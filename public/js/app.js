@@ -13951,6 +13951,7 @@ var routes = [{ path: '/dashboard', component: __webpack_require__(62) }, { path
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 var router = new __WEBPACK_IMPORTED_MODULE_0_vue_router__["a" /* default */]({
+  mode: 'history',
   routes: routes
 });
 

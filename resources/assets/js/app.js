@@ -24,6 +24,7 @@ let routes = [
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 const router = new VueRouter({
+  mode:'history',
   routes 
 })
 
