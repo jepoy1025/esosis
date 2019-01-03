@@ -27,6 +27,15 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+
+        $this->validate($request,[
+            'first_name' => 'required|string|max:50',
+            'middle_name' => 'required|string|max:50',
+            'last_name' => 'required|string|max:50',
+            'username' => 'required|string|min:8|max:10|unique:users',
+            'email' => 'required|string|min:6|unique:users',
+        ]);
+
         return User::create([
             'first_name' => $request['first_name'],
             'middle_name' => $request['middle_name'],
