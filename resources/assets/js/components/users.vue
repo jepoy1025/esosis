@@ -28,11 +28,11 @@
                     <tr v-for="user in users" :key="user.id">
                         <td>{{user.id}}</td>
                         <td>{{user.photo}}</td>
-                        <td>{{user.first_name}}</td>
-                        <td>{{user.last_name}}</td>
+                        <td>{{user.first_name | upText}}</td>
+                        <td>{{user.last_name | upText}}</td>
                         <td>{{user.username}}</td>
                         <td>{{user.email}}</td>
-                        <td>{{user.role}}</td>
+                        <td>{{user.role | upText}}</td>
                         <td>
                             <a href="" class="green">
                             <i class="fas fa-user-cog"></i>

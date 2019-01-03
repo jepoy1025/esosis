@@ -8,12 +8,14 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-import { Form, HasError, AlertError } from 'vform'
+import moment from 'moment';
+import { Form, HasError, AlertError } from 'vform';
+
 window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
-import VueRouter from 'vue-router'
 
+import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 
@@ -23,7 +25,6 @@ let routes = [
   { path: '/settings', component: require('./components/profile.vue') },
   { path: '/users', component: require('./components/users.vue') }
 ]
-
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -33,6 +34,13 @@ const router = new VueRouter({
   mode:'history',
   routes 
 })
+
+Vue.filter('upText',function(text){
+	return text.charAt(0).toUpperCase() + text.slice(1);
+});
+Vue.filter('myDate',function(created){
+	return moment(created).format('MMMM Do YYYY, h:mm:ss a');
+});
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 

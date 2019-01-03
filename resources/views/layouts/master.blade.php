@@ -23,7 +23,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Left navbar links -->
     <ul class="navbar-nav">
       <li class="nav-item">
-        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars"></i></a>
+        <a class="nav-link" data-widget="pushmenu" href="#"><i class="fa fa-bars pink"></i></a>
       </li>
     </ul>
 
@@ -33,7 +33,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
           <button class="btn btn-navbar" type="submit">
-            <i class="fa fa-search"></i>
+            <i class="fa fa-search pink"></i>
           </button>
         </div>
       </div>
