@@ -29,9 +29,9 @@ Vue.use(VueRouter)
 
 import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {
-	color: 'rgb(143, 255, 199)',
+	color: '#ffb3ff',
 	failedcolor: 'red',
-	height: '50px'
+	height: '30px'
 })
 
 

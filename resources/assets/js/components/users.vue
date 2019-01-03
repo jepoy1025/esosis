@@ -53,12 +53,13 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Adding Form</h5>
+                <h5 v-show="editMode" class="modal-title" id="exampleModalLabel">Updating Form</h5>
+                <h5 v-show="!editMode" class="modal-title" id="exampleModalLabel">Adding Form</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form @submit.prevent="createUser">
+              <form @submit.prevent="editMode ? updateUser() : createUser()">
               <div class="modal-body">
                 <div class="form-group">
                   <input v-model="form.first_name" placeholder="First Name" type="text" name="first_name" id="first_name"
@@ -93,7 +94,7 @@
                   </select>
                   <has-error :form="form" field="user_type"></has-error>
                 </div>
-                <div class="form-group">
+                <div v-show="!editMode" class="form-group">
                   <input v-model="form.password" placeholder="Password" type="password" name="password" id="password"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
                   <has-error :form="form" field="password"></has-error>
@@ -101,7 +102,8 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Create User</button>
+                <button v-show="editMode" type="submit" class="btn btn-success">Update User</button>
+                <button v-show="!editMode" type="submit" class="btn btn-primary">Create User</button>
               </div>
             </form>
             </div>
@@ -117,6 +119,7 @@
 
         data() {
             return{
+                editMode : false,
                 users : {},
                 form: new Form({
                     first_name : '',
@@ -131,12 +134,17 @@
             }
         },
         methods: {
+            updateUser(){
+                
+            },
             editModal(user){
+                this.editMode = true;
                 this.form.reset();
                 $('#userModal').modal('show');
                 this.form.fill(user);
             },
             newModal(){
+                this.editMode = false;
                 this.form.reset();
                 $('#userModal').modal('show');
             },
