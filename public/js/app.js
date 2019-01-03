@@ -71379,6 +71379,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
 
     methods: {
+        editModal: function editModal(user) {
+            this.form.reset();
+            $('#userModal').modal('show');
+            this.form.fill(user);
+        },
+        newModal: function newModal() {
+            this.form.reset();
+            $('#userModal').modal('show');
+        },
         loadUser: function loadUser() {
             var _this = this;
 
@@ -71394,7 +71403,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.form.post('api/user').then(function () {
 
                 Fire.$emit('afterCreate');
-                $('#addUser').modal('hide');
+                $('#userModal').modal('hide');
                 toast({
                     type: 'success',
                     title: 'User Created Succesfully'
@@ -71450,7 +71459,23 @@ var render = function() {
     _c("div", { staticClass: "row" }, [
       _c("div", { staticClass: "col-12" }, [
         _c("div", { staticClass: "card card-info" }, [
-          _vm._m(0),
+          _c("div", { staticClass: "card-header" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-tools" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-block btn-outline-primary btn-lg",
+                  on: { click: _vm.newModal }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-user-plus fa-fw" }),
+                  _vm._v(" Add New Staff/Admin")
+                ]
+              )
+            ])
+          ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-body table-responsive p-0" }, [
             _c("table", { staticClass: "table table-hover" }, [
@@ -71480,7 +71505,19 @@ var render = function() {
                       _c("td", [_vm._v(_vm._s(_vm._f("upText")(user.role)))]),
                       _vm._v(" "),
                       _c("td", [
-                        _vm._m(2, true),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-default",
+                            attrs: { href: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.editModal(user)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-user-cog green" })]
+                        ),
                         _vm._v(" "),
                         _c(
                           "button",
@@ -71512,7 +71549,7 @@ var render = function() {
       {
         staticClass: "modal fade",
         attrs: {
-          id: "addUser",
+          id: "userModal",
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "exampleModalLabel",
@@ -71528,7 +71565,7 @@ var render = function() {
           },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(3),
+              _vm._m(2),
               _vm._v(" "),
               _c(
                 "form",
@@ -71869,7 +71906,7 @@ var render = function() {
                     )
                   ]),
                   _vm._v(" "),
-                  _vm._m(4)
+                  _vm._m(3)
                 ]
               )
             ])
@@ -71884,29 +71921,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card-header" }, [
-      _c("h3", { staticClass: "card-title" }, [
-        _c("b", { staticClass: "pink" }, [_vm._v("Admin/Staff")]),
-        _vm._v(" Users")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-tools" }, [
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-block btn-outline-primary btn-lg",
-            attrs: {
-              type: "button",
-              "data-toggle": "modal",
-              "data-target": "#addUser"
-            }
-          },
-          [
-            _c("i", { staticClass: "fas fa-user-plus fa-fw" }),
-            _vm._v(" Add New Staff/Admin")
-          ]
-        )
-      ])
+    return _c("h3", { staticClass: "card-title" }, [
+      _c("b", { staticClass: "pink" }, [_vm._v("Admin/Staff")]),
+      _vm._v(" Users")
     ])
   },
   function() {
@@ -71930,16 +71947,6 @@ var staticRenderFns = [
       _vm._v(" "),
       _c("th", [_vm._v("Action")])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "button",
-      { staticClass: "btn btn-default", attrs: { href: "" } },
-      [_c("i", { staticClass: "fas fa-user-cog green" })]
-    )
   },
   function() {
     var _vm = this

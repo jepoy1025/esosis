@@ -8,7 +8,7 @@
                 <h3 class="card-title"><b class="pink">Admin/Staff</b> Users</h3>
 
                 <div class="card-tools">
-                    <button type="button" class="btn btn-block btn-outline-primary btn-lg" data-toggle="modal" data-target="#addUser"><i class="fas fa-user-plus fa-fw"></i> Add New Staff/Admin</button>
+                    <button class="btn btn-block btn-outline-primary btn-lg" @click="newModal" ><i class="fas fa-user-plus fa-fw"></i> Add New Staff/Admin</button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -34,7 +34,7 @@
                         <td>{{user.email}}</td>
                         <td>{{user.role | upText}}</td>
                         <td>
-                            <button href="" class="btn btn-default">
+                            <button href="" @click="editModal(user)" class="btn btn-default">
                             <i class="fas fa-user-cog green"></i>
                             </button>
                             <button href="" @click="deleteUser(user.id)" class="btn btn-default">
@@ -49,7 +49,7 @@
             <!-- /.card -->
           </div>
         </div>
-        <div class="modal fade" id="addUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
@@ -114,6 +114,7 @@
 
 <script>
     export default {
+
         data() {
             return{
                 users : {},
@@ -130,7 +131,15 @@
             }
         },
         methods: {
-
+            editModal(user){
+                this.form.reset();
+                $('#userModal').modal('show');
+                this.form.fill(user);
+            },
+            newModal(){
+                this.form.reset();
+                $('#userModal').modal('show');
+            },
             loadUser(){
                 axios.get("api/user").then(({data})=>(this.users = data.data));
             },
@@ -141,7 +150,7 @@
                 .then(()=>{
 
                     Fire.$emit('afterCreate');
-                    $('#addUser').modal('hide');
+                    $('#userModal').modal('hide');
                     toast({
                       type: 'success',
                       title: 'User Created Succesfully'
@@ -177,7 +186,7 @@
                     })
                     }
                 })
-            }
+            },
 
         },
         created() {
