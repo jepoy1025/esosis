@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection\Paginate;
 
 class UserController extends Controller
 {
@@ -16,7 +18,10 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        return DB::table('users')
+                    ->join('roles','users.role_id','=','roles.id')
+                    ->select('users.*','roles.role')
+                    ->paginate(10);
     }
 
     /**
