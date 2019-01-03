@@ -34,12 +34,12 @@
                         <td>{{user.email}}</td>
                         <td>{{user.role | upText}}</td>
                         <td>
-                            <a href="" class="green">
-                            <i class="fas fa-user-cog"></i>
-                            </a>
-                            <a href="" class="red">
-                            <i class="fas fa-user-times"></i>
-                            </a>
+                            <button href="" class="btn btn-default">
+                            <i class="fas fa-user-cog green"></i>
+                            </button>
+                            <button href="" @click="deleteUser(user.id)" class="btn btn-default">
+                            <i class="fas fa-user-times red"></i>
+                            </button>
                         </td>
                     </tr>
                 </tbody></table>
@@ -152,8 +152,31 @@
                 .catch(()=>{
 
                 })
+            },
 
-                
+            deleteUser(id){
+                swal({
+                  title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  type: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                    this.form.delete('/api/user/'+id).then(()=>{
+                        Fire.$emit('afterCreate');
+                            swal(
+                              'Deleted!',
+                              'Your file has been deleted.',
+                              'success'
+                            )
+                    }).catch(()=>{
+                        swal("failes","There was something wrong.","warning");
+                    })
+                    }
+                })
             }
 
         },
