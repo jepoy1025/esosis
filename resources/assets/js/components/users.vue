@@ -1,5 +1,6 @@
 <template>
     <div class="container">
+        <br>
         <div class="row">
           <div class="col-12">
             <div class="card card-info">
@@ -98,7 +99,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Create User</button>
+                <button type="submit" class="btn btn-primary">Create User</button>
               </div>
             </form>
             </div>

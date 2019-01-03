@@ -50965,6 +50965,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -51001,6 +51002,8 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
+    _c("br"),
+    _vm._v(" "),
     _vm._m(0),
     _vm._v(" "),
     _c(
@@ -51504,7 +51507,7 @@ var staticRenderFns = [
       _vm._v(" "),
       _c(
         "button",
-        { staticClass: "btn btn-primary", attrs: { type: "button" } },
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
         [_vm._v("Create User")]
       )
     ])
