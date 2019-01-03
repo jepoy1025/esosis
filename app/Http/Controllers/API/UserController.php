@@ -21,6 +21,7 @@ class UserController extends Controller
         return DB::table('users')
                     ->join('roles','users.role_id','=','roles.id')
                     ->select('users.*','roles.role')
+                    ->latest()
                     ->paginate(10);
     }
 
