@@ -18,3 +18,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::apiResources(['user' => 'API\UserController']);
+Route::apiResources(['teacher' => 'API\TeacherController']);
+Route::apiResources(['level' => 'API\LevelController']);
+Route::apiResources(['sy' => 'API\SyController']);
+Route::apiResources(['fee' => 'API\FeeController']);
+Route::put('teacher-active/{teacher}','API\TeacherController@activate');
+//Route::get('teacher', 'API\TeacherController@index');

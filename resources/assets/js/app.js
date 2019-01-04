@@ -38,6 +38,9 @@ Vue.use(VueProgressBar, {
 let routes = [
   { path: '/dashboard', component: require('./components/dashboard.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
+  { path: '/teachers', component: require('./components/teachers.vue') },
+  { path: '/levels', component: require('./components/level.vue') },
+  { path: '/fees', component: require('./components/fee.vue') },
   { path: '/users', component: require('./components/users.vue') }
 ]
 /**

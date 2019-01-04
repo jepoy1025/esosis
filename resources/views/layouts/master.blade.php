@@ -10,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
 
-  <title>AdminLTE 3 | Starter</title>
+  <title>Lotus | ESOSIS</title>
 
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="/css/app.css">
@@ -109,16 +109,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/users" class="nav-link">
+                <router-link to="/fees" class="nav-link">
                   <i class="fas fa-money-check cyan"></i>
                   <p class="cyan">School Fee</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link to="/teachers" class="nav-link">
                   <i class="fas fa-chalkboard-teacher cyan"></i>
                   <p>Teacher</p>
-                </a>
+                </router-link>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -133,10 +133,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link to="/levels" href="#" class="nav-link">
                   <i class="fas fa-sort-amount-up cyan"></i>
                   <p>Level & S.Y.</p>
-                </a>
+                </router-link>
               </li>
             </ul>
           </li>
