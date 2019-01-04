@@ -39,7 +39,8 @@ class UserController extends Controller
             'middle_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
             'username' => 'required|string|min:8|max:10|unique:users',
-            'email' => 'required|string|min:6|unique:users',
+            'email' => 'required|string|unique:users',
+            'password' => 'required|string|min:6',
         ]);
 
         return User::create([
@@ -73,8 +74,23 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $user = User::findOrFail($id);
+        $this->validate($request,[
+            'username' => 'required|string|min:6|max:15|unique:users,username,'.$user->id,
+            'email' => 'required|string|unique:users,email,'.$user->id,
+            'password' => 'sometimes|min:6',
+        ]);
+        $user->update([
+            'first_name' => $request['first_name'],
+            'middle_name' => $request['middle_name'],
+            'last_name' => $request['last_name'],
+            'username' => $request['username'],
+            'email' => $request['email'],
+            'role_id' => $request['user_type'],
+            'photo' => $request['photo']
+        ]);
+        return $user;
     }
 
     /**

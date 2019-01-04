@@ -87,24 +87,64 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <router-link to="/users" class="nav-link">
-                  <i class="fas fa-users cyan"></i>
-                  <p class="cyan">Users Page</p>
+                  <i class="fas fa-user-tie cyan"></i>
+                  <p class="cyan">Admin/Staff</p>
                 </router-link>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">
-                  <i class="fa fa-circle-o nav-icon"></i>
-                  <p>Inactive Page</p>
+                  <i class="fas fa-user-friends cyan"></i>
+                  <p>Parent/Sponsor</p>
                 </a>
               </li>
             </ul>
           </li>
-
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-clipboard-list pink"></i>
+              <p class="pink">
+                Utilities
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/users" class="nav-link">
+                  <i class="fas fa-money-check cyan"></i>
+                  <p class="cyan">School Fee</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <p>Teacher</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-warehouse cyan"></i>
+                  <p>Room</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-book cyan"></i>
+                  <p>Subject</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-sort-amount-up cyan"></i>
+                  <p>Level & S.Y.</p>
+                </a>
+              </li>
+            </ul>
+          </li>
           <li class="nav-item">
           <router-link to="settings" class="nav-link">
             <i class="nav-icon fas fa-wrench pink"></i>
             <p class="pink">
-              Account Settings
+              Profile Settings
             </p>
           </router-link>
           </li>
