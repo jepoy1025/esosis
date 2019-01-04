@@ -121,10 +121,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link to="/rooms" class="nav-link">
                   <i class="fas fa-warehouse cyan"></i>
                   <p>Room</p>
-                </a>
+                </router-link>
               </li>
               <li class="nav-item">
                 <a href="#" class="nav-link">

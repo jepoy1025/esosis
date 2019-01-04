@@ -22,5 +22,10 @@ Route::apiResources(['teacher' => 'API\TeacherController']);
 Route::apiResources(['level' => 'API\LevelController']);
 Route::apiResources(['sy' => 'API\SyController']);
 Route::apiResources(['fee' => 'API\FeeController']);
+Route::apiResources(['room' => 'API\RoomController']);
+
 Route::put('teacher-active/{teacher}','API\TeacherController@activate');
+Route::get('active-teacher','API\TeacherController@actTeacher');
+Route::get('inactive-room','API\RoomController@inActive');
+Route::put('room-active/{room}','API\RoomController@activate');
 //Route::get('teacher', 'API\TeacherController@index');

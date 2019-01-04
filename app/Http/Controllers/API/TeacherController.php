@@ -16,6 +16,14 @@ class TeacherController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function actTeacher(){
+        $data = DB::table('teachers')
+            ->where('status','=','active')
+            ->get();
+            
+        return compact('data');
+    }
+
     public function index()
     {
         return Teacher::latest()->paginate(10);

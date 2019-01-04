@@ -30602,7 +30602,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_4_vue_progressbar___default.a, {
   height: '30px'
 });
 
-var routes = [{ path: '/dashboard', component: __webpack_require__(171) }, { path: '/settings', component: __webpack_require__(174) }, { path: '/teachers', component: __webpack_require__(200) }, { path: '/levels', component: __webpack_require__(203) }, { path: '/fees', component: __webpack_require__(206) }, { path: '/users', component: __webpack_require__(177) }];
+var routes = [{ path: '/dashboard', component: __webpack_require__(171) }, { path: '/settings', component: __webpack_require__(174) }, { path: '/teachers', component: __webpack_require__(200) }, { path: '/levels', component: __webpack_require__(203) }, { path: '/fees', component: __webpack_require__(206) }, { path: '/rooms', component: __webpack_require__(209) }, { path: '/users', component: __webpack_require__(177) }];
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -74486,6 +74486,930 @@ if (false) {
   module.hot.accept()
   if (module.hot.data) {
     require("vue-hot-reload-api")      .rerender("data-v-5144c53f", module.exports)
+  }
+}
+
+/***/ }),
+/* 209 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(3)
+/* script */
+var __vue_script__ = __webpack_require__(210)
+/* template */
+var __vue_template__ = __webpack_require__(211)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/room.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-4970501c", Component.options)
+  } else {
+    hotAPI.reload("data-v-4970501c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 210 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            editMode: false,
+            teacher: {},
+            level: {},
+            room: {},
+            inactive: {},
+            form: new Form({
+                id: '',
+                grade_level: '',
+                section: '',
+                advicer_id: ''
+            })
+        };
+    },
+
+    methods: {
+        inactiveModal: function inactiveModal() {
+            $('#inactiveModal').modal('show');
+        },
+        newModal: function newModal() {
+            this.editMode = false;
+            this.form.reset();
+            $('#roomModal').modal('show');
+        },
+        editModal: function editModal(teacher) {
+            this.editMode = true;
+            this.form.reset();
+            $('#roomModal').modal('show');
+            this.form.fill(teacher);
+        },
+        loadInactive: function loadInactive() {
+            var _this = this;
+
+            axios.get("api/inactive-room").then(function (_ref) {
+                var data = _ref.data;
+                return _this.inactive = data.data;
+            });
+        },
+        loadTeacher: function loadTeacher() {
+            var _this2 = this;
+
+            axios.get("api/active-teacher").then(function (_ref2) {
+                var data = _ref2.data;
+                return _this2.teacher = data.data;
+            });
+        },
+        loadLevel: function loadLevel() {
+            var _this3 = this;
+
+            axios.get("api/level").then(function (_ref3) {
+                var data = _ref3.data;
+                return _this3.level = data.data;
+            });
+        },
+        loadRoom: function loadRoom() {
+            var _this4 = this;
+
+            axios.get("api/room").then(function (_ref4) {
+                var data = _ref4.data;
+                return _this4.room = data.data;
+            });
+        },
+        createRoom: function createRoom() {
+            var _this5 = this;
+
+            this.$Progress.start();
+            this.form.post('api/room').then(function () {
+
+                Fire.$emit('afterCreate');
+                $('#roomModal').modal('hide');
+                toast({
+                    type: 'success',
+                    title: 'Room Created Succesfully'
+                });
+                _this5.$Progress.finish();
+            }).catch(function () {
+                _this5.$Progress.fail();
+            });
+        },
+        updateRoom: function updateRoom() {
+            var _this6 = this;
+
+            this.$Progress.start();
+            this.form.put('/api/room/' + this.form.id).then(function () {
+                Fire.$emit('afterCreate');
+                swal('Success!', 'Room Updated.', 'success');
+                _this6.$Progress.finish();
+                $('#roomModal').modal('hide');
+            }).catch(function () {
+                _this6.$Progress.fail();
+            });
+        },
+        roomDeactivate: function roomDeactivate(id) {
+            var _this7 = this;
+
+            swal({
+                title: 'Room will be inactive?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, deactivate it!'
+            }).then(function (result) {
+                if (result.value) {
+                    _this7.form.delete('/api/room/' + id).then(function () {
+                        Fire.$emit('afterCreate');
+                        swal('Deleted!', 'Room has tuen inactive.', 'success');
+                    }).catch(function () {
+                        swal("failes", "There was something wrong.", "warning");
+                    });
+                }
+            });
+        },
+        roomActivate: function roomActivate(id) {
+            var _this8 = this;
+
+            swal({
+                title: 'Room will be activated?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Activate it!'
+            }).then(function (result) {
+                if (result.value) {
+                    _this8.form.put('/api/room-active/' + id).then(function () {
+                        Fire.$emit('afterCreate');
+                        swal('Deleted!', 'Room has been Activated.', 'success');
+                    }).catch(function () {
+                        swal("failes", "There was something wrong.", "warning");
+                    });
+                }
+            });
+        }
+    },
+
+    created: function created() {
+        var _this9 = this;
+
+        this.loadTeacher();
+        this.loadLevel();
+        this.loadRoom();
+        this.loadInactive();
+        Fire.$on('afterCreate', function () {
+            _this9.loadRoom();
+            _this9.loadInactive();
+        });
+        // setInterval(() => this.loadUser(),3000);
+    }
+});
+
+/***/ }),
+/* 211 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("br"),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-12" }, [
+        _c("div", { staticClass: "card card-info" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("div", { staticClass: "card-tools" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-warning btn-lg",
+                  on: { click: _vm.inactiveModal }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-eye fa-fw" }),
+                  _vm._v(" View Inactive Rooms")
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-primary btn-lg",
+                  on: { click: _vm.newModal }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-plus-circle fa-fw" }),
+                  _vm._v(" Create Room")
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body table-responsive p-0" }, [
+            _c("table", { staticClass: "table table-hover" }, [
+              _c(
+                "tbody",
+                [
+                  _vm._m(1),
+                  _vm._v(" "),
+                  _vm._l(_vm.room, function(room) {
+                    return _c("tr", { key: room.id }, [
+                      _c("td", [_vm._v(_vm._s(room.id))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.title))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.section))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.population))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.availability))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(room.status))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-default",
+                            attrs: { href: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.editModal(room)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-edit orange" })]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-default",
+                            attrs: {
+                              href: "",
+                              disabled: _vm.teacher.status == "inactive"
+                            },
+                            on: {
+                              click: function($event) {
+                                _vm.roomDeactivate(room.id)
+                              }
+                            }
+                          },
+                          [_c("i", { staticClass: "fas fa-times red" })]
+                        )
+                      ])
+                    ])
+                  })
+                ],
+                2
+              )
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "roomModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.editMode,
+                        expression: "editMode"
+                      }
+                    ],
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Updating Teacher")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.editMode,
+                        expression: "!editMode"
+                      }
+                    ],
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Adding Teacher")]
+                ),
+                _vm._v(" "),
+                _vm._m(2)
+              ]),
+              _vm._v(" "),
+              _c(
+                "form",
+                {
+                  on: {
+                    submit: function($event) {
+                      $event.preventDefault()
+                      _vm.editMode ? _vm.updateRoom() : _vm.createRoom()
+                    }
+                  }
+                },
+                [
+                  _c("div", { staticClass: "modal-body" }, [
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("Select Grade Level:")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.grade_level,
+                                expression: "form.grade_level"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("grade_level")
+                            },
+                            attrs: { name: "grade_level", id: "grade_level" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "grade_level",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(_vm.level, function(level) {
+                            return _c(
+                              "option",
+                              { domProps: { value: level.id } },
+                              [_vm._v(_vm._s(level.title))]
+                            )
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "marital_status" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.form.section,
+                              expression: "form.section"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          class: {
+                            "is-invalid": _vm.form.errors.has("section")
+                          },
+                          attrs: {
+                            placeholder: "Section",
+                            type: "text",
+                            name: "section",
+                            id: "section"
+                          },
+                          domProps: { value: _vm.form.section },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.form, "section", $event.target.value)
+                            }
+                          }
+                        }),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "section" }
+                        })
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "form-group" },
+                      [
+                        _c("label", [_vm._v("Select Advicer:")]),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.form.advicer_id,
+                                expression: "form.advicer_id"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            class: {
+                              "is-invalid": _vm.form.errors.has("advicer_id")
+                            },
+                            attrs: { name: "advicer_id", id: "advicer_id" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.form,
+                                  "advicer_id",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          _vm._l(_vm.teacher, function(teacher) {
+                            return _c(
+                              "option",
+                              { domProps: { value: teacher.id } },
+                              [_vm._v(_vm._s(teacher.name))]
+                            )
+                          }),
+                          0
+                        ),
+                        _vm._v(" "),
+                        _c("has-error", {
+                          attrs: { form: _vm.form, field: "marital_status" }
+                        })
+                      ],
+                      1
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "modal-footer" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        attrs: { type: "button", "data-dismiss": "modal" }
+                      },
+                      [_vm._v("Close")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.editMode,
+                            expression: "editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-success",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Update Teacher")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "button",
+                      {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: !_vm.editMode,
+                            expression: "!editMode"
+                          }
+                        ],
+                        staticClass: "btn btn-primary",
+                        attrs: { type: "submit" }
+                      },
+                      [_vm._v("Create Room")]
+                    )
+                  ])
+                ]
+              )
+            ])
+          ]
+        )
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "inactiveModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "exampleModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          {
+            staticClass: "modal-dialog modal-dialog-centered",
+            attrs: { role: "document" }
+          },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(3),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("div", { staticClass: "card-body table-responsive p-0" }, [
+                  _c("table", { staticClass: "table table-hover" }, [
+                    _c(
+                      "tbody",
+                      [
+                        _vm._m(4),
+                        _vm._v(" "),
+                        _vm._l(_vm.inactive, function(inactive) {
+                          return _c("tr", { key: inactive.id }, [
+                            _c("td", [_vm._v(_vm._s(inactive.title))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(inactive.section))]),
+                            _vm._v(" "),
+                            _c("td", [_vm._v(_vm._s(inactive.name))]),
+                            _vm._v(" "),
+                            _c("td", [
+                              _c(
+                                "button",
+                                {
+                                  staticClass: "btn btn-default",
+                                  attrs: {
+                                    href: "",
+                                    disabled: _vm.teacher.status == "inactive"
+                                  },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.roomActivate(inactive.id)
+                                    }
+                                  }
+                                },
+                                [_c("i", { staticClass: "fas fa-check green" })]
+                              )
+                            ])
+                          ])
+                        })
+                      ],
+                      2
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(5)
+            ])
+          ]
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "card-title" }, [
+      _c("b", { staticClass: "pink" }, [_vm._v("Rooms")]),
+      _vm._v(" utilities")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("ID")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Grade Level")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Section")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Advicer")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Population")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Availability")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Status")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Action")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Inactive Rooms")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Grade Level")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Section")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Advicer")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Re-activate")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-footer" }, [
+      _c(
+        "button",
+        {
+          staticClass: "btn btn-danger",
+          attrs: { type: "button", "data-dismiss": "modal" }
+        },
+        [_vm._v("Close")]
+      )
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-4970501c", module.exports)
   }
 }
 
