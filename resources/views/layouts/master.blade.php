@@ -75,6 +75,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </p>
           </router-link>
           </li>
+          <li class="nav-item">
+          <router-link to="/load" class="nav-link">
+            <i class="nav-icon fas fa-calendar-week pink"></i>
+            <p class="pink">
+              Class Loading
+            </p>
+          </router-link>
+          </li>
           
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -127,10 +135,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link to="/subjects" class="nav-link">
                   <i class="fas fa-book cyan"></i>
                   <p>Subject</p>
-                </a>
+                </router-link>
               </li>
               <li class="nav-item">
                 <router-link to="/levels" href="#" class="nav-link">
@@ -142,7 +150,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           </li>
           <li class="nav-item">
           <router-link to="settings" class="nav-link">
-            <i class="nav-icon fas fa-wrench pink"></i>
+            <i class="nav-icon fas fa-user-cog pink"></i>
             <p class="pink">
               Profile Settings
             </p>
@@ -205,6 +213,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
-<script src="/js/app.js"></script>
+<script src={{ mix('js/app.js') }}></script>
 </body>
 </html>

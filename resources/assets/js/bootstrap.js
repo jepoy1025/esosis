@@ -1,4 +1,4 @@
-
+  
 window._ = require('lodash');
 window.Popper = require('popper.js').default;
 
@@ -13,6 +13,7 @@ try {
 
     require('bootstrap');
     require('admin-lte');
+    require('fullcalendar');
 } catch (e) {}
 
 /**

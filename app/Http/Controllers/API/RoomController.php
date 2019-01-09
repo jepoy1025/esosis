@@ -27,6 +27,16 @@ class RoomController extends Controller
         return compact('data');
     }
 
+    public function column()
+    {
+        $data = DB::table('rooms')
+                    ->join('levels','rooms.grade_level','=','levels.id')
+                    ->where('rooms.status','active')
+                    ->select('rooms.id','levels.title')
+                    ->get();
+        return $data;
+    }
+
     public function inActive(){
         $data = DB::table('rooms')
                     ->join('levels','rooms.grade_level','=','levels.id')

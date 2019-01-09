@@ -14,6 +14,8 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::post('postAjax','TestController@store');
+
 
 Auth::routes();
 

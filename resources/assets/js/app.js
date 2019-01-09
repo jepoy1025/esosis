@@ -9,6 +9,20 @@ require('./bootstrap');
 
 window.Vue = require('vue')
 import moment from 'moment';
+import {ContainerMixin, ElementMixin} from 'vue-slicksort';
+
+// import vuedraggable from 'vuedraggable';
+// Vue.use(vuedraggable)
+
+import Schedule from 'vue-schedule'
+Vue.use(Schedule)
+
+import FullCalendar from 'vue-full-calendar'
+Vue.use(FullCalendar)
+
+import VueGridLayout from 'vue-grid-layout';
+Vue.use(VueGridLayout)
+
 import { Form, HasError, AlertError } from 'vform';
 import swal from 'sweetalert2';
 window.swal = swal;
@@ -27,6 +41,7 @@ Vue.component(AlertError.name, AlertError)
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
+
 import VueProgressBar from 'vue-progressbar'
 Vue.use(VueProgressBar, {
 	color: '#ffb3ff',
@@ -38,11 +53,13 @@ Vue.use(VueProgressBar, {
 let routes = [
   { path: '/dashboard', component: require('./components/dashboard.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
-  { path: '/teachers', component: require('./components/teachers.vue') },
-  { path: '/levels', component: require('./components/level.vue') },
-  { path: '/fees', component: require('./components/fee.vue') },
-  { path: '/rooms', component: require('./components/room.vue') },
-  { path: '/users', component: require('./components/users.vue') }
+  { path: '/teachers', component: require('./components/utilities/teachers.vue') },
+  { path: '/levels', component: require('./components/utilities/level.vue') },
+  { path: '/fees', component: require('./components/utilities/fee.vue') },
+  { path: '/rooms', component: require('./components/utilities/room.vue') },
+  { path: '/subjects', component: require('./components/utilities/subject.vue') },
+  { path: '/load', component: require('./components/loading/calendar.vue') },
+  { path: '/users', component: require('./components/utilities/users.vue') }
 ]
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -64,6 +81,7 @@ Vue.filter('myDate',function(created){
 window.Fire = new Vue();
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+
 
 const app = new Vue({
     el: '#app',
