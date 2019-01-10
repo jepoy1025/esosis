@@ -50,6 +50,19 @@
             }
         },
 
+        computed: {
+            computedRooms() {
+                return this.resources.map(item => {
+                    return {
+                        ...item,
+                        ...{
+                            title: item.title + ' - ' + item.section
+                        }
+                    }
+                })
+            }
+        },
+
 
         mounted() {
             //axios.get("api/teacher").then(({result})=>(this.resultRooms = result.data));
@@ -94,7 +107,7 @@
                         }
                     },
                     resourceLabelText: 'Rooms',
-                    resources: this.resources,
+                    resources: this.computedRooms,
 
                     //console.log(level),
                     drop: function (date, jsEvent, ui, resourceId,) {
