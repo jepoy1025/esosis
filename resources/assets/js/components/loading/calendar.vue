@@ -106,6 +106,25 @@
                     resourceLabelText: 'Rooms',
                     resources: this.computedRooms,
 
+                    events: function(start, end, timezone, callback) {
+                        console.log({
+                            start, end, timezone, callback
+                        });
+                        axios.get(`/api/schedule`)
+                            .then(({data}) => {
+                                callback(data.map(item => {
+                                    return {
+                                        title: item.subject.title,
+                                        start: moment(start.format('YYYY-MM-DD') + ' ' + item.start_time),
+                                        end: moment(start.format('YYYY-MM-DD') + ' ' + item.end_time),
+                                        subjectId: item.subject_id,
+                                        resourceId: item.room_id,
+                                        scheduleId: item.id,
+                                    }
+                                }))
+                            });
+                    },
+
                     //console.log(level),
                     drop: function (date, jsEvent, ui, resourceId,) {
                         //console.log('drop', date.format(), resourceId);
@@ -177,7 +196,7 @@
             },
             saveEvent(event) {
                 let data = {
-                    id: _.get(this.eventScheduleIds, event._id),
+                    id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
                     subject_id: event.subjectId,
                     room_id: event.resourceId,
                     start_time: event.start.local().format('HH:mm:ss'),

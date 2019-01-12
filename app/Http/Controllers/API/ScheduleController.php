@@ -16,7 +16,9 @@ class ScheduleController extends Controller
      */
     public function index()
     {
-        //
+        return Schedule::query()
+            ->with('subject')
+            ->get();
     }
 
     /**
