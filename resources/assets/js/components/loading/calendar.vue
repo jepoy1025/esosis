@@ -47,6 +47,7 @@
                 subjects: [],
                 resources: [{id: 10, name: 'yow'}],
                 calendar: null,
+                eventScheduleIds: {},
             }
         },
 
@@ -76,24 +77,20 @@
         },
 
         methods: {
-            /**
-             * When drag from sidebar list to calendar
-             * You can call ajax here to your endpoint
-             */
-            onEventReceive(event, ui) {
-                console.log(event.subjectId, event)
-            },
             loadLevel() {
                 return axios.get("api/level").then(({data}) => (this.level = data.data));
             },
 
             initCalendar() {
+                let self = this;
                 this.calendar = $('#calendar').fullCalendar({
-                    now: '2018-04-07',
+                    // now: '2018-04-07',
                     editable: true, // enable draggable events
                     droppable: true, // this allows things to be dropped onto the calendar
                     aspectRatio: 1,
                     scrollTime: '7:00', // undo default 6am scrollTime
+                    defaultTimedEventDuration: '01:00:00',
+                    forceEventDuration: true,
                     header: {
                         left: '',
                         center: 'Header',
@@ -118,31 +115,27 @@
                             $(this).remove();
                         }
                     },
-                    eventReceive: function (event, revertFunc,) { // called when a proper external event is dropped
-                        alert(event.title + " was dropped on " + event.start.format());
-                        //$('#calendar').fullCalendar('removeEvents',event._id);
-
-                        // if (!confirm("Are you sure about this change?")) {
-                        console.log();
-                        // }
-                        axios.get("api/teacher").then(({data}) => (this.teacher = data.data));
-                        console.log('eventReceive', event.subjectId, event);
-                        Fire.$emit('afterCreate');
-                    },
-                    eventDrop: function (event, revertFunc,) { // called when an event (already on the calendar) is moved
-                        //revertFunc();
-                        axios.get("api/teacher").then(({data}) => (this.teacher = data.data));
-                        console.log('eventReceive', event);
-                        console.log('eventDrop', event);
-
-                    },
                     eventClick: function (event, element) {
-
                         event.title = "CLICKED!";
-
                         $('#calendar').fullCalendar('updateEvent', event);
-
-                    }
+                    },
+                    eventDrop: function (event, revertFn,) { // called when an event (already on the calendar) is moved
+                        //revertFunc();
+                        console.log('eventDrop', event);
+                        self.saveEvent(event);
+                    },
+                    eventReceive: function (event,) { // called when a proper external event is dropped
+                        console.log('eventReceive', {
+                            event
+                        });
+                        self.saveEvent(event);
+                    },
+                    eventResize(event, delta, revertFn) {
+                        console.log({
+                            event, delta, revertFn,
+                        });
+                        self.saveEvent(event);
+                    },
                 });
             },
 
@@ -182,15 +175,25 @@
                     })
                 });
             },
-
-            /**
-             * When drag from calendar to calendar
-             * You can call ajax here to your endpoint
-             */
-            onEventDrop(event, ui, delta, revertFunc) {
-                Fire.emit('afterCreate')
-                console.log(event.subjectId, event),
-                    revertFunc();
+            saveEvent(event) {
+                let data = {
+                    id: _.get(this.eventScheduleIds, event._id),
+                    subject_id: event.subjectId,
+                    room_id: event.resourceId,
+                    start_time: event.start.local().format('HH:mm:ss'),
+                    end_time: event.end.local().format('HH:mm:ss'),
+                };
+                if (data.id) {
+                    axios.put(`/api/schedule/${data.id}`, data)
+                        .then(({data}) => {
+                            this.eventScheduleIds[event._id] = data.id
+                        });
+                } else {
+                    axios.post(`/api/schedule`, data)
+                        .then(({data}) => {
+                            this.eventScheduleIds[event._id] = data.id
+                        });
+                }
             },
         },
         created() {
