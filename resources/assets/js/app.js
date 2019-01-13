@@ -59,6 +59,7 @@ let routes = [
   { path: '/rooms', component: require('./components/utilities/room.vue') },
   { path: '/subjects', component: require('./components/utilities/subject.vue') },
   { path: '/load', component: require('./components/loading/calendar.vue') },
+  { path: '/new_student', component: require('./components/enrollment/new_student.vue') },
   { path: '/users', component: require('./components/utilities/users.vue') }
 ]
 /**

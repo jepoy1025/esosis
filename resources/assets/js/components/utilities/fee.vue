@@ -63,7 +63,6 @@
                 <div class="form-group">
                   <input v-model="form.books" placeholder="Books Fee" type="number" name="books" id="books"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('books') }">
-                  </input>
                   <has-error :form="form" field="books"></has-error>
                 </div>
                 <div class="form-group">

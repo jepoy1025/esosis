@@ -55,7 +55,10 @@ class FeeController extends Controller
      */
     public function show($id)
     {
-        //
+        $fee = DB::table('fees')
+                ->where('id','=',$id)
+                ->first();
+        return compact('fee');
     }
 
     /**
