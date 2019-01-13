@@ -24,6 +24,7 @@ Route::apiResources(['sy' => 'API\SyController']);
 Route::apiResources(['fee' => 'API\FeeController']);
 Route::apiResources(['room' => 'API\RoomController']);
 Route::apiResources(['subject' => 'API\SubjectController']);
+Route::apiResources(['schedule' => 'API\ScheduleController']);
 
 Route::put('teacher-active/{teacher}','API\TeacherController@activate');
 Route::get('active-teacher','API\TeacherController@actTeacher');

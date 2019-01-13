@@ -9,6 +9,9 @@ require('./bootstrap');
 
 window.Vue = require('vue')
 import moment from 'moment';
+
+window.moment = moment;
+
 import {ContainerMixin, ElementMixin} from 'vue-slicksort';
 
 // import vuedraggable from 'vuedraggable';

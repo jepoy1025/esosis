@@ -10,7 +10,7 @@
                     background: #eee;
                     text-align: left;">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Draggable Events</h4>
-                    <div v-for="subject in resources" :key="subject.id" class='fc-event' :subject-id="subject.id"
+                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;">{{ subject.title }}
                     </div>
                     <p>
@@ -46,6 +46,21 @@
                 teacher: {},
                 subjects: [],
                 resources: [{id: 10, name: 'yow'}],
+                calendar: null,
+                eventScheduleIds: {},
+            }
+        },
+
+        computed: {
+            computedRooms() {
+                return this.resources.map(item => {
+                    return {
+                        ...item,
+                        ...{
+                            title: item.title + ' - ' + item.section
+                        }
+                    }
+                })
             }
         },
 
@@ -55,76 +70,92 @@
             //axios.get("api/teacher").then(result => { console.log(result); return result; },
             //axios.get("api/room-column").then(({json})=>(this.resources = json.data));
             Fire.$emit('afterCreate');
-            var subjects = this.resources;
-            console.log(subjects);
-            $('#calendar').fullCalendar({
-                now: '2018-04-07',
-                editable: true, // enable draggable events
-                droppable: true, // this allows things to be dropped onto the calendar
-                aspectRatio: 1,
-                scrollTime: '7:00', // undo default 6am scrollTime
-                header: {
-                    left: '',
-                    center: 'Header',
-                    right: ''
-                },
-                defaultView: 'timelineDay',
-                views: {
-                    timelineThreeDays: {
-                        type: 'timeline',
-                        duration: {days: 3}
-                    }
-                },
-                resourceLabelText: 'Rooms',
-                resources: subjects,
-
-                //console.log(level),
-                drop: function (date, jsEvent, ui, resourceId,) {
-                    //console.log('drop', date.format(), resourceId);
-                    // is the "remove after drop" checkbox checked?
-                    if ($('#drop-remove').is(':checked')) {
-                        // if so, remove the element from the "Draggable Events" list
-                        $(this).remove();
-                    }
-                },
-                eventReceive: function (event, revertFunc,) { // called when a proper external event is dropped
-                    alert(event.title + " was dropped on " + event.start.format());
-                    //$('#calendar').fullCalendar('removeEvents',event._id);
-
-                    // if (!confirm("Are you sure about this change?")) {
-                    console.log();
-                    // }
-                    axios.get("api/teacher").then(({data}) => (this.teacher = data.data));
-                    console.log('eventReceive', event.subjectId, event);
-                    Fire.$emit('afterCreate');
-                },
-                eventDrop: function (event, revertFunc,) { // called when an event (already on the calendar) is moved
-                    //revertFunc();
-                    axios.get("api/teacher").then(({data}) => (this.teacher = data.data));
-                    console.log('eventReceive', event);
-                    console.log('eventDrop', event);
-
-                },
-                eventClick: function (event, element) {
-
-                    event.title = "CLICKED!";
-
-                    $('#calendar').fullCalendar('updateEvent', event);
-
-                }
-            });
+            Promise.all([this.loadLevel(), this.loadRoom(), this.loadSubject()])
+                .then(repsonses => {
+                    this.initCalendar()
+                })
         },
 
         methods: {
-            /**
-             * When drag from sidebar list to calendar
-             * You can call ajax here to your endpoint
-             */
-            onEventReceive(event, ui) {
-                console.log(event.subjectId, event)
-            },
             loadLevel() {
-                axios.get("api/level").then(({data}) => (this.level = data.data));
+                return axios.get("api/level").then(({data}) => (this.level = data.data));
+            },
+
+            initCalendar() {
+                let self = this;
+                this.calendar = $('#calendar').fullCalendar({
+                    // now: '2018-04-07',
+                    editable: true, // enable draggable events
+                    droppable: true, // this allows things to be dropped onto the calendar
+                    aspectRatio: 1,
+                    scrollTime: '7:00', // undo default 6am scrollTime
+                    defaultTimedEventDuration: '01:00:00',
+                    forceEventDuration: true,
+                    header: {
+                        left: '',
+                        center: 'Header',
+                        right: ''
+                    },
+                    defaultView: 'timelineDay',
+                    views: {
+                        timelineThreeDays: {
+                            type: 'timeline',
+                            duration: {days: 3}
+                        }
+                    },
+                    resourceLabelText: 'Rooms',
+                    resources: this.computedRooms,
+
+                    events: function(start, end, timezone, callback) {
+                        console.log({
+                            start, end, timezone, callback
+                        });
+                        axios.get(`/api/schedule`)
+                            .then(({data}) => {
+                                callback(data.map(item => {
+                                    return {
+                                        title: item.subject.title,
+                                        start: moment(start.format('YYYY-MM-DD') + ' ' + item.start_time),
+                                        end: moment(start.format('YYYY-MM-DD') + ' ' + item.end_time),
+                                        subjectId: item.subject_id,
+                                        resourceId: item.room_id,
+                                        scheduleId: item.id,
+                                    }
+                                }))
+                            });
+                    },
+
+                    //console.log(level),
+                    drop: function (date, jsEvent, ui, resourceId,) {
+                        //console.log('drop', date.format(), resourceId);
+                        // is the "remove after drop" checkbox checked?
+                        if ($('#drop-remove').is(':checked')) {
+                            // if so, remove the element from the "Draggable Events" list
+                            $(this).remove();
+                        }
+                    },
+                    eventClick: function (event, element) {
+                        event.title = "CLICKED!";
+                        $('#calendar').fullCalendar('updateEvent', event);
+                    },
+                    eventDrop: function (event, revertFn,) { // called when an event (already on the calendar) is moved
+                        //revertFunc();
+                        console.log('eventDrop', event);
+                        self.saveEvent(event);
+                    },
+                    eventReceive: function (event,) { // called when a proper external event is dropped
+                        console.log('eventReceive', {
+                            event
+                        });
+                        self.saveEvent(event);
+                    },
+                    eventResize(event, delta, revertFn) {
+                        console.log({
+                            event, delta, revertFn,
+                        });
+                        self.saveEvent(event);
+                    },
+                });
             },
 
             initDraggables() {
@@ -151,35 +182,44 @@
             //   return resources;
             // },
             loadRoom() {
-                axios.get("api/room").then(response => {
-                    this.resources = response.data.data
+                return axios.get("api/room").then(({data}) => {
+                    this.resources = data.data
+                });
+            },
+            loadSubject() {
+                return axios.get("api/subject").then(({data}) => {
+                    this.subjects = data.data;
                     Vue.nextTick(() => {
                         this.initDraggables()
                     })
                 });
             },
-            loadSubject() {
-                axios.get("api/subject").then(({data}) => (this.subjects = data.data));
-            },
-
-            /**
-             * When drag from calendar to calendar
-             * You can call ajax here to your endpoint
-             */
-            onEventDrop(event, ui, delta, revertFunc) {
-                Fire.emit('afterCreate')
-                console.log(event.subjectId, event),
-                    revertFunc();
+            saveEvent(event) {
+                let data = {
+                    id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
+                    subject_id: event.subjectId,
+                    room_id: event.resourceId,
+                    start_time: event.start.local().format('HH:mm:ss'),
+                    end_time: event.end.local().format('HH:mm:ss'),
+                };
+                if (data.id) {
+                    axios.put(`/api/schedule/${data.id}`, data)
+                        .then(({data}) => {
+                            this.eventScheduleIds[event._id] = data.id
+                        });
+                } else {
+                    axios.post(`/api/schedule`, data)
+                        .then(({data}) => {
+                            this.eventScheduleIds[event._id] = data.id
+                        });
+                }
             },
         },
         created() {
-            this.loadLevel();
-            this.loadRoom();
-            this.loadSubject();
             //this.roomColumn();
             Fire.$on('afterCreate', () => {
-                this.loadLevel();
-                this.loadRoom();
+                // this.loadLevel();
+                // this.loadRoom();
             });
             // setInterval(() => this.loadUser(),3000);
         }
