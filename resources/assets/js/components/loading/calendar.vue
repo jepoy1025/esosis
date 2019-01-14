@@ -1,17 +1,23 @@
 <template>
     <div class="container">
+        <div class="row">
+            <button class="btn btn-block btn-outline-info"></button>
+        </div>
         <div class="col-lg-12">
-            <div id='wrap' style="width: 100%;margin: 0;">
-
+            <div id='wrap' style="width: 100%;margin: 0;position: relative;
+line-height: 1.4em;">
+                
                 <div id='external-events' style="    float: left;
                     width: 20%;
                     padding: 0;
                     border: 1px solid #ccc;
                     background: #eee;
                     text-align: left;">
-                    <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Draggable Events</h4>
+                    <label>Input Grade Level:</label>
+                      <input type="text" name="level" v-model="gradeLevel">
+                    <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
                     <div v-for="subject in subjects" :key="subject.id" class='fc-event' :subject-id="subject.id"
-                         style="margin: 10px 0;cursor: pointer;">{{ subject.title }}
+                         style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
                         <input type='checkbox' id='drop-remove'/>
@@ -42,10 +48,10 @@
         data() {
             //Fire.$emit('afterCreate');
             return {
-                level: {},
+                gradeLevel: 'Grade 3',
                 teacher: {},
                 subjects: [],
-                resources: [{id: 10, name: 'yow'}],
+                resources: [],
                 calendar: null,
                 eventScheduleIds: {},
             }
@@ -77,9 +83,6 @@
         },
 
         methods: {
-            loadLevel() {
-                return axios.get("api/level").then(({data}) => (this.level = data.data));
-            },
 
             initCalendar() {
                 let self = this;
@@ -88,9 +91,12 @@
                     editable: true, // enable draggable events
                     droppable: true, // this allows things to be dropped onto the calendar
                     aspectRatio: 1,
-                    scrollTime: '7:00', // undo default 6am scrollTime
+                    scrollTime: '7:00',
+                    slotDuration: '00:05:00', // undo default 6am scrollTime
                     defaultTimedEventDuration: '01:00:00',
                     forceEventDuration: true,
+                    contentHeight: 500,
+                    schedulerLicenseKey: 'GPL-My-Project-Is-Open-Source',
                     header: {
                         left: '',
                         center: 'Header',
@@ -135,6 +141,7 @@
                         }
                     },
                     eventClick: function (event, element) {
+                        self.deleteEvent(event);
                         event.title = "CLICKED!";
                         $('#calendar').fullCalendar('updateEvent', event);
                     },
@@ -194,6 +201,11 @@
                     })
                 });
             },
+            loadLevel(){
+                return axios.get("api/level").then(({data})=>{
+                        this.level = data.data
+                    });
+            },
             saveEvent(event) {
                 let data = {
                     id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
@@ -201,12 +213,16 @@
                     room_id: event.resourceId,
                     start_time: event.start.local().format('HH:mm:ss'),
                     end_time: event.end.local().format('HH:mm:ss'),
+                    day: 1,
                 };
                 if (data.id) {
                     axios.put(`/api/schedule/${data.id}`, data)
                         .then(({data}) => {
                             this.eventScheduleIds[event._id] = data.id
-                        });
+                        })
+                        .catch(error => {
+                            window.alert("textext");
+                    });
                 } else {
                     axios.post(`/api/schedule`, data)
                         .then(({data}) => {
@@ -214,9 +230,21 @@
                         });
                 }
             },
+            // deleteEvent(event) {
+            //     let data = {
+            //         id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
+            //         subject_id: event.subjectId,
+            //         room_id: event.resourceId,
+            //         start_time: event.start.local().format('HH:mm:ss'),
+            //         end_time: event.end.local().format('HH:mm:ss'),
+            //     };
+            //     axios.delete(`/api/schedule/${data.id}`, data)
+            //             .then((result) => {
+       
+            // }
         },
         created() {
-            //this.roomColumn();
+            //this.loadLevel();
             Fire.$on('afterCreate', () => {
                 // this.loadLevel();
                 // this.loadRoom();
