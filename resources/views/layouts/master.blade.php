@@ -96,6 +96,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Old Student</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="#" class="nav-link">
+                  <i class="fas fa-list-ol cyan"></i>
+                  <p>Waiting List</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -126,6 +132,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item">
+          <router-link to="/dashboard" class="nav-link">
+            <i class="nav-icon fas fa-cash-register pink"></i>
+            <p class="pink">
+              Cashier
+            </p>
+          </router-link>
           </li>
           <li class="nav-item">
           <router-link to="/load" class="nav-link">

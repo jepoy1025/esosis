@@ -9,11 +9,33 @@
               <div class="card-header">
                 <h3 class="card-title"><b class="pink">Registration</b> form</h3>
                 <!-- <form @submit.prevent="editMode ? updateLevel() : createLevel()"> -->
-                <div class="card-tools">
-                    <label class="pink">Applying for:</label>
+                  <div class="row">
+                  <div class="col-lg-3 col-md-3">
+                  <label class="pink">Applying for:</label>
                     <select name="payment" v-model="payment" id="grade_level" class="form-control"  @change="feeForm(payment)">
                       <option v-for="level in level" v-bind:value="level" :hidden="level.id == '0'" >{{level.title}}</option>
-                  </select>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3">
+                  <label class="pink">Section:</label>
+                    <select name="room" v-model="room" id="room" class="form-control" @change="checkRoom(room)"> 
+                    <option v-for="section in section" v-bind:value="section" :hidden="section.grade_level != form.grade_level" >{{section.section}}</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6 col-md-6">
+                    <div class="pull-left">
+                        <label class="pink">Add to Waiting List</label><br>
+                        Click here: <input type="checkbox" id="checkbox" v-model="waitingList" @change="waitingListSelect()">
+                    </div>
+                  </div>
+                  <!-- <div class="col-lg-3 col-md-3">
+                    <label class="pink">Section:</label>
+                    <select name="payment" v-model="payment" id="grade_level" class="form-control"  @change="feeForm(payment)">
+                      <option v-for="level in level" v-bind:value="level" :hidden="level.id == '0'" >{{level.title}}</option>
+                    </select>
+                  </div> -->
+                 </div> 
+                <div class="card-tools">
                 </div>
               </div>
               <!-- /.card-header -->
@@ -83,9 +105,9 @@
                         </div>
                         <div class="form-group col-md-4 col-sm-6 col-xs-12">
                             <label>Birth Date</label>
-                          <input @input="getDate(form.birthDate)" v-model="form.birthDate" placeholder="" type="date" value="" name="birthDate" id="birthDate"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('birthDate') }">
-                          <has-error :form="form" field="birthDate"></has-error>
+                          <input @input="getDate(form.birth_date)" v-model="form.birth_date" placeholder="" type="date" value="" name="birth_date" id="birth_date"
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('birth_date') }">
+                          <has-error :form="form" field="birth_date"></has-error>
                         </div>
                         <div class="form-group col-md-2 col-sm-12 col-xs-12">
                             <label>Age</label>
@@ -95,13 +117,13 @@
                         </div>
                         <div class="form-group col-md-2 col-sm-6 col-xs-12">
                             <label>Sisters</label>
-                          <input @input="sisterInput()" v-model="form.noOfSisters" placeholder="0" type="number" name="noOfSisters" id="noOfSisters"
+                          <input @change="sisterInput()" v-model="form.noOfSisters" placeholder="0" type="text" name="noOfSisters" id="noOfSisters"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('noOfSisters') }">
                           <has-error :form="form" field="noOfSisters"></has-error>
                         </div>
                         <div class="form-group col-md-2 col-sm-6 col-xs-12">
                             <label>Brothers</label>
-                          <input @input="brotherInput()" v-model="form.noOfBrothers" placeholder="0" type="number" name="noOfBrothers" id="noOfBrothers"
+                          <input @change="brotherInput()" v-model="form.noOfBrothers" placeholder="0" type="text" name="noOfBrothers" id="noOfBrothers"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('noOfBrothers') }">
                           <has-error :form="form" field="noOfBrothers"></has-error>
                         </div>
@@ -272,7 +294,9 @@
                   </div>
                 </div>
                 <div class="row" style="padding-top: 20px">
-                    <button type="button" class="btn btn-block btn-secondary btn-lg" @click="processPayment()"><h3 class="pink">Process Payments</h3></button>
+                  <div class="col-md-12">
+                      <button type="button" class="btn btn-block btn-secondary btn-lg" @click="processPayment()"><h3 class="pink">Next Step</h3></button>
+                  </div>
                 </div>
             </div>
             <!-- /.card -->
@@ -287,11 +311,13 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" v-show="!waitingList">
                 <label>Student Requirements:</label>
+                <div class="row">&nbsp&nbsp
                 <div :hidden="form.grade_level < 5">Form 137 :  <input type="checkbox" id="form.form137" v-model="form.form137"></div>
                 NSO : <input type="checkbox" id="form.nso" v-model="form.nso">
                 Picture 1x1 : <input type="checkbox" id="form.picture1x1" v-model="form.picture1x1">
+                </div>
                 <div class="form-group">
                     <label>Whole Year Fee:</label>
                   <input v-model="form.whole_year" placeholder="Whole Year Fee" type="number" name="whole_year" id="whole_year"
@@ -319,7 +345,8 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Enroll Student</button>
+                <button type="submit" class="btn btn-primary" v-show="!waitingList">Enroll Student</button>
+                <button type="submit" class="btn btn-primary" v-show="waitingList">Save to Waiting List</button>
               </div>
             </div>
           </div>
@@ -334,20 +361,26 @@
     export default {
             data() {               
               return {
+                waitingList : '',
                 tweenedNumber : 0,
                 number : 0,
                 count: 0,
+                population: 0,
                 level:{},
+                section:{},
                 age:'',
                 guardian: false,
                 sisterCount:0,
                 brotherCount:0,
                 studentCount:0,
+                room:[],
                 payment:[],
                 gradetitle:'',
                 checked:'',
                 //age:'',
                 form: new Form({
+                    student_type:1,
+                    room_id:'',
                     student_id: '',
                     grade_level : '',
                     first_name : '',
@@ -358,7 +391,7 @@
                     schoolAttendedAddress: '',
                     schoolAttendedDate: '',
                     gender: '',
-                    birthDate: '',
+                    birth_date: '',
                     noOfSisters:0,
                     noOfBrothers:0,
                     sistersName: [],
@@ -398,6 +431,7 @@
             methods: {
                 loadLevel(){
                     axios.get("api/fee").then(({data})=>(this.level = data.data));
+                    axios.get("api/room/").then(({data})=>(this.section = data.data));
                 },
                 loadStudentCount(){
                     axios.get("api/student-count").then(({data})=>(this.studentCount = data.data));
@@ -410,27 +444,89 @@
                     //this.age = now;
                 },
                 sisterInput(){
+                  if(this.form.noOfSisters != null){
                     this.sisterCount = parseInt(this.form.noOfSisters);
+                  }
                 },
                 brotherInput(){
+                  if(this.form.noOfBrothers != null){
                     this.brotherCount = parseInt(this.form.noOfBrothers);
+                  }
                 },
                 processPayment(){
                     $('#paymentModal').modal('show');      
                 },
                 onSelectFee(){
                     axios.get("api/fee/"+this.form.grade_level).then(({data})=>(this.payment = data.data));
+                    
+                },
+                checkRoom(data){
+                    //console.log(data);
+                    this.form.room_id = data.id;
+                    this.population = data.population;
+                    var pop = data.population;
+                    var rem = 30 - pop;
+                    //console.log(pop);
+                    if (pop > 25 && pop <= 29){
+                        swal('Room has '+ pop+' already')
+                    };
+                    if (pop >= 30){
+                      swal({
+                        title: 'Population reach the limit',
+                        text: "create A new room or Proceed Anyway",
+                        type: 'warning',
+                        showCancelButton: true,
+                        cancelButtonText:'Proceed',
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#85e085',
+                        confirmButtonText: 'Create New Room!'
+                      }).then((result) => {
+                        if (result.value) {
+                          swal(
+                            'Redirecting!',
+                            'To Rooms Tab.',
+                            'success',
+                            location.href = '/rooms',
+                          )
+                        }
+                      })
+                    };
                 },
                 feeForm(fee){
+                    this.room= [];
                     this.form.grade_level = fee.grade_level;
                     this.form.whole_year = fee.whole_year;
                     this.form.books = fee.books;
                     this.form.uniform = fee.uniform;
                     this.form.min_downpayment = fee.min_downpayment;
                     this.gradetitle = fee.title;
+                    
                 },
                 insertStudent(){
-                    axios.post("api/fee/"+this.form.grade_level).then(({data})=>(this.payment = data.data));
+                    this.$Progress.start();
+                    this.form.post('api/student')
+                    .then(()=>{
+
+                        $('#paymentModal').modal('hide');
+                        toast({
+                          type: 'success',
+                          title: 'Student Added Succesfully'
+                        });
+                        this.$Progress.finish();
+                        this.form.reset();
+
+                    })
+                    .catch(()=>{
+                      this.$Progress.fail();
+                    })
+                },
+                waitingListSelect(){
+                    if(this.waitingList == true){
+                      this.form.student_type = 3;
+                      this.form.room_id = null; 
+                    }else{
+                      this.form.student_type = 1;
+                    }
                 }
             },
             created() {

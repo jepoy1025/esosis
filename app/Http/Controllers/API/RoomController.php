@@ -87,7 +87,10 @@ class RoomController extends Controller
      */
     public function show($id)
     {
-        //
+        $room = DB::table('rooms')
+                ->where('id','=',$id)
+                ->first();
+        return compact('room');;
     }
 
     /**
