@@ -39,7 +39,7 @@ class StudentController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
@@ -87,23 +87,23 @@ class StudentController extends Controller
           ->where('student_id','=',$student_id)
           ->first();
         $id = $student->id;
-        
-        if($request['noOfSister'] > 0){
-            
+
+        if ($request['noOfSister'] > 0) {
+
         }
-        if($request['noOfBrothers'] > 0){
-            for($ctr = 1; $ctr < $request['noOfBrothers']+1; $ctr++){
+        if ($request['noOfBrothers'] > 0) {
+            for ($ctr = 0; $ctr < $request->get('noOfBrothers'); $ctr++) {
                 DB::table('siblings')->insert(
-                array(
-                       'student_id'     =>   $id, 
-                       'type'   =>   'brother',
-                       'name'   =>  $request->[{'brothersName['.$ctr.']'}],
-                       'birth_date' => $request->[{'brothersDob['.$ctr.']'}],
-                )
+                    [
+                        'student_id' => $id,
+                        'type' => 'brother',
+                        'name' => $request->get('brothersName')[$ctr],
+                        'birth_date' => $request->get('brothersDob')[$ctr],
+                    ]
                 );
             }
         }
-        
+
 
         return compact('returns');
 
