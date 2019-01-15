@@ -82,11 +82,12 @@ class ScheduleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Schedule $schedule
+     * @return void
+     * @throws \Exception
      */
-    public function destroy($id)
+    public function destroy(Schedule $schedule)
     {
-        //
+        $schedule->delete();
     }
 }

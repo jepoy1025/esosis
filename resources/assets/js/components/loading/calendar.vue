@@ -141,9 +141,25 @@ line-height: 1.4em;">
                         }
                     },
                     eventClick: function (event, element) {
-                        self.deleteEvent(event);
-                        event.title = "CLICKED!";
-                        $('#calendar').fullCalendar('updateEvent', event);
+                        bootbox.dialog({
+                            message: 'Confirm delete schedule?',
+                            title: 'Confirmation',
+                            buttons: {
+                                cancel: {
+                                    label: 'Cancel',
+                                    className: 'btn-default'
+                                },
+                                confirm: {
+                                    label: 'Yes, Delete',
+                                    className: 'btn-danger',
+                                    callback() {
+                                        self.deleteEvent(event)
+                                    }
+                                },
+                            },
+                        });
+                        // event.title = "CLICKED!";
+                        // $('#calendar').fullCalendar('updateEvent', event);
                     },
                     eventDrop: function (event, revertFn,) { // called when an event (already on the calendar) is moved
                         //revertFunc();
@@ -230,18 +246,20 @@ line-height: 1.4em;">
                         });
                 }
             },
-            // deleteEvent(event) {
-            //     let data = {
-            //         id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
-            //         subject_id: event.subjectId,
-            //         room_id: event.resourceId,
-            //         start_time: event.start.local().format('HH:mm:ss'),
-            //         end_time: event.end.local().format('HH:mm:ss'),
-            //     };
-            //     axios.delete(`/api/schedule/${data.id}`, data)
-            //             .then((result) => {
-       
-            // }
+            deleteEvent(event) {
+                let data = {
+                    id: event.scheduleId ? event.scheduleId : _.get(this.eventScheduleIds, event._id),
+                };
+                axios.delete(`/api/schedule/${data.id}`)
+                        .then(() => {
+                            this.calendar.fullCalendar('removeEvents', event._id)
+                            window.toast(
+                                'Success!',
+                                'Schedule has been deleted.',
+                                'success',
+                            )
+                        });
+            }
         },
         created() {
             //this.loadLevel();
