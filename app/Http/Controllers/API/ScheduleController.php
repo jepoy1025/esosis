@@ -39,9 +39,10 @@ class ScheduleController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        //return response()->json(['isvalid'=>false,'errors'=>'wweeeew']);
-        $schedule = Schedule::query()->create($request->only('subject_id', 'room_id', 'teacher_id', 'start_time', 'end_time', 'day'));
-        return $schedule;
+        // return response()->json(['isvalid'=>false,'errors'=>'wweeeew']);
+        // $schedule = Schedule::query()->create($request->only('subject_id', 'room_id', 'teacher_id', 'start_time', 'end_time', 'day'));
+        // return $schedule;
+        return Response::json(['error' => 'Error msg'], 404); // Status code here
     }
 
     /**
@@ -75,8 +76,9 @@ class ScheduleController extends Controller
      */
     public function update(Request $request, Schedule $schedule)
     {
-        $schedule->update($request->only('subject_id', 'room_id', 'teacher_id', 'start_time', 'end_time', 'day'));
-        return $schedule;
+        // $schedule->update($request->only('subject_id', 'room_id', 'teacher_id', 'start_time', 'end_time', 'day'));
+        // return $schedule;
+        return Response::json(['error' => 'Error msg'], 404);
     }
 
     /**

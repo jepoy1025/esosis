@@ -237,13 +237,27 @@ line-height: 1.4em;">
                             this.eventScheduleIds[event._id] = data.id
                         })
                         .catch(error => {
+                            this.calendar.fullCalendar('removeEvents', event._id)
                             window.alert("textext");
                     });
                 } else {
                     axios.post(`/api/schedule`, data)
                         .then(({data}) => {
                             this.eventScheduleIds[event._id] = data.id
-                        });
+                            window.toast(
+                                'Success!',
+                                'Subject Added',
+                                'success',
+                            )
+                        })
+                        .catch(error => {
+                             this.calendar.fullCalendar('removeEvents', event._id)
+                             window.toast(
+                                'Oops!',
+                                'The teacher is not available or the subject is already added.',
+                                'error',
+                            )
+                     });
                 }
             },
             deleteEvent(event) {
