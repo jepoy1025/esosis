@@ -20,4 +20,8 @@ Route::post('postAjax','TestController@store');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('invoice',  function(){
+	return view('prints.invoice');
+});
 Route::get('{path}',"HomeController@index")->where( 'path', '([A-z\/_.\d-]+)?' );

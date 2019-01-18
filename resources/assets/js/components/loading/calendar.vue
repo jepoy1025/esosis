@@ -277,10 +277,10 @@ line-height: 1.4em;">
         },
         created() {
             //this.loadLevel();
-            Fire.$on('afterCreate', () => {
-                // this.loadLevel();
-                // this.loadRoom();
-            });
+            // Fire.$on('afterCreate', () => {
+            //     // this.loadLevel();
+            //     // this.loadRoom();
+            // });
             // setInterval(() => this.loadUser(),3000);
         }
 

@@ -27,6 +27,8 @@ Route::apiResources(['subject' => 'API\SubjectController']);
 Route::apiResources(['schedule' => 'API\ScheduleController']);
 Route::apiResources(['student' => 'API\StudentController']);
 
+
+Route::get('student-waiting','API\StudentController@waitingList');
 Route::put('teacher-active/{teacher}','API\TeacherController@activate');
 Route::get('active-teacher','API\TeacherController@actTeacher');
 Route::get('inactive-room','API\RoomController@inActive');

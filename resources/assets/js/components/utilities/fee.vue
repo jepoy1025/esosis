@@ -18,6 +18,7 @@
                         <th>ID</th>
                         <th>Grade Level</th>
                         <th>Whole Year Fee</th>
+                        <th>miscellaneous</th>
                         <th>Books</th>
                         <th>Uniform</th>
                         <th>Downpayment</th>
@@ -27,6 +28,7 @@
                         <td>{{fee.id}}</td>
                         <td>{{fee.title}}</td>
                         <td>{{fee.whole_year}}</td>
+                        <td>{{fee.misc}}</td>
                         <td>{{fee.books}}</td>
                         <td>{{fee.uniform}}</td>
                         <td>{{fee.min_downpayment}}</td>
@@ -59,6 +61,11 @@
                   <input v-model="form.whole_year" placeholder="Whole Year Fee" type="number" name="whole_year" id="whole_year"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('whole_year') }">
                   <has-error :form="form" field="whole_year"></has-error>
+                </div>
+                <div class="form-group">
+                  <input v-model="form.misc" placeholder="miscellaneous" type="number" name="misc" id="misc"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('misc') }">
+                  <has-error :form="form" field="misc"></has-error>
                 </div>
                 <div class="form-group">
                   <input v-model="form.books" placeholder="Books Fee" type="number" name="books" id="books"
@@ -100,6 +107,7 @@
                     id: '',
                     grade_level : '',
                     whole_year : '',
+                    misc: '',
                     books : '',
                     uniform : '',
                     min_downpayment : ''

@@ -56,14 +56,35 @@ Vue.use(VueProgressBar, {
 let routes = [
   { path: '/dashboard', component: require('./components/dashboard.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
+
+  //Utilities
   { path: '/teachers', component: require('./components/utilities/teachers.vue') },
   { path: '/levels', component: require('./components/utilities/level.vue') },
   { path: '/fees', component: require('./components/utilities/fee.vue') },
   { path: '/rooms', component: require('./components/utilities/room.vue') },
   { path: '/subjects', component: require('./components/utilities/subject.vue') },
+  { path: '/users', component: require('./components/utilities/users.vue') },
+
+  //Class Loading
   { path: '/load', component: require('./components/loading/calendar.vue') },
+
+  //Enrollment
   { path: '/new_student', component: require('./components/enrollment/new_student.vue') },
-  { path: '/users', component: require('./components/utilities/users.vue') }
+  { path: '/old_student', component: require('./components/enrollment/old_student.vue') },
+
+  //Announcement
+  { path: '/announcement', component: require('./components/announcements/announcement.vue') },
+
+  //cashier
+  { path: '/cashier', component: require('./components/cashiers/cashier.vue') },
+
+  //parent users
+  { path: 'register_sis/:id', component: require('./components/enrollment/waiting_list.vue')},
+
+  //sis
+  { path: '/studentList', component: require('./components/sis/student_list.vue') },
+  { path: '/addStudent', component: require('./components/sis/add_student.vue') },
+  
 ]
 /**
  * Next, we will create a fresh Vue application instance and attach it to

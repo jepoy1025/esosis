@@ -84,6 +84,7 @@ class FeeController extends Controller
         $fee = Fee::findOrFail($id);
         $fee->update([
             'whole_year' => $request['whole_year'],
+            'misc' => $request['misc'],
             'books' => $request['books'],
             'uniform' => $request['uniform'],
             'min_downpayment' => $request['min_downpayment']

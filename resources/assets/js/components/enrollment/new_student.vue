@@ -22,12 +22,6 @@
                     <option v-for="section in section" v-bind:value="section" :hidden="section.grade_level != form.grade_level" >{{section.section}}</option>
                     </select>
                   </div>
-                  <div class="col-lg-6 col-md-6">
-                    <div class="pull-left">
-                        <label class="pink">Add to Waiting List</label><br>
-                        Click here: <input type="checkbox" id="checkbox" v-model="waitingList" @change="waitingListSelect()">
-                    </div>
-                  </div>
                   <!-- <div class="col-lg-3 col-md-3">
                     <label class="pink">Section:</label>
                     <select name="payment" v-model="payment" id="grade_level" class="form-control"  @change="feeForm(payment)">
@@ -238,9 +232,9 @@
                             <has-error :form="form" field="guardiansName"></has-error>
                         </div>
                         <div class="form-group col-md-3 col-sm-6 col-xs-12">
-                            <input v-model="form.SourceIncome" placeholder="Source of Income" type="text" name="SourceIncome" id="SourceIncome"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('SourceIncome') }">
-                            <has-error :form="form" field="SourceIncome"></has-error>
+                            <input v-model="form.guardiansSourceIncome" placeholder="Source of Income" type="text" name="guardiansSourceIncome" id="guardiansSourceIncome"
+                                class="form-control" :class="{ 'is-invalid': form.errors.has('guardiansSourceIncome') }">
+                            <has-error :form="form" field="guardiansSourceIncome"></has-error>
                         </div> 
                         <div class="form-group col-md-3 col-sm-6 col-xs-12">
                             <input v-model="form.guardiansCompany" placeholder="Company" type="text" name="guardiansCompany" id="guardiansCompany"
@@ -311,7 +305,7 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body" v-show="!waitingList">
+              <div class="modal-body">
                 <label>Student Requirements:</label>
                 <div class="row">&nbsp&nbsp
                 <div :hidden="form.grade_level < 5">Form 137 :  <input type="checkbox" id="form.form137" v-model="form.form137"></div>
@@ -325,6 +319,12 @@
                   <has-error :form="form" field="whole_year"></has-error>
                 </div>
                 <div class="form-group">
+                    <label>miscellaneous:</label>
+                  <input v-model="form.misc" placeholder="Whole Year Fee" type="number" name="misc" id="misc"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('misc') }" readonly>
+                  <has-error :form="form" field="misc"></has-error>
+                </div>
+                <div class="form-group">
                     <label>Books Fee</label>
                   <input v-model="form.books" placeholder="Books Fee" type="number" name="books" id="books"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('books') }" readonly>
@@ -332,6 +332,7 @@
                 </div>
                 <div class="form-group">
                     <label>Uniform Fee</label>
+                  <input type="checkbox" id="checkbox" v-model="form.uniformCheck">
                   <input v-model="form.uniform" placeholder="Uniform Fee" type="number" name="uniform" id="uniform"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('uniform') }" readonly>
                   <has-error :form="form" field="uniform"></has-error>
@@ -342,11 +343,17 @@
                     class="form-control" :class="{ 'is-invalid': form.errors.has('min_downpayment') }" readonly>
                   <has-error :form="form" field="min_downpayment"></has-error>
                 </div>
+                <h5>Student Code for SIS: {{form.student_code}}</h5>
+                <div class="form-group">
+                    <label>Amount</label>
+                  <input v-model="form.paidAmount" placeholder="Amount" type="number" name="paidAmount" id="paidAmount"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }">
+                  <has-error :form="form" field="paidAmount"></has-error>
+                </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" v-show="!waitingList">Enroll Student</button>
-                <button type="submit" class="btn btn-primary" v-show="waitingList">Save to Waiting List</button>
+                <button type="submit" class="btn btn-primary">Enroll Student</button>
               </div>
             </div>
           </div>
@@ -361,7 +368,7 @@
     export default {
             data() {               
               return {
-                waitingList : '',
+                pushId:'',
                 tweenedNumber : 0,
                 number : 0,
                 count: 0,
@@ -379,6 +386,7 @@
                 checked:'',
                 //age:'',
                 form: new Form({
+                    paidAmount:0,
                     student_type:1,
                     room_id:'',
                     student_id: '',
@@ -399,6 +407,7 @@
                     brothersName: [],
                     brothersDob: [],
                     parent_id: [],
+                    uniformCheck:false,
                     guardianCheck:'',
                     fathersName:'',
                     fathersSourceIncome:'',
@@ -419,16 +428,29 @@
                     emergencyAltContact:'',
                     grade_level : '',
                     whole_year : '',
+                    misc :'',
                     books : '',
                     uniform : '',
                     min_downpayment : '',
                     form137: false,
                     nso: false,
                     picture1x1: false,
+                    student_code:'',
                 })
               }
             },
             methods: {
+                rndStr() {
+                    let text = " "
+                    let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                  
+                    for( let i=0; i < 10; i++ ) {
+                      text += chars.charAt(Math.floor(Math.random() * chars.length))
+                    }
+
+                    this.form.student_code = text;
+                    
+                },
                 loadLevel(){
                     axios.get("api/fee").then(({data})=>(this.level = data.data));
                     axios.get("api/room/").then(({data})=>(this.section = data.data));
@@ -496,6 +518,7 @@
                     this.room= [];
                     this.form.grade_level = fee.grade_level;
                     this.form.whole_year = fee.whole_year;
+                    this.form.misc = fee.misc;
                     this.form.books = fee.books;
                     this.form.uniform = fee.uniform;
                     this.form.min_downpayment = fee.min_downpayment;
@@ -505,8 +528,8 @@
                 insertStudent(){
                     this.$Progress.start();
                     this.form.post('api/student')
-                    .then(()=>{
-
+                    .then(({data})=>{
+                        this.pushId = data.data;
                         $('#paymentModal').modal('hide');
                         toast({
                           type: 'success',
@@ -514,24 +537,23 @@
                         });
                         this.$Progress.finish();
                         this.form.reset();
+                        this.$router.push('/')
 
                     })
                     .catch(()=>{
                       this.$Progress.fail();
+                      $('#paymentModal').modal('hide');
+                      toast({
+                          type: 'error',
+                          title: 'Something Went Wrong!'
+                        });
                     })
                 },
-                waitingListSelect(){
-                    if(this.waitingList == true){
-                      this.form.student_type = 3;
-                      this.form.room_id = null; 
-                    }else{
-                      this.form.student_type = 1;
-                    }
-                }
             },
             created() {
                 //this.calculateAge();
                 this.loadLevel();
+                this.rndStr();
             }
     }
 </script>
