@@ -108,6 +108,7 @@
                 </tbody></table>
               </div>
               <form @submit.prevent="processPayment()">
+                <div id="printable">
                 <div class="form-group">
                   <label>Select Payment Type:</label>
                   <select name="type" v-model="form.type" id="teacher_id" class="form-control" :class="{ 'is-invalid': form.errors.has('type') }">
@@ -124,6 +125,7 @@
                     class="form-control" :class="{ 'is-invalid': form.errors.has('amount') }">
                   <has-error :form="form" field="amount"></has-error>
                 </div>
+              </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-success">Process Payment</button>
@@ -177,6 +179,11 @@
                               'success'
                             )
                   this.$Progress.finish();
+                  var divToPrint=document.getElementById("printable");
+                   newWin= window.open("");
+                   newWin.document.write(divToPrint.outerHTML);
+                   newWin.print();
+                   newWin.close();
                   $('#makeTrans').modal('hide');
                 })
                 .catch(() => {

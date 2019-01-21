@@ -39,4 +39,14 @@ class GradesController extends Controller
         ]);
         return $subject; 
     }
+
+    public function print($id){
+        $data = DB::table('grades')
+            ->join('subjects','grades.subject_id','=','subjects.id')
+            ->where('grades.student_id', $id)
+            ->select('grades.*','subjects.title')
+            ->get();
+
+        return view('prints.grades', ['data' => $data]);
+    }
 }

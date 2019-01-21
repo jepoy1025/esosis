@@ -105,12 +105,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
           @endcan
           @can('isAdmin')
           <li class="nav-item">
-          <router-link to="/dashboard" class="nav-link">
-            <i class="nav-icon fas fa-tachometer-alt pink"></i>
-            <p class="pink">
-              Dashboard
-            </p>
-          </router-link>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -180,14 +174,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </p>
           </router-link>
           </li>
-          <li class="nav-item">
-          <router-link to="/dashboard" class="nav-link">
-            <i class="nav-icon fas fa-user-tie pink"></i>
-            <p class="pink">
-              Sponsor
-            </p>
-          </router-link>
-          </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-users-cog pink"></i>
@@ -217,6 +203,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
             </ul>
           </li>
+          <li class="nav-item">
+          <router-link to="/cashier" class="nav-link">
+            <i class="nav-icon fas fa-ticket-alt pink"></i>
+            <p class="pink">
+              Student Codes
+            </p>
+          </router-link>
+          </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-print pink"></i>
@@ -227,7 +221,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/fees" class="nav-link">
+                <router-link to="/class_list" class="nav-link">
                   <i class="fas fa-money-check cyan"></i>
                   <p>class List</p>
                 </router-link>

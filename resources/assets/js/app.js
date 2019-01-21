@@ -97,6 +97,9 @@ let routes = [
   { path: '/comment/:id', component: require('./components/students/comments.vue') },
   { path: '/requirement/:id', component: require('./components/students/requirements.vue') },
 
+  //reports
+  { path: '/class_list', component: require('./components/report/class_list.vue') },
+
   
 ]
 /**

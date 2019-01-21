@@ -6,6 +6,7 @@
                     <div class="card-header"><h4>{{student.last_name}}, {{student.first_name}}</h4>
                         <div class="card-tools">
                             <button class="btn btn-block btn-outline-primary btn-lg" @click="backStudent"><i class="fas fa-plus-circle fa-fw"></i> Back</button>
+                            <button class="btn btn-block btn-outline-primary btn-lg" @click="printGrade"><i class="fas fa-plus-circle fa-fw"></i> Print</button>
                         </div>
                     </div>
     
@@ -135,6 +136,10 @@
                 .catch(() => {
                   this.$Progress.fail();
                 })
+            },
+
+            printGrade(){
+                window.open('/api/gradePrint/'+this.$route.params.id);
             }
 
         },
