@@ -298,14 +298,14 @@
         </div>
             <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content" id="printMe">
               <div class="modal-header" style="background-color: #A9A9A9;">
                 <h4 class="modal-title pink"><b>{{form.last_name}}, {{form.first_name}} {{form.middle_name}}</b> <p> {{gradetitle}}</p></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <div class="modal-body">
+              <div class="modal-body" id>
                 <label>Student Requirements:</label>
                 <div class="row">&nbsp&nbsp
                 <div :hidden="form.grade_level < 5">Form 137 :  <input type="checkbox" id="form.form137" v-model="form.form137"></div>
@@ -353,7 +353,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Enroll Student</button>
+                <button type="submit" class="btn btn-primary" v-print="'#printMe'">Enroll Student</button>
               </div>
             </div>
           </div>

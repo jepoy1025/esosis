@@ -25,7 +25,26 @@ class StudentController extends Controller
     //                 ->get();
 
     // }
+    public function sponsorGet($id){
+        $data = DB::table('sponsor_students')
+            ->join('students','sponsor_students.student_id','=','students.id')
+            ->join('levels','students.grade_level_id','=','levels.id')
+            ->where('sponsor_students.sponsor_id',$id)
+            ->select('students.*','levels.title')
+            ->get();
+        return compact('data');
+    }
 
+    public function parentGet($id){
+        $data = DB::table('parent_student')
+            ->join('students','parent_student.student_id','=','students.id')
+            ->join('levels','students.grade_level_id','=','levels.id')
+            ->where('parent_student.parent_id',$id)
+            ->select('students.*','levels.title')
+            ->get();
+
+        return compact('data');
+    }
     public function waitingList(){
         //$ret = "sasdasd";
         $data = DB::table('students')
@@ -258,10 +277,10 @@ class StudentController extends Controller
       array(
              'student_id'     =>   $id, 
              'grade_level'   =>   $request['grade_level'],
-             'first'    => '',
-             'second'    => '',
-             'third'    => '',
-             'fourth'    => '',
+             'first'    => 'Please Fill',
+             'second'    => 'Please Fill',
+             'third'    => 'Please Fill',
+             'fourth'    => 'Please Fill',
       )
       );
     $countSubj = DB::table('subjects')->where('level','=',$request['grade_level'])->count();
@@ -317,7 +336,11 @@ class StudentController extends Controller
 
     public function show($id)
     {
-        //
+        $data = DB::table('students')
+            ->where('id', $id)
+            ->first();
+
+         return compact('data');
     }
 
     /**

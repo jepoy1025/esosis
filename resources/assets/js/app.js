@@ -17,6 +17,9 @@ import {ContainerMixin, ElementMixin} from 'vue-slicksort';
 // import vuedraggable from 'vuedraggable';
 // Vue.use(vuedraggable)
 
+import Print from 'vue-print-nb'
+Vue.use(Print);
+
 import Schedule from 'vue-schedule'
 Vue.use(Schedule)
 
@@ -55,6 +58,7 @@ Vue.use(VueProgressBar, {
 
 let routes = [
   { path: '/dashboard', component: require('./components/dashboard.vue') },
+  { path: '/developer', component: require('./components/developer.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
 
   //Utilities
@@ -64,6 +68,8 @@ let routes = [
   { path: '/rooms', component: require('./components/utilities/room.vue') },
   { path: '/subjects', component: require('./components/utilities/subject.vue') },
   { path: '/users', component: require('./components/utilities/users.vue') },
+  { path: '/parents', component: require('./components/utilities/parents.vue') },
+  { path: '/sponsors', component: require('./components/utilities/sponsors.vue') },
 
   //Class Loading
   { path: '/load', component: require('./components/loading/calendar.vue') },
@@ -84,6 +90,13 @@ let routes = [
   //sis
   { path: '/studentList', component: require('./components/sis/student_list.vue') },
   { path: '/addStudent', component: require('./components/sis/add_student.vue') },
+
+  //student
+  { path: '/grade', component: require('./components/students/grade.vue') },
+  { path: '/grade/:id', component: require('./components/students/grade_list.vue') },
+  { path: '/comment/:id', component: require('./components/students/comments.vue') },
+  { path: '/requirement/:id', component: require('./components/students/requirements.vue') },
+
   
 ]
 /**
@@ -104,6 +117,21 @@ Vue.filter('myDate',function(created){
 });
 
 window.Fire = new Vue();
+
+Vue.component(
+    'passport-clients',
+    require('./components/passport/Clients.vue')
+);
+
+Vue.component(
+    'passport-authorized-clients',
+    require('./components/passport/AuthorizedClients.vue')
+);
+
+Vue.component(
+    'passport-personal-access-tokens',
+    require('./components/passport/PersonalAccessTokens.vue')
+);
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 

@@ -82,6 +82,23 @@
                         </div>
 
                         <div class="form-group row">
+                            <label for="usertype" class="col-md-4 col-form-label text-md-right">{{ __('User Type') }}</label>
+
+                            <div class="col-md-6">
+                                <select id="usertype" type="usertype" class="form-control{{ $errors->has('usertype') ? ' is-invalid' : '' }}" name="usertype" value="{{ old('usertype') }}" required>
+                                    <option value="3">Parent</option>
+                                    <option value="4">Sponsor</option>
+                                </select>
+
+                                @if ($errors->has('usertype'))
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('usertype') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">

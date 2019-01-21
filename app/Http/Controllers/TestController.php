@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TestController extends Controller
 {
@@ -13,7 +14,7 @@ class TestController extends Controller
      */
     public function index()
     {
-        //
+        return Auth::user();
     }
 
     /**
@@ -49,7 +50,7 @@ class TestController extends Controller
      */
     public function show($id)
     {
-        //
+        
     }
 
     /**

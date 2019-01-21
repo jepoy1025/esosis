@@ -85,6 +85,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
             </li>
           @endcan
+          @can('isSponsor')
+            <li class="nav-item">
+            <router-link to="/studentList" class="nav-link">
+              <i class="nav-icon fas fa-clipboard-list pink"></i>
+              <p class="pink">
+                Students List
+              </p>
+            </router-link>
+            </li>            
+            {{-- <li class="nav-item">
+            <router-link to="/addStudent" class="nav-link">
+              <i class="nav-icon fas fa-user-plus pink"></i>
+              <p class="pink">
+                Add Students
+              </p>
+            </router-link>
+            </li> --}}
+          @endcan
           @can('isAdmin')
           <li class="nav-item">
           <router-link to="/dashboard" class="nav-link">
@@ -127,8 +145,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link to="/new_student" class="nav-link">
-                  <i class="fas fa-chart-bar cyan"></i>
+                <router-link to="/grade" class="nav-link">
+                  <i class="fas fa-calendar-alt cyan"></i>
                   <p class="cyan">Performance</p>
                 </router-link>
               </li>
@@ -151,14 +169,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <i class="nav-icon fas fa-cash-register pink"></i>
             <p class="pink">
               Cashier
-            </p>
-          </router-link>
-          </li>
-          <li class="nav-item">
-          <router-link to="/announcement" class="nav-link">
-            <i class="nav-icon fas fa-bullhorn pink"></i>
-            <p class="pink">
-              Announcements
             </p>
           </router-link>
           </li>
@@ -194,10 +204,45 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <a href="#" class="nav-link">
+                <router-link to="/parents" class="nav-link">
                   <i class="fas fa-user-friends cyan"></i>
-                  <p>Parent/Sponsor</p>
-                </a>
+                  <p>Parent</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/sponsors" class="nav-link">
+                  <i class="fas fa-user-friends cyan"></i>
+                  <p>Sponsor</p>
+                </router-link>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-print pink"></i>
+              <p class="pink">
+                Generate Reports
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/fees" class="nav-link">
+                  <i class="fas fa-money-check cyan"></i>
+                  <p>class List</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/teachers" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <p>Class Schedule</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/teachers" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <p>Student Ranking</p>
+                </router-link>
               </li>
             </ul>
           </li>

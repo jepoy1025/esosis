@@ -9,6 +9,7 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Collection\Paginate;
 
+
 class UserController extends Controller
 {
     /**
@@ -16,6 +17,13 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+
     public function index()
     {
         return DB::table('users')
@@ -61,6 +69,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function profile(){
+        return auth('api')->user();
+    }
+
     public function show($id)
     {
         //
@@ -104,5 +116,21 @@ class UserController extends Controller
         $user = User::findOrFail($id);
         $user -> delete();
         return ['message' => 'User Deleted'];
+    }
+
+    public function sponsors(){
+        $data =  DB::table('users')
+                    ->where('role_id',4)
+                    ->get();
+
+        return compact('data');
+    }
+
+     public function parents(){
+        $data =  DB::table('users')
+                    ->where('role_id',3)
+                    ->get();
+
+        return compact('data');
     }
 }
