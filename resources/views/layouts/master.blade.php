@@ -121,42 +121,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p class="cyan">New Student</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <router-link to="/old_student" class="nav-link">
                   <i class="fas fa-folder-open cyan"></i>
                   <p>Old Student</p>
                 </router-link>
-              </li>
+              </li> --}}
             </ul>
           </li>
-          <li class="nav-item has-treeview">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-users pink"></i>
-              <p class="pink">
-                Students
-                <i class="right fa fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <router-link to="/grade" class="nav-link">
-                  <i class="fas fa-calendar-alt cyan"></i>
-                  <p class="cyan">Performance</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fas fa-list-ol cyan"></i>
-                  <p>Requirements</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="fas fa-file-archive cyan"></i>
-                  <p>Archived</p>
-                </a>
-              </li>
-            </ul>
+          <li class="nav-item">
+          <router-link to="/grade" class="nav-link">
+            <i class="nav-icon fas fa-users pink"></i>
+            <p class="pink">
+              Students
+            </p>
+          </router-link>
           </li>
           <li class="nav-item">
           <router-link to="/cashier" class="nav-link">
@@ -204,7 +183,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
           <li class="nav-item">
-          <router-link to="/cashier" class="nav-link">
+          <router-link to="/codes" class="nav-link">
             <i class="nav-icon fas fa-ticket-alt pink"></i>
             <p class="pink">
               Student Codes
@@ -227,13 +206,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/teachers" class="nav-link">
-                  <i class="fas fa-chalkboard-teacher cyan"></i>
-                  <p>Class Schedule</p>
-                </router-link>
-              </li>
-              <li class="nav-item">
-                <router-link to="/teachers" class="nav-link">
+                <router-link to="/ranking" class="nav-link">
                   <i class="fas fa-chalkboard-teacher cyan"></i>
                   <p>Student Ranking</p>
                 </router-link>

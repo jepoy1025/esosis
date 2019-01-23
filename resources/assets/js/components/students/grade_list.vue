@@ -94,6 +94,7 @@
                 student_id:'',
                 subjects:{},
                 student:[],
+                average:'',
                 form: new Form({
                     id: '',
                     title:'',
@@ -122,6 +123,7 @@
                 axios.get('/api/student/' + this.$route.params.id).then(({data})=>(this.student = data.data));
             },
             backStudent(){
+                axios.put('/api/rank-student/' + this.$route.params.id).then(({data})=>(this.average = data.data));
                 this.$router.push("/grade");
             },
 

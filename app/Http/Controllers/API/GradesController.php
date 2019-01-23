@@ -49,4 +49,27 @@ class GradesController extends Controller
 
         return view('prints.grades', ['data' => $data]);
     }
+
+    public function rank(request $request,$id){
+        $total = 0;
+        $data = DB::table('grades')
+            ->where('grades.student_id', $id)
+            ->get();
+        $count = count($data);
+        for($ctr = 0;$ctr < $count;$ctr++){
+            $total = $total + $data[$ctr]->first;
+            $total = $total + $data[$ctr]->second;
+            $total = $total + $data[$ctr]->third;
+            $total = $total + $data[$ctr]->fourth;
+        }
+
+        $count = $count * 4;
+        $average = $total/$count;
+
+        DB::table('rankings')
+            ->where('student_id', $id)
+            ->update(['average' => $average]);
+
+        return $average;
+    }
 }

@@ -64,6 +64,7 @@
                 </tbody></table>
               </div>
               <div class="modal-footer">
+                <button type="button" class="btn btn-submit" data-dismiss="modal" @click="printList()">Print List</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               </div>
             </div>
@@ -144,6 +145,7 @@
 
         data() {
             return{
+                trans_id : '',
                 editMode : false,
                 accounts : {},
                 transactions : {},
@@ -157,8 +159,12 @@
             }
         },
         methods: {
+            printList(){
+              window.open('/api/transactionsPrint/'+this.trans_id);
+            },
             viewTransactions(id){
               axios.get("/api/transactions/"+ id).then(({data})=>(this.transactions = data.data));
+              this.trans_id = id;
               $('#transReports').modal('show');
             },
             newModal(){
