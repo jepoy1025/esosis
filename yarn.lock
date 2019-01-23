@@ -4590,6 +4590,10 @@ prettier@^1.7.0:
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.15.3.tgz#1feaac5bdd181237b54dbe65d874e02a1472786a"
 
+print-js@^1.0.54:
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/print-js/-/print-js-1.0.54.tgz#f15df027951e9a9165b6d39420d362ba7f0fc130"
+
 private@^0.1.6, private@^0.1.8, private@~0.1.5:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -5885,6 +5889,12 @@ vue-loader@^13.7.1:
     vue-hot-reload-api "^2.2.0"
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
+
+vue-print-nb@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/vue-print-nb/-/vue-print-nb-1.0.3.tgz#9cf0f67a808a7635c6e79a0cf4c96d652bc32cc6"
+  dependencies:
+    babel-plugin-transform-runtime "^6.23.0"
 
 vue-progressbar@^0.7.5:
   version "0.7.5"

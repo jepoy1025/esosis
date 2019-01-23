@@ -161,22 +161,49 @@ line-height: 1.4em;">
                         // event.title = "CLICKED!";
                         // $('#calendar').fullCalendar('updateEvent', event);
                     },
-                    eventDrop: function (event, revertFn,) { // called when an event (already on the calendar) is moved
+                    eventDrop: function (event, duration, revertFn,) { // called when an event (already on the calendar) is moved
                         //revertFunc();
                         console.log('eventDrop', event);
-                        self.saveEvent(event);
+                        if (self.isValidDrop(event)) {
+                            self.saveEvent(event);
+                        } else {
+                            revertFn();
+                            window.swal.fire(
+                                'Oops!',
+                                'Teacher is not available for this time schedule.',
+                                'error'
+                            )
+                        }
                     },
-                    eventReceive: function (event,) { // called when a proper external event is dropped
+                    eventReceive: function (event) { // called when a proper external event is dropped
                         console.log('eventReceive', {
                             event
                         });
-                        self.saveEvent(event);
+                        if (self.isValidDrop(event)) {
+                            self.saveEvent(event);
+                        } else {
+                            self.calendar.fullCalendar('removeEvents', event._id);
+                            window.swal.fire(
+                                'Oops!',
+                                'Teacher is not available for this time schedule.',
+                                'error'
+                            )
+                        }
                     },
                     eventResize(event, delta, revertFn) {
                         console.log({
                             event, delta, revertFn,
                         });
-                        self.saveEvent(event);
+                        if (self.isValidDrop(event)) {
+                            self.saveEvent(event);
+                        } else {
+                            revertFn();
+                            window.swal.fire(
+                                'Oops!',
+                                'Teacher is not available for this time schedule.',
+                                'error'
+                            )
+                        }
                     },
                 });
             },
@@ -251,12 +278,12 @@ line-height: 1.4em;">
                             )
                         })
                         .catch(error => {
-                             this.calendar.fullCalendar('removeEvents', event._id)
+                             this.calendar.fullCalendar('removeEvents', event._id);
                              window.toast(
                                 'Oops!',
                                 'The teacher is not available or the subject is already added.',
                                 'error',
-                            )
+                            );
                      });
                 }
             },
@@ -273,6 +300,32 @@ line-height: 1.4em;">
                                 'success',
                             )
                         });
+            },
+            isValidDrop(event) {
+                let subject = this.subjects.find(item => {
+                    return item.id === parseInt(event.subjectId)
+                });
+                let events = this.calendar.fullCalendar('clientEvents')
+                    .filter(item => {
+                        let sub = this.subjects.find(sub => {
+                            return item.subjectId === parseInt(sub.id)
+                        });
+                        if (!sub) {
+                            return false;
+                        }
+                        return item._id !== event._id && sub.teacher_id === subject.teacher_id;
+                    });
+                let valid = true;
+                _.forEach(events, item => {
+                    if (event.start.local().isAfter(item.start) && event.start.local().isBefore(item.end) || event.end.local().isAfter(item.start) && event.end.local().isBefore(item.end) || event.start.local().isSame(item.start) || event.end.local().isSame(item.end)) {
+                        valid = false;
+                        return false;
+                    }
+                });
+                console.log({
+                    valid
+                });
+                return valid;
             }
         },
         created() {
