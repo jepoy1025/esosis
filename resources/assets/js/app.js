@@ -99,6 +99,10 @@ let routes = [
 
   //reports
   { path: '/class_list', component: require('./components/report/class_list.vue') },
+  { path: '/ranking', component: require('./components/report/ranking.vue') },
+
+  //codes
+  { path: '/codes', component: require('./components/codes.vue') },
 
   
 ]

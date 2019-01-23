@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('profile', 'API\UserController@profile');
 
+Route::get('codes', 'API\CodesController@index');
 
 Route::apiResources(['user' => 'API\UserController']);
 Route::get('sponsor', 'API\UserController@sponsors');
@@ -36,6 +37,8 @@ Route::apiResources(['subject' => 'API\SubjectController']);
 Route::apiResources(['schedule' => 'API\ScheduleController']);
 Route::apiResources(['student' => 'API\StudentController']);
 
+
+Route::put('rank-student/{id}','API\GradesController@rank');
 Route::get('grades','API\GradesController@index');
 Route::get('gradePrint/{id}','API\GradesController@print');
 Route::get('grade-list/{id}','API\GradesController@gradeList');
@@ -46,6 +49,7 @@ Route::get('student-waiting','API\StudentController@waitingList');
 Route::put('grade/{id}','API\GradesController@update');
 Route::put('comment/{id}','API\CommentController@update');
 Route::put('requirement/{id}','API\RequirementsController@update');
+Route::get('transactionsPrint/{id}','API\ReportsController@transactions');
 
 
 Route::put('teacher-active/{teacher}','API\TeacherController@activate');
@@ -65,5 +69,8 @@ Route::get('sisStudentList','API\SisController@studentList');
 Route::get('account/{id}','API\SisController@balance');
 
 Route::get('testPrint/{id}','API\ReportsController@generatePDF');
+Route::get('rankPrint/{id}','API\ReportsController@topStudents');
 Route::get('studentRoom/{id}','API\ReportsController@studentRoom');
+Route::get('studentRank/{id}','API\ReportsController@studentRank');
+
 //Route::get('teacher', 'API\TeacherController@index');

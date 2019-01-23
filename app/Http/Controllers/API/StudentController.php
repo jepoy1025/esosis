@@ -318,6 +318,15 @@ class StudentController extends Controller
             'amount' => $request['paidAmount'],
         )
     );
+
+
+    DB::table('rankings')->insert(
+        array(
+            'grade_level' => $request['grade_level'],
+            'student_id'     =>   $id, 
+            'average' => 00.00
+        )
+    );
     $data = $id;
             return compact('data');
         
