@@ -317,7 +317,10 @@ line-height: 1.4em;">
                     });
                 let valid = true;
                 _.forEach(events, item => {
-                    if (event.start.local().isAfter(item.start) && event.start.local().isBefore(item.end) || event.end.local().isAfter(item.start) && event.end.local().isBefore(item.end) || event.start.local().isSame(item.start) || event.end.local().isSame(item.end)) {
+                    if (
+                        event.start.local().isAfter(item.start) && event.start.local().isBefore(item.end) || event.end.local().isAfter(item.start) && event.end.local().isBefore(item.end) || event.start.local().isSame(item.start) || event.end.local().isSame(item.end)
+                        || item.start.local().isAfter(event.start.local()) && item.start.local().isBefore(event.end.local()) || item.end.local().isAfter(event.start.local()) && item.end.local().isBefore(event.end.local()) || item.start.local().isSame(event.start.local()) || item.end.local().isSame(event.end.local())
+                    ) {
                         valid = false;
                         return false;
                     }
