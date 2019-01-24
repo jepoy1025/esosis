@@ -59,6 +59,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->last_name }}, {{Auth::user()->first_name}}</a>
+          @can('isSponsor')
+            <a>Sponsor</a>
+          @endcan
+          @can('isNormal')
+            <a>Parent</a>
+          @endcan
+          @can('isAdmin')
+            <a>Admin</a>
+          @endcan
         </div>
       </div>
 
@@ -209,6 +218,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <router-link to="/ranking" class="nav-link">
                   <i class="fas fa-chalkboard-teacher cyan"></i>
                   <p>Student Ranking</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/schedule" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <p>Schedules</p>
                 </router-link>
               </li>
             </ul>

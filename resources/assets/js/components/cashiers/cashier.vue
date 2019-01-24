@@ -151,6 +151,7 @@
                 transactions : {},
                 accountView: [],
                 studentName: '',
+                transID:'',
                 form: new Form({
                   account_id:'',
                   Amount: '',
@@ -177,7 +178,8 @@
             },
             processPayment(){
               this.form.put('/api/transactions/'+this.form.account_id)
-                .then(()=>{
+                .then(({data})=>{
+                  this.transID = data.data
                   Fire.$emit('afterCreate');
                             swal(
                               'Success!',
@@ -185,11 +187,7 @@
                               'success'
                             )
                   this.$Progress.finish();
-                  var divToPrint=document.getElementById("printable");
-                   newWin= window.open("");
-                   newWin.document.write(divToPrint.outerHTML);
-                   newWin.print();
-                   newWin.close();
+                  window.open('/api/payment/'+this.transID);
                   $('#makeTrans').modal('hide');
                 })
                 .catch(() => {
@@ -205,8 +203,8 @@
             createUser(){
                 this.$Progress.start();
                 this.form.post('api/user')
-                .then(()=>{
-
+                .then(({data})=>{
+                    this.transID = data.data;
                     Fire.$emit('afterCreate');
                     $('#userModal').modal('hide');
                     toast({

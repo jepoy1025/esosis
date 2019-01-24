@@ -99,15 +99,19 @@ class CashierController extends Controller
             'amount' => $request['amount']
         ]);
     	}
-
     	$payment->update([
             'first' => $request['first'],
             'second' => $request['second'],
             'third' => $request['third'],
             'fourth' => $request['fourth']
         ]);
-        
 
-        return $payment;
+        $trans = DB::table('transactions')
+          ->where('student_id','=',$amounts->student_id)
+          ->orderBy('id', 'desc')
+          ->first();
+        $data = $trans->id;
+
+        return compact('data');
     }
 }

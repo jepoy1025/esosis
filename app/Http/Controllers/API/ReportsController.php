@@ -61,4 +61,44 @@ class ReportsController extends Controller
 
         return view('prints.topStudent', ['data' => $data]);
     }
+
+    public function enrollment($id){
+        $student =  DB::table('students')
+                ->where('id', $id)
+                ->first();
+        $data = DB::table('transactions')
+                ->where('student_id', $id)
+                ->first();
+
+        $code = DB::table('codes')
+                ->where('student_id', $id)
+                ->first();
+        //dd($student);
+        return view('prints.enrollmentReciept', ['data' => $data, 'student' => $student, 'code' => $code]);
+    }
+
+    public function payment($id){
+
+        $data = DB::table('transactions')
+                ->where('id', $id)
+                ->first();
+
+        $student = DB::table('students')
+                ->where('id', $data->student_id)
+                ->first();
+        //dd($student);
+        return view('prints.paymentReciept', ['data' => $data, 'student'=>$student]);
+    }
+
+    public function schedules(){
+        $data = DB::table('schedules')
+            ->join('subjects','schedules.subject_id','=','subjects.id')
+            ->join('teachers','schedules.teachers_id','=','teachers.id')
+            ->join('rooms','schedule.room_id','=','room.id')
+            ->join('levels','rooms.grade_level','=','levels.id')
+            ->select('schedules.*','subjects.title','teachers.name','levels.title')
+            ->get();
+
+        return compact('data');
+    }
 }

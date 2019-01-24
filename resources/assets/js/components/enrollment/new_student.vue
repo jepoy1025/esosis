@@ -298,7 +298,7 @@
         </div>
             <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" id="printMe">
+            <div class="modal-content">
               <div class="modal-header" style="background-color: #A9A9A9;">
                 <h4 class="modal-title pink"><b>{{form.last_name}}, {{form.first_name}} {{form.middle_name}}</b> <p> {{gradetitle}}</p></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -353,7 +353,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" v-print="'#printMe'">Enroll Student</button>
+                <button type="submit" class="btn btn-primary">Enroll Student</button>
               </div>
             </div>
           </div>
@@ -537,7 +537,8 @@
                         });
                         this.$Progress.finish();
                         this.form.reset();
-                        this.$router.push('/')
+                         window.open('/api/enrollmentPrint/'+this.pushId);
+                        //this.$router.push('/')
 
                     })
                     .catch(()=>{

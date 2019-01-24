@@ -70,7 +70,10 @@ Route::get('account/{id}','API\SisController@balance');
 
 Route::get('testPrint/{id}','API\ReportsController@generatePDF');
 Route::get('rankPrint/{id}','API\ReportsController@topStudents');
+Route::get('getSchedule', 'API\ReportsController@schedules');
 Route::get('studentRoom/{id}','API\ReportsController@studentRoom');
 Route::get('studentRank/{id}','API\ReportsController@studentRank');
+Route::get('enrollmentPrint/{id}','API\ReportsController@enrollment');
+Route::get('payment/{id}','API\ReportsController@payment');
 
 //Route::get('teacher', 'API\TeacherController@index');
