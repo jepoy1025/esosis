@@ -16,7 +16,7 @@ line-height: 1.4em;">
                     <label>Input Grade Level:</label>
                       <input type="text" name="level" v-model="gradeLevel">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
-                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :subject-id="subject.id"
+                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :level="subject.level" :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
@@ -126,6 +126,7 @@ line-height: 1.4em;">
                                         subjectId: item.subject_id,
                                         resourceId: item.room_id,
                                         scheduleId: item.id,
+                                        level: item.subject.level,
                                     }
                                 }))
                             });
@@ -164,30 +165,44 @@ line-height: 1.4em;">
                     eventDrop: function (event, duration, revertFn,) { // called when an event (already on the calendar) is moved
                         //revertFunc();
                         console.log('eventDrop', event);
-                        if (self.isValidDrop(event)) {
-                            self.saveEvent(event);
-                        } else {
+                        if (!self.isValidRoomLevel(event)) {
+                            revertFn();
+                            window.swal.fire(
+                                'Oops!',
+                                'Grade level of subject is not the same with room grade level.',
+                                'error'
+                            )
+                        } else if (!self.isValidDrop(event)) {
                             revertFn();
                             window.swal.fire(
                                 'Oops!',
                                 'Teacher is not available for this time schedule.',
                                 'error'
                             )
+                        } else {
+                            self.saveEvent(event);
                         }
                     },
                     eventReceive: function (event) { // called when a proper external event is dropped
                         console.log('eventReceive', {
                             event
                         });
-                        if (self.isValidDrop(event)) {
-                            self.saveEvent(event);
-                        } else {
+                        if (!self.isValidRoomLevel(event)) {
+                            self.calendar.fullCalendar('removeEvents', event._id);
+                            window.swal.fire(
+                                'Oops!',
+                                'Grade level of subject is not the same with room grade level.',
+                                'error'
+                            )
+                        } else if (!self.isValidDrop(event)) {
                             self.calendar.fullCalendar('removeEvents', event._id);
                             window.swal.fire(
                                 'Oops!',
                                 'Teacher is not available for this time schedule.',
                                 'error'
                             )
+                        } else {
+                            self.saveEvent(event);
                         }
                     },
                     eventResize(event, delta, revertFn) {
@@ -215,7 +230,8 @@ line-height: 1.4em;">
                     $(this).data('event', {
                         title: $.trim($(this).text()), // use the element's text as the event title
                         stick: true, // maintain when user navigates (see docs on the renderEvent method)
-                        subjectId: $(this).attr('subject-id')
+                        subjectId: $(this).attr('subject-id'),
+                        level: $(this).attr('level'),
                     });
                     // make the event draggable using jQuery UI
                     $(this).draggable({
@@ -300,6 +316,12 @@ line-height: 1.4em;">
                                 'success',
                             )
                         });
+            },
+            isValidRoomLevel(event) {
+                let room = this.resources.find(item => {
+                    return item.id == event.resourceId;
+                });
+                return room.grade_level == event.level
             },
             isValidDrop(event) {
                 let subject = this.subjects.find(item => {
