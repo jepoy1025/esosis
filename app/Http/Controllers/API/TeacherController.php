@@ -26,7 +26,7 @@ class TeacherController extends Controller
 
     public function index()
     {
-        return Teacher::latest()->paginate(10);
+        return Teacher::latest()->get();
     }
 
     /**

@@ -54,6 +54,7 @@ line-height: 1.4em;">
                 resources: [],
                 calendar: null,
                 eventScheduleIds: {},
+                teachers: [],
             }
         },
 
@@ -76,7 +77,7 @@ line-height: 1.4em;">
             //axios.get("api/teacher").then(result => { console.log(result); return result; },
             //axios.get("api/room-column").then(({json})=>(this.resources = json.data));
             Fire.$emit('afterCreate');
-            Promise.all([this.loadLevel(), this.loadRoom(), this.loadSubject()])
+            Promise.all([this.loadLevel(), this.loadRoom(), this.loadSubject(), this.getTeachers()])
                 .then(repsonses => {
                     this.initCalendar()
                 })
@@ -274,6 +275,12 @@ line-height: 1.4em;">
                     end_time: event.end.local().format('HH:mm:ss'),
                     day: 1,
                 };
+                let subject = this.subjects.find(item => {
+                    return item.id == data.subject_id
+                });
+                let teacher = this.teachers.find(item => {
+                    return item.id == subject.teacher_id
+                });
                 if (data.id) {
                     axios.put(`/api/schedule/${data.id}`, data)
                         .then(({data}) => {
@@ -289,7 +296,7 @@ line-height: 1.4em;">
                             this.eventScheduleIds[event._id] = data.id
                             window.toast(
                                 'Success!',
-                                'Subject Added',
+                                `${event.start.local().format('hh:mm a')} ${teacher.name}`,
                                 'success',
                             )
                         })
@@ -351,6 +358,12 @@ line-height: 1.4em;">
                     valid
                 });
                 return valid;
+            },
+            getTeachers() {
+                axios.get(`/api/teacher`)
+                    .then(({data}) => {
+                        this.teachers = data;
+                    })
             }
         },
         created() {
