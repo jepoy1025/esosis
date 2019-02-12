@@ -10,6 +10,13 @@ use App\Payment;
 
 class CashierController extends Controller
 {
+    public function account($id){
+        $data = DB::table('payments')
+            ->where('student_id', $id)
+            ->first();
+
+        return compact('data');
+    }
     public function index()
     {
          $data = DB::table('payments')
@@ -29,81 +36,66 @@ class CashierController extends Controller
 
          return compact('data');
     }
-
+ 
     public function update(Request $request, $id){
+        $month = date('F');
+        $label = '';
     	$amounts = DB::table('payments')
-    		->where('id',$id)
+    		->where('student_id',$id)
     		->first();
 
-    	$payment = Payment::findOrFail($id);
-		 
-    	if($request['type'] == 1){
-    		$dummy = $amounts->whole_year - $request['amount'];
+    	//dd($request);
+        if($request['checkEnrollment'] == true){
+            $amounts->enrollment_fee = $amounts->enrollment_fee - $request['enrollment'];
+            $label = $label . ', Registration fee - P '.$request['enrollment'];
+        }
 
-    		$payment->update([
-            'whole_year' => $dummy
+        if($request['checkTuition'] == true){
+            $amounts->whole_year = $amounts->whole_year - $request['tuition'];
+            $label = $label . ', '.$month.' Tuition fee - P '.$request['tuition'];
+        }
 
-        ]);
-    		transaction::create([
-            'student_id' => $amounts->student_id,
-            'type' => 'Tuition',
-            'amount' => $request['amount']
-        ]);
+        if($request['checkMisc'] == true){
+            $amounts->misc = $amounts->misc - $request['misc'];
+            $label = $label . ', Miscellaneous fee - P '.$request['misc'];
+        }
 
-    	}
-    	if($request['type'] == 2){
-    		$dummy = $amounts->misc - $request['amount'];
-    		$payment->update([
-            'misc' => $dummy
+        if($request['checkBooks'] == true){
+            $amounts->books = $amounts->books - $request['books'];
+            $label = $label . ', Books fee - P '.$request['books'];
+        }
 
-        ]);
-    		transaction::create([
-            'student_id' => $amounts->student_id,
-            'type' => 'Miscellaneos',
-            'amount' => $request['amount']
-        ]);
+        if($request['checkUniform'] == true){
+            $amounts->uniform = $amounts->uniform - $request['uniform'];
+            $label = $label . ', Uniform fee - P '.$request['uniform'];
+        }
 
-    	}
-    	if($request['type'] == 3){
-    		$dummy = $amounts->books - $request['amount'];
-    		$payment->update([
-            'books' => $dummy
-        ]);
-    		transaction::create([
-            'student_id' => $amounts->student_id,
-            'type' => 'Books Payment',
-            'amount' => $request['amount']
-        ]);
-    	}
-    	if($request['type'] == 4){
-    		$dummy = $amounts->uniform - $request['amount'];
-    		$payment->update([
-            'uniform' => $dummy
+        if($request['checkPta'] == true){
+            $amounts->pta = $amounts->pta - $request['pta'];
+            $label = $label . ', Pta fee - P '.$request['pta'];
+        }
 
-        ]);
-    		transaction::create([
-            'student_id' => $amounts->student_id,
-            'type' => 'Uniform',
-            'amount' => $request['amount']
-        ]);
-    	}
-    	if($request['type'] == 5){
-    		$dummy = $amounts->past_balance - $request['amount'];
-    		$payment->update([
-            'past_balance' => $dummy
+        if($request['checkPastBalance'] == true){
+            $amounts->past_balance = $amounts->past_balance - $request['pastBalance'];
+            $label = $label . ', Others fee - P '.$request['pastBalance'];
+        }
 
-        ]);
-    		transaction::create([
-            'student_id' => $amounts->student_id,
-            'type' => 'Others',
-            'amount' => $request['amount']
-        ]);
-    	}
-    	$payment->update([
-            'first' => $request['first'],
-            'second' => $request['second'],
-            'third' => $request['third'],
-            'fourth' => $request['fourth']
+        DB::table('payments')
+            ->where('student_id', $id)
+            ->update([
+                'past_balance' => $amounts->past_balance,
+                'enrollment_fee' => $amounts->enrollment_fee,
+                'whole_year' => $amounts->whole_year,
+                'misc' => $amounts->misc,
+                'books' => $amounts->books,
+                'uniform' => $amounts->uniform,
+                'pta' => $amounts->pta,
+            ]);
+
+        Transaction::create([
+            'student_id' => $id,
+            'type' => $label,
+            'amount' => $request['total'],
         ]);
 
         $trans = DB::table('transactions')
@@ -111,6 +103,14 @@ class CashierController extends Controller
           ->orderBy('id', 'desc')
           ->first();
         $data = $trans->id;
+
+        return compact('data');
+    }
+
+    public function balance($id){
+        $data = DB::table('payments')
+                ->where('student_id', $id)
+                ->first();
 
         return compact('data');
     }

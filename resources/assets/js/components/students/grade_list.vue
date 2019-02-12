@@ -5,8 +5,7 @@
                 <div class="card card-default">
                     <div class="card-header"><h4>{{student.last_name}}, {{student.first_name}}</h4>
                         <div class="card-tools">
-                            <button class="btn btn-block btn-outline-primary btn-lg" @click="backStudent"><i class="fas fa-plus-circle fa-fw"></i> Back</button>
-                            <button class="btn btn-block btn-outline-primary btn-lg" @click="printGrade"><i class="fas fa-plus-circle fa-fw"></i> Print</button>
+                            
                         </div>
                     </div>
     
@@ -36,7 +35,12 @@
                                 </tr>
                             </tbody></table>
                           </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" @click="backStudent"><i class="fas fa-undo-alt fa-fw"></i> Back</button>
+                            <button type="submit" class="btn btn-success" @click="printGrade"><i class="fas fa-print fa-fw"></i> Print</button>
+                          </div>
                     </div>
+
                 </div>
             </div>
         </div>

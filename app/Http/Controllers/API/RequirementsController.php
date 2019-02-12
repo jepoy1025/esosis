@@ -28,12 +28,14 @@ class RequirementsController extends Controller
     }
 
     public function update(Request $request, $id){
-    	$subject = Requirement::findOrFail($id);
-    	$subject->update([
+
+        $update = DB::table('requirements')
+            ->where('student_id', $id)
+            ->update([
             'form_137' => $request['form_137'],
             'birth_cert' => $request['nso'],
             'photo2x2' => $request['picture2x2']
-        ]);
-        return $subject; 
+            ]);
+        return $update;   
     }
 }

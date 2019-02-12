@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use NumberToWords\NumberToWords;
 
 class TestController extends Controller
 {
@@ -85,5 +86,18 @@ class TestController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function test()
+    {
+                // create the number to words "manager" class
+        $numberToWords = new NumberToWords();
+
+        // build a new number transformer using the RFC 3066 language identifier
+        $numberTransformer = $numberToWords->getNumberTransformer('en');
+
+        return $numberTransformer->toWords(143);
+        // okay na?
+        # code...
     }
 }

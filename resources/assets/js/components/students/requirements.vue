@@ -7,14 +7,52 @@
                     <div class="card-header"><h4>{{student.last_name}}, {{student.first_name}}</h4></div>
    
                     <div class="card-body">
-                        
-                            <input type="checkbox" id="form.form_137" v-model="form.form_137"/> <H3>FORM 137</H3>
-                            <input type="checkbox" id="form.nso" v-model="form.nso"/> <h3>Birth certificate(PSA)</h3>
-                            <input type="checkbox" id="form.picture2x2" v-model="form.picture2x2"/> <h3>Picture size 2x2</h3>
+                            <div class="row">
+          <!-- /.col -->
+          <div class="col-md-4 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-success"><i class="fas fa-table"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Form 137</span>
+                <span class="info-box-number"><input type="checkbox" id="form.form_137" v-model="form.form_137"/></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-4 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-warning"><i class="fas fa-newspaper fa-fw"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">Birth Certificate(PSA)</span>
+                <span class="info-box-number"><input type="checkbox" id="form.nso" v-model="form.nso"/></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+          <div class="col-md-4 col-sm-6 col-12">
+            <div class="info-box">
+              <span class="info-box-icon bg-danger"><i class="fas fa-id-badge"></i></span>
+
+              <div class="info-box-content">
+                <span class="info-box-text">2x2 Picture</span>
+                <span class="info-box-number"><input type="checkbox" id="form.picture2x2" v-model="form.picture2x2"/></span>
+              </div>
+              <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+          </div>
+          <!-- /.col -->
+        </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click="backStudent">Back</button>
-                            <button type="submit" class="btn btn-success">Update Student REquirements</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click="backStudent"><i class="fas fa-undo-alt fa-fw"></i>Back</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save fa-fw"></i> Save Updates</button>
                         </div>
                         </form>
                     </div>
@@ -62,12 +100,20 @@
 
             saveComment() {
                 this.$Progress.start();
-                this.form.put('/api/requirement/'+this.form.id)
+                this.form.put('/api/requirement/'+this.$route.params.id)  
                 .then(()=>{
                   Fire.$emit('afterCreate');
+                  toast({
+                          type: 'success',
+                          title: 'Student Requirement Updated'
+                        });
                   this.$Progress.finish();
                 })
-                .catch(() => {
+                .catch(() => { 
+                toast({
+                          type: 'error',
+                          title: 'Something Went Wrong'
+                        }); 
                   this.$Progress.fail();
                 })
             },

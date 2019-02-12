@@ -106,7 +106,7 @@
                         <div class="form-group col-md-2 col-sm-12 col-xs-12">
                             <label>Age</label>
                           <input v-bind:value="age" placeholder="" type="text" name="age" id="age"
-                            class="form-control" :class="{ 'is-invalid': form.errors.has('age') }">
+                            class="form-control" :class="{ 'is-invalid': form.errors.has('age') }" readonly>
                           <has-error :form="form" field="age"></has-error>
                         </div>
                         <div class="form-group col-md-2 col-sm-6 col-xs-12">
@@ -338,7 +338,7 @@
                   <has-error :form="form" field="uniform"></has-error>
                 </div>
                 <div class="form-group">
-                    <label>Minimum Downpayment For This Transaction</label>
+                    <label>Enrollment Fee</label>
                   <input v-model="form.min_downpayment" placeholder="Minimum Downpayment" type="number" name="min_downpayment" id="min_downpayment"
                     class="form-control" :class="{ 'is-invalid': form.errors.has('min_downpayment') }" readonly>
                   <has-error :form="form" field="min_downpayment"></has-error>
@@ -432,6 +432,7 @@
                     books : '',
                     uniform : '',
                     min_downpayment : '',
+                    pta: '',
                     form137: false,
                     nso: false,
                     picture1x1: false,
@@ -451,13 +452,16 @@
                     this.form.student_code = text;
                     
                 },
+                
                 loadLevel(){
                     axios.get("api/fee").then(({data})=>(this.level = data.data));
                     axios.get("api/room/").then(({data})=>(this.section = data.data));
                 },
+
                 loadStudentCount(){
                     axios.get("api/student-count").then(({data})=>(this.studentCount = data.data));
                 },
+
                 getDate(value){
                     var birthday = Date.parse(value);
                     var age = ~~((Date.now() - birthday) / (31557600000));
@@ -465,23 +469,28 @@
                     this.age = age;
                     //this.age = now;
                 },
+
                 sisterInput(){
                   if(this.form.noOfSisters != null){
                     this.sisterCount = parseInt(this.form.noOfSisters);
                   }
                 },
+
                 brotherInput(){
                   if(this.form.noOfBrothers != null){
                     this.brotherCount = parseInt(this.form.noOfBrothers);
                   }
                 },
+
                 processPayment(){
                     $('#paymentModal').modal('show');      
                 },
+
                 onSelectFee(){
                     axios.get("api/fee/"+this.form.grade_level).then(({data})=>(this.payment = data.data));
                     
                 },
+
                 checkRoom(data){
                     //console.log(data);
                     this.form.room_id = data.id;
@@ -514,6 +523,7 @@
                       })
                     };
                 },
+
                 feeForm(fee){
                     this.room= [];
                     this.form.grade_level = fee.grade_level;
@@ -522,10 +532,14 @@
                     this.form.books = fee.books;
                     this.form.uniform = fee.uniform;
                     this.form.min_downpayment = fee.min_downpayment;
-                    this.gradetitle = fee.title;
-                    
+                    this.form.pta = fee.pta;
+                    this.gradetitle = fee.title;  
                 },
+
                 insertStudent(){
+                  if(this.form.paidAmount > this.form.min_downpayment){
+                    swal.fire('The amount you entered CAP the Enrollment Fee');
+                  }else{
                     this.$Progress.start();
                     this.form.post('api/student')
                     .then(({data})=>{
@@ -549,7 +563,8 @@
                           title: 'Something Went Wrong!'
                         });
                     })
-                },
+                  }
+                }
             },
             created() {
                 //this.calculateAge();

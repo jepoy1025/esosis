@@ -10,15 +10,16 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test','TestController@test');
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 Route::post('postAjax','TestController@store');
 
 
 Auth::routes();
-
+Route::get('/chats','ChatsController@index');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('invoice',  function(){

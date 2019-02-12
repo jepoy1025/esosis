@@ -35,8 +35,8 @@
                             </div>
                           </div>
                           <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" @click="backStudent">Back</button>
-                            <button type="submit" class="btn btn-success">Update Narrative Report</button>
+                            <button type="button" class="btn btn-danger" @click="backStudent"><i class="fas fa-undo-alt fa-fw"></i> Back</button>
+                            <button type="submit" class="btn btn-success"><i class="fas fa-save fa-fw"></i> Save Updates</button>
                           </div>
                         </form>
                     </div>
@@ -59,7 +59,7 @@
                     second: '',
                     third: '',
                     fourth: '',
-                })
+                }) 
             }
 
         },
@@ -88,6 +88,10 @@
                 this.form.put('/api/comment/'+this.form.id)
                 .then(()=>{
                   Fire.$emit('afterCreate');
+                  toast({
+                      type: 'success',
+                      title: 'Updates Saved'
+                  });
                   this.$Progress.finish();
                 })
                 .catch(() => {

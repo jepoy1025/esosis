@@ -28,16 +28,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </ul>
 
     <!-- SEARCH FORM -->
-    <form class="form-inline ml-3">
+{{--     <form class="form-inline ml-3">
       <div class="input-group input-group-sm">
-        <input class="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search">
+        <input class="form-control form-control-navbar" @keyup="searchit" v-model="search" type="search" placeholder="Search" aria-label="Search">
         <div class="input-group-append">
-          <button class="btn btn-navbar" type="submit">
+          <button class="btn btn-navbar" @click="searchit">
             <i class="fa fa-search pink"></i>
           </button>
         </div>
       </div>
-    </form>
+    </form> --}}
   </nav>
   <!-- /.navbar -->
 
@@ -60,13 +60,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->last_name }}, {{Auth::user()->first_name}}</a>
           @can('isSponsor')
-            <a>Sponsor</a>
+            <p class="pink">Sponsor</p>
           @endcan
           @can('isNormal')
-            <a>Parent</a>
+            <p class="pink">Parent</p>
           @endcan
           @can('isAdmin')
-            <a>Admin</a>
+            <p class="pink">Admin</p>
           @endcan
         </div>
       </div>
@@ -130,21 +130,42 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p class="cyan">New Student</p>
                 </router-link>
               </li>
-              {{-- <li class="nav-item">
+              <li class="nav-item">
                 <router-link to="/old_student" class="nav-link">
                   <i class="fas fa-folder-open cyan"></i>
                   <p>Old Student</p>
                 </router-link>
-              </li> --}}
+              </li>
             </ul>
           </li>
-          <li class="nav-item">
-          <router-link to="/grade" class="nav-link">
-            <i class="nav-icon fas fa-users pink"></i>
-            <p class="pink">
-              Students
-            </p>
-          </router-link>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-users pink"></i>
+              <p class="pink">
+                Student Menu
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/grade" class="nav-link">
+                  <i class="fas fa-file cyan"></i>
+                  <p class="cyan">Student Tab</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/drop_student" class="nav-link">
+                  <i class="fas fa-folder-open cyan"></i>
+                  <p>Drop</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/transfered" class="nav-link">
+                  <i class="fas fa-folder-open cyan"></i>
+                  <p>Transfered</p>
+                </router-link>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
           <router-link to="/cashier" class="nav-link">
@@ -218,6 +239,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <router-link to="/ranking" class="nav-link">
                   <i class="fas fa-chalkboard-teacher cyan"></i>
                   <p>Student Ranking</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/schedule" class="nav-link">
+                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <p>Payment Transactions</p>
                 </router-link>
               </li>
               <li class="nav-item">

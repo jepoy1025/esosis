@@ -8,32 +8,62 @@
                 <h3 class="card-title"><b class="pink">Enrollment </b>(Old Students)</h3>
 
                 <div class="card-tools">
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" v-model="search" @keyup="searchit" type="search" placeholder="Search Last Name" aria-label="Search">
+                  </div>
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
+              <div class="card-body table-responsive p-0" v-show="!searchFilter">
                 <table class="table table-hover">
                   <tbody>
                     <tr>
-                        <th>Student ID</th>
-                        <th>First Name</th>
                         <th>Last Name</th>
+                        <th>First Name</th>
                         <th>Past Grade Level</th>
+                        <th></th>
                         <th></th>
                     </tr>
                     <tr v-for="student in students" :key="student.id">
-                        <td>{{student.student_id}}</td>
-                        <td>{{student.first_name}}</td>
-                        <td>{{student.last_name}}</td>
+                        <td class="red">{{student.last_name | upText}}</td>
+                        <td class="red">{{student.first_name | upText}}</td>
+                        <td class="indigo">{{student.title}}</td>
+                        <th></th>
+                        <td class="pull-left">
+                            <button href="" @click="enrollModal(student)" class="btn btn-default">
+                            <i class="fas fa-user-plus green">Enroll</i>
+                            </button>
+                            <button href="" @click="studentBalance(student)" class="btn btn-default">
+                            <i class="fas fa-list-alt orange">Check Balance</i>
+                            </button>
+                            <button href="" @click="archiveStudent(student.id)" class="btn btn-default">
+                            <i class="fas fa-user-times red">Move To Archive</i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody></table>
+              </div>
+              <div class="card-body table-responsive p-0" v-show="searchFilter">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                        <th>Last Name</th>
+                        <th>First Name</th>
+                        <th>Past Grade Level</th>
+                        <th></th>
+                    </tr>
+                    <tr v-for="student in students" :key="student.id" :hidden="student.last_name != stud_name">
+                        <td class="red">{{student.last_name | upText}}</td>
+                        <td class="red">{{student.first_name | upText}}</td>
                         <td>{{student.title}}</td>
                         <td>
-                            <button href="" @click="editModal(student)" class="btn btn-default">
-                            <i class="fas fa-user-cog green">Enroll</i>
+                            <button href="" @click="enrollModal(student)" class="btn btn-default">
+                            <i class="fas fa-user-plus green">Enroll</i>
                             </button>
-                            <button href="" @click="deleteUser(student.id)" class="btn btn-default">
-                            <i class="fas fa-user-times red">Check Payment</i>
+                            <button href="" @click="studentBalance(student)" class="btn btn-default">
+                            <i class="fas fa-list-alt orange">Check Balance</i>
                             </button>
-                            <button href="" @click="deleteUser(student.id)" class="btn btn-default">
+                            <button href="" @click="archiveStudent(student.id)" class="btn btn-default">
                             <i class="fas fa-user-times red">Move To Archive</i>
                             </button>
                         </td>
@@ -41,65 +71,117 @@
                 </tbody></table>
               </div>
               <!-- /.card-body -->
+             <!--  <div class="card-footer">
+                <pagination :data="students" @pagination-change-page="getResults"></pagination>
+              </div> -->
             </div>
             <!-- /.card -->
           </div>
         </div>
-        <div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="balanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 v-show="editMode" class="modal-title" id="exampleModalLabel">Updating Form</h5>
-                <h5 v-show="!editMode" class="modal-title" id="exampleModalLabel">Adding Form</h5>
+                <h5 class="modal-title" id="exampleModalLabel"><b>{{student.last_name}}, {{student.first_name}}</b> remaining balance</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form @submit.prevent="editMode ? updateUser() : createUser()">
               <div class="modal-body">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                        <th></th>
+                        <th>Amount</th>
+                    </tr>
+                    <tr>
+                        <td>Enrollment Fee</td>
+                        <td>P {{accountView.enrollment_fee}}.00</td>
+                    </tr>
+                    <tr>
+                        <td>Whole Year(tuition)</td>
+                        <td>P {{accountView.whole_year}}.00</td>
+                    </tr>
+                    <tr>
+                        <td>miscellaneous</td>
+                        <td>P {{accountView.misc}}.00</td>
+                    </tr>
+                    <tr>
+                        <td>Uniform</td>
+                        <td>P {{accountView.uniform}}.00</td>
+                    </tr>
+                    <tr>
+                        <td>Books</td>
+                        <td>P {{accountView.books}}.00</td>
+                    </tr>
+                    <tr>
+                        <td>Past Balance</td>
+                        <td>P {{accountView.past_balance}}.00</td>
+                    </tr>
+                    <tr>
+                        <td><b>TOTAL:</b></td>
+                        <td><b>P {{accountView.past_balance + accountView.books + accountView.uniform + accountView.misc + accountView.whole_year + accountView.enrollment_fee}}.00</b></td>
+                    </tr>
+                </tbody></table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="paymentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #A9A9A9;">
+                <h4 class="modal-title pink"><b>{{form.last_name}}, {{form.first_name}} {{form.middle_name}}</b> <p> {{form.grade_title}}</p></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <form @submit.prevent="enrollStudent()">
+              <div class="modal-body" id>
                 <div class="form-group">
-                  <input v-model="form.first_name" placeholder="First Name" type="text" name="first_name" id="first_name"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('first_name') }">
-                  <has-error :form="form" field="first_name"></has-error>
+                    <label>Whole Year Fee:</label>
+                  <input v-model="form.whole_year" placeholder="Whole Year Fee" type="number" name="whole_year" id="whole_year"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('whole_year') }" readonly>
+                  <has-error :form="form" field="whole_year"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.middle_name" placeholder="Middle Name" type="text" name="middle_name" id="middle_name"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('middle_name') }">
-                  <has-error :form="form" field="middle_name"></has-error>
+                    <label>miscellaneous:</label>
+                  <input v-model="form.misc" placeholder="Whole Year Fee" type="number" name="misc" id="misc"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('misc') }" readonly>
+                  <has-error :form="form" field="misc"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.last_name" placeholder="Last Name" type="text" name="last_name" id="last_name"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('last_name') }">
-                  <has-error :form="form" field="last_name"></has-error>
+                    <label>Books Fee</label>
+                  <input v-model="form.books" placeholder="Books Fee" type="number" name="books" id="books"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('books') }" readonly>
+                  <has-error :form="form" field="books"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.username" placeholder="Username" type="text" name="username" id="username"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('username') }">
-                  <has-error :form="form" field="username"></has-error>
+                    <label>Uniform Fee</label>
+                  <input type="checkbox" id="checkbox" v-model="form.uniformCheck">
+                  <input v-model="form.uniform" placeholder="Uniform Fee" type="number" name="uniform" id="uniform"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('uniform') }" readonly>
+                  <has-error :form="form" field="uniform"></has-error>
                 </div>
                 <div class="form-group">
-                  <input v-model="form.email" placeholder="E-Mail" type="email" name="email" id="email"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('email') }">
-                  <has-error :form="form" field="email"></has-error>
+                    <label>Minimum Downpayment For This Transaction</label>
+                  <input v-model="form.min_downpayment" placeholder="Minimum Downpayment" type="number" name="min_downpayment" id="min_downpayment"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('min_downpayment') }" readonly>
+                  <has-error :form="form" field="min_downpayment"></has-error>
                 </div>
                 <div class="form-group">
-                  <select name="user_type" v-model="form.user_type" id="user_type" class="form-control" :class="{ 'is-invalid': form.errors.has('user_type') }">
-                      <option value="">Select User Role</option>
-                      <option value="2">Staff</option>
-                      <option value="3">Admin</option>
-                  </select>
-                  <has-error :form="form" field="user_type"></has-error>
-                </div>
-                <div v-show="!editMode" class="form-group">
-                  <input v-model="form.password" placeholder="Password" type="password" name="password" id="password"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('password') }">
-                  <has-error :form="form" field="password"></has-error>
+                    <label>Amount</label>
+                  <input v-model="form.paidAmount" placeholder="Amount" type="number" name="paidAmount" id="paidAmount"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('paidAmount') }">
+                  <has-error :form="form" field="paidAmount"></has-error>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button v-show="editMode" type="submit" class="btn btn-success">Update User</button>
-                <button v-show="!editMode" type="submit" class="btn btn-primary">Create User</button>
+                <button type="submit" class="btn btn-primary">Enroll Student</button>
               </div>
             </form>
             </div>
@@ -117,6 +199,17 @@
             return{
                 editMode : false,
                 students : {},
+                student_id:'',
+                name: '',
+                search:'',
+                stud_name:'',
+                testPayment:'',
+                level:{},
+                fees:[],
+                accountView: [],
+                payment:[],
+                student: [],
+                searchFilter: false,
                 form: new Form({
                     id: '',
                     first_name : '',
@@ -124,13 +217,66 @@
                     last_name : '',
                     username: '',
                     email: '',
+                    grade_title:'',
                     user_type: '',
                     photo: '',
-                    password:''
+                    whole_year : '',
+                    misc :'',
+                    books : '',
+                    uniform : '',
+                    min_downpayment : '',
+                    uniformCheck: false,
+                    paidAmount:'',
                 })
             }
         },
         methods: {
+            enrollModal(student){
+              $('#paymentModal').modal('show');
+              this.fees = this.level[student.grade_level_id];
+              this.student_id = student.id;
+              this.form.whole_year = this.fees.whole_year;
+              this.form.misc = this.fees.misc;
+              this.form.books = this.fees.books;
+              this.form.uniform = this.fees.uniform;
+              this.form.min_downpayment = this.fees.min_downpayment;
+              this.form.first_name = student.first_name;
+              this.form.last_name = student.last_name;
+              this.form.middle_name = student.middle_name;
+              this.form.grade_title = student.title;
+              //axios.get("/api/fee"+ student.grade_level_id).then(({data})=>(this.payment = data.data));
+            },
+            enrollStudent(){
+              if(this.form.paidAmount > this.form.min_downpayment){
+                swal(
+                              'Failed To Create Transaction!',
+                              'Check the Amount',
+                              'error'
+                      );
+              }else{
+                this.$Progress.start();
+                this.form.put('/api/oldStudent/'+this.student_id)
+                .then(()=>{
+                  Fire.$emit('afterCreate');
+                            swal(
+                              'Success!',
+                              'Student Enrolled',
+                              'success'
+                            )
+                  this.$Progress.finish();
+                  window.open('/api/reEnrollPrint/'+this.student_id);
+                  $('#paymentModal').modal('hide');
+                })
+                .catch(() => {
+                  swal(
+                              'Failed To Create Transaction!',
+                              'Check the Amount',
+                              'error'
+                      )
+                  this.$Progress.fail();
+                })
+              }
+            },
             updateUser(){
                 this.$Progress.start();
                 this.form.put('/api/user/'+this.form.id)
@@ -160,9 +306,14 @@
                 $('#userModal').modal('show');
             },
             loadStudent(){
+                axios.get("api/fee").then(({data})=>(this.level = data.data));
                 axios.get("api/student-waiting").then(({data})=>(this.students = data.data));
             },
-
+            studentBalance(student){
+              axios.get("/api/balance/"+ student.id).then(({data})=>(this.accountView = data.data));
+              this.student = student;
+              $('#balanceModal').modal('show');
+            },
             createUser(){
                 this.$Progress.start();
                 this.form.post('api/user')
@@ -181,23 +332,30 @@
                   this.$Progress.fail();
                 })
             },
-
-            deleteUser(id){
+            searchit(){
+              if(this.search == "" || this.search == null || this.search == "search"){
+                this.searchFilter = false;
+              }else{
+                this.searchFilter = true;
+                this.stud_name = this.search.toLowerCase();
+              }
+            },
+            archiveStudent(id){
                 swal({
                   title: 'Are you sure?',
-                  text: "You won't be able to revert this!",
+                  text: "Student Data Will be Archived!",
                   type: 'warning',
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, delete it!'
+                  confirmButtonText: 'Yes, Move to Student Archives!'
                 }).then((result) => {
                     if (result.value) {
-                    this.form.delete('/api/user/'+id).then(()=>{
+                    this.form.put('/api/archiveStudent/'+id).then(()=>{
                         Fire.$emit('afterCreate');
                             swal(
-                              'Deleted!',
-                              'Your file has been deleted.',
+                              'Archived!',
+                              'Student Data has been moved to Student Archives.',
                               'success'
                             )
                     }).catch(()=>{
@@ -210,10 +368,20 @@
         },
         created() {
             this.loadStudent();
-            Fire.$on('afterCreate',()=>{
-                this.loadUser();
+            Fire.$on('searching', ()=>{
+              let query = this.search;
+              axios.get('api/findStudent?q' + query)
+              .then((data)=>{
+                this.students = data.data;
+              })
+              .catch(()=>{
+
+              })
             });
-            // setInterval(() => this.loadUser(),3000);
+            Fire.$on('afterCreate',()=>{
+                this.loadStudent();
+            });
+            //setInterval(() => this.loadUser(),3000);
         }
-    }
+      }
 </script>

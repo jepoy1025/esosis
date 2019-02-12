@@ -1,4 +1,4 @@
-<?php 
+<?php   
 
 namespace App\Http\Controllers\API;
 
@@ -11,13 +11,19 @@ class CommentController extends Controller
 {
     public function index()
     {
-
+   
          	
     }
 
     public function commentList(Request $request, $id){
+        $student = DB::table('students')->where('id',$id)->first();
+        //dd($student);
     	$data = DB::table('comments')
-    	 	->where('student_id',$id)
+    	 	->where([
+                ['comments.student_id', '=', $id],
+                ['comments.grade_level', '=', $student->grade_level_id],
+
+            ])
     	 	->first();
          
         return compact('data');

@@ -5,14 +5,16 @@
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title"><b class="pink">Enrollment </b>(Old Students)</h3>
+                <h3 class="card-title"><b class="pink">Student Payments </b></h3>
 
                 <div class="card-tools">
-                  <input type="text" name="studentName" v-model="studentName" placeholder="Search Student" >
+                  <div class="input-group input-group-sm">
+                    <input class="form-control" v-model="search" @keyup="searchit" type="search" placeholder="Search Last Name" aria-label="Search">
+                  </div>
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body table-responsive p-0">
+              <div class="card-body table-responsive p-0" v-show="!searchFilter">
                 <table class="table table-hover">
                   <tbody>
                     <tr>
@@ -21,6 +23,28 @@
                         <th>Actions</th>
                     </tr>
                     <tr v-for="student in accounts" :key="student.id">
+                        <td>{{student.student_id}}</td>
+                        <td>{{student.last_name}}, {{student.first_name}}</td>
+                        <td>
+                            <button href="" @click="viewTransactions(student.student_id)" class="btn btn-default">
+                            <i class="fas fa-user-cog green">View Transactions</i>
+                            </button>
+                            <button href="" @click="createTransactions(student)" class="btn btn-default">
+                            <i class="fas fa-user-times red">Make Transaction</i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody></table>
+              </div>
+              <div class="card-body table-responsive p-0" v-show="searchFilter">
+                <table class="table table-hover">
+                  <tbody>
+                    <tr>
+                        <th>Student ID</th>
+                        <th>Full Name</th>
+                        <th>Actions</th>
+                    </tr>
+                    <tr v-for="student in accounts" :key="student.id" :hidden="student.last_name != stud_name">
                         <td>{{student.student_id}}</td>
                         <td>{{student.last_name}}, {{student.first_name}}</td>
                         <td>
@@ -146,12 +170,15 @@
         data() {
             return{
                 trans_id : '',
+                searchFilter: false,
                 editMode : false,
                 accounts : {},
                 transactions : {},
                 accountView: [],
                 studentName: '',
                 transID:'',
+                search:'',
+                stud_name:'',
                 form: new Form({
                   account_id:'',
                   Amount: '',
@@ -160,6 +187,14 @@
             }
         },
         methods: {
+          searchit(){
+              if(this.search == "" || this.search == null || this.search == "search"){
+                this.searchFilter = false;
+              }else{
+                this.searchFilter = true;
+                this.stud_name = this.search.toLowerCase();
+              }
+            },
             printList(){
               window.open('/api/transactionsPrint/'+this.trans_id);
             },
@@ -195,10 +230,7 @@
                 })
             },
             createTransactions(account){
-              this.form.reset();
-              this.form.account_id = account.id;
-              this.accountView = account;
-              $('#makeTrans').modal('show');
+              this.$router.push("/payments/"+account.student_id);
             },
             createUser(){
                 this.$Progress.start();

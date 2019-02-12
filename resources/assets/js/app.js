@@ -44,6 +44,8 @@ window.Form = Form;
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
+Vue.component('pagination', require('laravel-vue-pagination'));
+
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
@@ -55,8 +57,9 @@ Vue.use(VueProgressBar, {
 	height: '30px'
 })
 
-
+//Vue.component('chats', require('./components/chat.vue'));
 let routes = [
+  { path: '/chat', component: require('./components/chat.vue')},
   { path: '/dashboard', component: require('./components/dashboard.vue') },
   { path: '/developer', component: require('./components/developer.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
@@ -77,12 +80,15 @@ let routes = [
   //Enrollment
   { path: '/new_student', component: require('./components/enrollment/new_student.vue') },
   { path: '/old_student', component: require('./components/enrollment/old_student.vue') },
+  { path: '/drop_student', component: require('./components/enrollment/drop.vue') },
+
 
   //Announcement
   { path: '/announcement', component: require('./components/announcements/announcement.vue') },
 
   //cashier
   { path: '/cashier', component: require('./components/cashiers/cashier.vue') },
+  { path: '/payments/:id', component: require('./components/cashiers/payments.vue') },
 
   //parent users
   { path: 'register_sis/:id', component: require('./components/enrollment/waiting_list.vue')},
@@ -96,6 +102,7 @@ let routes = [
   { path: '/grade/:id', component: require('./components/students/grade_list.vue') },
   { path: '/comment/:id', component: require('./components/students/comments.vue') },
   { path: '/requirement/:id', component: require('./components/students/requirements.vue') },
+  { path: '/transfered', component: require('./components/students/transfered.vue') },
 
   //reports
   { path: '/class_list', component: require('./components/report/class_list.vue') },
@@ -144,7 +151,11 @@ Vue.component(
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 
+
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    data:{
+      search: ''
+    }
 });
