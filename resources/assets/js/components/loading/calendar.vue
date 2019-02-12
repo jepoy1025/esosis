@@ -55,6 +55,7 @@ line-height: 1.4em;">
                 calendar: null,
                 eventScheduleIds: {},
                 teachers: [],
+                schedules: [],
             }
         },
 
@@ -77,7 +78,7 @@ line-height: 1.4em;">
             //axios.get("api/teacher").then(result => { console.log(result); return result; },
             //axios.get("api/room-column").then(({json})=>(this.resources = json.data));
             Fire.$emit('afterCreate');
-            Promise.all([this.loadLevel(), this.loadRoom(), this.loadSubject(), this.getTeachers()])
+            Promise.all([this.loadLevel(), this.loadRoom(), this.loadSubject(), this.getSchedules(), this.getTeachers()])
                 .then(repsonses => {
                     this.initCalendar()
                 })
@@ -117,20 +118,17 @@ line-height: 1.4em;">
                         console.log({
                             start, end, timezone, callback
                         });
-                        axios.get(`/api/schedule`)
-                            .then(({data}) => {
-                                callback(data.map(item => {
-                                    return {
-                                        title: item.subject.title,
-                                        start: moment(start.format('YYYY-MM-DD') + ' ' + item.start_time),
-                                        end: moment(start.format('YYYY-MM-DD') + ' ' + item.end_time),
-                                        subjectId: item.subject_id,
-                                        resourceId: item.room_id,
-                                        scheduleId: item.id,
-                                        level: item.subject.level,
-                                    }
-                                }))
-                            });
+                        callback(self.schedules.map(item => {
+                            return {
+                                title: item.subject.title,
+                                start: moment(start.format('YYYY-MM-DD') + ' ' + item.start_time),
+                                end: moment(start.format('YYYY-MM-DD') + ' ' + item.end_time),
+                                subjectId: item.subject_id,
+                                resourceId: item.room_id,
+                                scheduleId: item.id,
+                                level: item.subject.level,
+                            }
+                        }));
                     },
 
                     //console.log(level),
@@ -166,7 +164,15 @@ line-height: 1.4em;">
                     eventDrop: function (event, duration, revertFn,) { // called when an event (already on the calendar) is moved
                         //revertFunc();
                         console.log('eventDrop', event);
-                        if (!self.isValidRoomLevel(event)) {
+
+                        if (!self.isValidDropForRoom(event)) {
+                            revertFn();
+                            window.swal.fire(
+                                'Oops!',
+                                'Schedule is not vacant for room.',
+                                'error'
+                            )
+                        } else if (!self.isValidRoomLevel(event)) {
                             revertFn();
                             window.swal.fire(
                                 'Oops!',
@@ -188,7 +194,14 @@ line-height: 1.4em;">
                         console.log('eventReceive', {
                             event
                         });
-                        if (!self.isValidRoomLevel(event)) {
+                        if (!self.isValidDropForRoom(event)) {
+                            self.calendar.fullCalendar('removeEvents', event._id);
+                            window.swal.fire(
+                                'Oops!',
+                                'Schedule is not vacant for room.',
+                                'error'
+                            )
+                        } else if (!self.isValidRoomLevel(event)) {
                             self.calendar.fullCalendar('removeEvents', event._id);
                             window.swal.fire(
                                 'Oops!',
@@ -321,7 +334,13 @@ line-height: 1.4em;">
                                 'Success!',
                                 'Schedule has been deleted.',
                                 'success',
-                            )
+                            );
+                            let schedule = this.schedules.find(item => {
+                                return item.id == event.scheduleId
+                            });
+                            if (schedule) {
+                                this.schedules.splice(this.schedules.indexOf(schedule), 1);
+                            }
                         });
             },
             isValidRoomLevel(event) {
@@ -329,6 +348,24 @@ line-height: 1.4em;">
                     return item.id == event.resourceId;
                 });
                 return room.grade_level == event.level
+            },
+            isValidDropForRoom(event) {
+                let room_schedules = this.schedules.filter(item => {
+                    return item.room_id == event.resourceId && item.id != event.scheduleId;
+                });
+                let valid = true;
+                _.forEach(room_schedules, schedule => {
+                    let start = moment(moment().format('YYYY-MM-DD ') + schedule.start_time);
+                    let end = moment(moment().format('YYYY-MM-DD ') + schedule.end_time);
+                    if (
+                        event.start.local().isAfter(start) && event.start.local().isBefore(end) || event.end.local().isAfter(start) && event.end.local().isBefore(end) || event.start.local().isSame(start) || event.end.local().isSame(end)
+                        || start.local().isAfter(event.start.local()) && start.local().isBefore(event.end.local()) || end.local().isAfter(event.start.local()) && end.local().isBefore(event.end.local()) || start.local().isSame(event.start.local()) || end.local().isSame(event.end.local())
+                    ) {
+                        valid = false;
+                        return false;
+                    }
+                });
+                return valid;
             },
             isValidDrop(event) {
                 let subject = this.subjects.find(item => {
@@ -360,9 +397,15 @@ line-height: 1.4em;">
                 return valid;
             },
             getTeachers() {
-                axios.get(`/api/teacher`)
+                return axios.get(`/api/teacher`)
                     .then(({data}) => {
                         this.teachers = data;
+                    })
+            },
+            getSchedules() {
+                return axios.get(`/api/schedule`)
+                    .then(response => {
+                        this.schedules = response.data;
                     })
             }
         },
