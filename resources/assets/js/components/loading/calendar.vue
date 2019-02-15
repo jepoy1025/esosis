@@ -223,7 +223,14 @@ line-height: 1.4em;">
                         console.log({
                             event, delta, revertFn,
                         });
-                        if (self.isValidDrop(event)) {
+                        if (!self.isValidDropForRoom(event)) {
+                            revertFn();
+                            window.swal.fire(
+                                'Oops!',
+                                'Schedule is not vacant for room.',
+                                'error'
+                            )
+                        } else if (self.isValidDrop(event)) {
                             self.saveEvent(event);
                         } else {
                             revertFn();
