@@ -60,6 +60,10 @@ class ReportsController extends Controller
             ->take(10)
             ->get();
 
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
         return compact('data');
     }
 
@@ -73,7 +77,11 @@ class ReportsController extends Controller
             ->take(10)
             ->get();
 
-        return view('prints.topStudent', ['data' => $data]);
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
+        return view('prints.topStudent', ['data' => $data, 'level' => $level]);
     }
 
     public function enrollment($id){

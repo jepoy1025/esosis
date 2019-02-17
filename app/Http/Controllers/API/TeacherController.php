@@ -18,7 +18,6 @@ class TeacherController extends Controller
      */
     public function actTeacher(){
         $data = DB::table('teachers')
-            ->where('status','=','active')
             ->get();
             
         return compact('data');

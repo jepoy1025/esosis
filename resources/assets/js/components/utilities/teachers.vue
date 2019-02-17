@@ -133,7 +133,7 @@
                 this.form.fill(teacher);
             },
       loadTeacher(){
-                axios.get("api/teacher").then(({data})=>(this.teacher = data.data));
+                axios.get("api/teacherList").then(({data})=>(this.teacher = data.data));
             },
       loadLevel(){
                 

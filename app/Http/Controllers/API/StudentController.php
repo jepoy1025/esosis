@@ -515,13 +515,6 @@ class StudentController extends Controller
           )
           );
 
-        DB::table('level_student')->insert(
-          array(
-                 'student_id'     =>   $id, 
-                 'level_id'   =>   $level_id,
-          )
-          );
-
         $lecture_id = DB::table('rooms')
                     ->where([
                         ['grade_level', '=', $level_id],
@@ -592,7 +585,7 @@ class StudentController extends Controller
     {
         return $data = DB::table('students')
             ->where('id', $id)
-            ->update(['status' => 4]);
+            ->update(['status' => 3]);
     }
 
     public function dropStudent(Request $request, $id)

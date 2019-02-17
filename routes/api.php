@@ -27,6 +27,8 @@ Route::get('parents', 'API\UserController@parents');
 Route::get('parentsStudents/{id}', 'API\StudentController@parentGet');
 Route::get('sponsorStudents/{id}', 'API\StudentController@sponsorGet');
 
+Route::get('teacherList', 'API\TeacherController@actTeacher');
+
 
 Route::apiResources(['teacher' => 'API\TeacherController']);
 Route::apiResources(['level' => 'API\LevelController']);

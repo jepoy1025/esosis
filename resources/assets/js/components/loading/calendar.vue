@@ -309,7 +309,7 @@ line-height: 1.4em;">
                             this.eventScheduleIds[event._id] = data.id
                             window.toast(
                                 'Success!',
-                                `${event.start.local().format('hh:mm a')} ${teacher.name}`,
+                                `${event.start.local().format('hh:mm a')}-${event.end.local().format('hh:mm a')} ,mr/ms ${teacher.name}`,
                                 'success',
                             )
                         })

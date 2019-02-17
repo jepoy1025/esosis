@@ -13,7 +13,7 @@
 Route::get('/test','TestController@test');
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('auth.login2');
 });
 Route::post('postAjax','TestController@store');
 
