@@ -15426,7 +15426,7 @@ be a descendant of the grid when it is being dragged.
 }
 
 .pink {
-  color: #ffb3ff;
+  color: #fa7fb6;
 }
 
 .red {
@@ -15464,7 +15464,7 @@ be a descendant of the grid when it is being dragged.
   --blue: #b3d9ff;
   --indigo: #404040;
   --purple: #9561e2;
-  --pink: #ffb3ff;
+  --pink: #fa7fb6;
   --red: #e3342f;
   --orange: #f6993f;
   --yellow: #ffed4a;
@@ -15986,7 +15986,7 @@ mark,
 
 code {
   font-size: 87.5%;
-  color: #ffb3ff;
+  color: #fa7fb6;
   word-break: break-word;
 }
 
@@ -32515,6 +32515,11 @@ readers do not read off random characters that represent icons */
 }
 
 .router-link-exact-active {
+  background-color: #4d4d4d;
+  color: white !important;
+}
+
+.nav-item.nav-link.active {
   background-color: #4d4d4d;
   color: white !important;
 }

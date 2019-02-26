@@ -2,30 +2,36 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default">
-                    <div class="card-header"><h3 class="card-title"><b class="pink">Class</b> List</h3></div>
+                <div class="card card-info">
+                    <div class="card-header"><h3 class="card-title"><b class="pink">Schedule </b> Report</h3>
+                    <div class="card-tools">
+                        <button class="btn btn-block btn-outline-primary btn-lg" @click="printAll" ><i class="fas fa-print fa-fw"></i> Print All Schedule</button>
+                    </div>
+                    </div>
                     <div class="card-body table-responsive p-0">
                     <table class="table table-hover">
                       <tbody>
-                        <tr>
-                            <th>ID</th>
-                            <th>Grade Level</th>
-                            <th>Section</th>
-                            <th>Advicer</th>
-                            <th>Action</th>
-                        </tr>
-                        <tr v-for="room in room" :key="room.id">
-                            <td>{{room.id}}</td>
-                            <td>{{room.title}}</td>
-                            <td>{{room.section}}</td>
-                            <td>{{room.name}}</td>
-                            <td>
-                                <button href="" @click="studentList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">View Students</i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody></table>
+                    <tr>
+                        <th>Grade Level</th>
+                        <th>Section</th>
+                        <th>Advicer</th>
+                        <th>Population</th>
+                        <th>Status</th>
+                        <th>Print</th>
+                    </tr>
+                    <tr v-for="room in room" :key="room.id">
+                        <td>{{room.title}}</td>
+                        <td>{{room.section}}</td>
+                        <td>{{room.name}}</td>
+                        <td>{{room.population}}</td>
+                        <td>{{room.status}}</td>
+                        <td>
+                            <button href="" @click="" class="btn btn-default">
+                            <i class="fas fa-print orange"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody></table>
                   </div>
                 </div>
             </div>
@@ -85,11 +91,14 @@
             }
         },
         methods : {
+            printAll(){
+                window.open('api/printAllSchedule/');
+            },
             print(){
                 window.open('/api/testPrint/');
             },
-            loadSchedule(){
-                axios.get('getSchedule').then(({data})=>(this.sched = data.data));
+            loadRoom(){
+                axios.get("api/room").then(({data})=>(this.room = data.data));
             },
             studentList(id){
                 axios.get("/api/studentRoom/" + id).then(({data})=>(this.students = data.data));
@@ -101,7 +110,7 @@
             }
         },
         created() {
-            this.loadSchedule();
+            this.loadRoom();
             console.log('Component mounted.')
         }
     }

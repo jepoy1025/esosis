@@ -24,12 +24,16 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Grade Level</th>
-                                <th>Action</th>
+                                <!-- <th>Action</th> -->
                             </tr>
                             <tr v-for="user in students" :key="user.id">
-                                <td>{{user.last_name}}, {{user.first_name}}</td>
-                                <td>{{user.title}}</td>
                                 <td>
+                                    <button href="" @click="pushProfile(user.id)" class="btn btn-default">
+                                    <i class="fas fa-user green"> {{user.last_name}}, {{user.first_name}}</i>
+                                    </button>
+                                </td>
+                                <td>{{user.title}}</td>
+<!--                                 <td>
                                     <button href="" @click="comment(user.id)" class="btn btn-default">
                                     <i class="fas fa-user-cog green">Comment</i>
                                     </button>
@@ -42,7 +46,7 @@
                                     <button href="" @click="transFunc(user.id)" class="btn btn-default">
                                     <i class="fas fa-user-times blue">Payment Transactions</i>
                                     </button>
-                                </td>
+                                </td> -->
                             </tr>
                         </tbody></table>
                     </div>
@@ -235,6 +239,9 @@
             
         },
         methods: {
+            pushProfile(id){
+                this.$router.push("/profile/"+id);
+            },
             addStudent(){
                 this.form.post('api/sisAddStudent')
                 .then(()=>{

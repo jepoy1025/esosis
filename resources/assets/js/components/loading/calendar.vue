@@ -1,9 +1,12 @@
 <template>
     <div class="container">
         <div class="row">
-            <button class="btn btn-block btn-outline-info"></button>
         </div>
         <div class="col-lg-12">
+            <div class="card card-info">
+                <div class="card-header">
+                <h3 class="card-title pink"><b>M. T. TH. F. Schedule Loading</b></h3>
+              </div>
             <div id='wrap' style="width: 100%;margin: 0;position: relative;
 line-height: 1.4em;">
                 
@@ -25,12 +28,13 @@ line-height: 1.4em;">
                     </p>
                 </div>
 
-                <div id='calendar' style="float: right;width: 80%;"></div>
+                <div id='calendar' style="float: right;width: 80%; background-color: #ffffff"></div>
 
                 <div style='clear:both'></div>
 
             </div>
             <button></button>
+            </div>
         </div>
     </div>
 </template>
@@ -141,8 +145,10 @@ line-height: 1.4em;">
                         }
                     },
                     eventClick: function (event, element) {
+                        var new_ev = event;
+                        console.log(new_ev.start);
                         bootbox.dialog({
-                            message: 'Confirm delete schedule?',
+                            message: `Confirm delete schedule?`,
                             title: 'Confirmation',
                             buttons: {
                                 cancel: {

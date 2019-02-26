@@ -69,4 +69,17 @@ class SisController extends Controller
 
         return compact('data');
     }
+
+    public function lecture(Request $request, $id){
+        $student = DB::table('students')
+                ->where('id',$id)
+                ->first();
+
+        $data = DB::table('rooms')
+            ->join('teachers','rooms.advicer_id','=','teachers.id')
+            ->where('rooms.id',$student->lecture_id)
+            ->first();
+
+        return compact('data');
+    }
 }

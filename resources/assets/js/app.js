@@ -59,7 +59,8 @@ Vue.use(VueProgressBar, {
 
 //Vue.component('chats', require('./components/chat.vue'));
 let routes = [
-  { path: '/chat', component: require('./components/chat.vue')},
+  { path: '/', component: require('./components/welcome.vue') },
+  { path: '/home', component: require('./components/welcome.vue') },
   { path: '/dashboard', component: require('./components/dashboard.vue') },
   { path: '/developer', component: require('./components/developer.vue') },
   { path: '/settings', component: require('./components/profile.vue') },
@@ -96,6 +97,7 @@ let routes = [
   //sis
   { path: '/studentList', component: require('./components/sis/student_list.vue') },
   { path: '/addStudent', component: require('./components/sis/add_student.vue') },
+  { path: '/profile/:id', component: require('./components/sis/profile.vue') },
 
   //student
   { path: '/grade', component: require('./components/students/grade.vue') },
@@ -108,6 +110,7 @@ let routes = [
   { path: '/class_list', component: require('./components/report/class_list.vue') },
   { path: '/ranking', component: require('./components/report/ranking.vue') },
   { path: '/schedule', component: require('./components/report/schedule.vue') },
+  { path: '/transaction', component: require('./components/report/transaction.vue') },
 
   //codes
   { path: '/codes', component: require('./components/codes.vue') },

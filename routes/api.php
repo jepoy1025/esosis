@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-
+  
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 Route::get('profile', 'API\UserController@profile');
 
@@ -81,7 +82,9 @@ Route::get('studentAccount/{id}','API\CashierController@account');
 Route::post('sisAddStudent','API\SisController@addStudent');
 Route::get('sisStudentList','API\SisController@studentList');
 Route::get('account/{id}','API\SisController@balance');
+Route::get('lecture/{id}','API\SisController@lecture');
 
+//reports
 Route::get('testPrint/{id}','API\ReportsController@generatePDF');
 Route::get('rankPrint/{id}','API\ReportsController@topStudents');
 Route::get('getSchedule', 'API\ReportsController@schedules');
@@ -90,5 +93,6 @@ Route::get('studentRank/{id}','API\ReportsController@studentRank');
 Route::get('enrollmentPrint/{id}','API\ReportsController@enrollment');
 Route::get('payment/{id}','API\ReportsController@payment');
 Route::get('reEnrollPrint/{id}','API\ReportsController@reEnroll');
+Route::get('printAllSchedule','API\ReportsController@allSchedule');
 
 //Route::get('teacher', 'API\TeacherController@index');

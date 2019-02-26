@@ -541,7 +541,9 @@ class StudentController extends Controller
     public function show($id)
     {
         $data = DB::table('students')
-            ->where('id', $id)
+            ->join('levels','students.grade_level_id','=','levels.id')
+            ->select('students.*','levels.title')
+            ->where('students.id', $id)
             ->first();
 
          return compact('data');

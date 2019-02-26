@@ -12,15 +12,15 @@
 */
 Route::get('/test','TestController@test');
 
-Route::get('/', function () {
-    return view('auth.login2');
-});
+// Route::get('/', function () {
+//     return view('/home');
+// });
 Route::post('postAjax','TestController@store');
 
 
 Auth::routes();
-Route::get('/chats','ChatsController@index');
-Route::get('/home', 'HomeController@index')->name('home');
+//Route::get('/chats','ChatsController@index');
+//Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('invoice',  function(){
 	return view('prints.invoice');

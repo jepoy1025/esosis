@@ -167,4 +167,17 @@ class ReportsController extends Controller
 
         return view('prints.reEnrollReciept', ['data' => $data, 'student'=>$student, 'payment'=>$payment, 'amount'=>$amount]);
     }
+
+    public function allSchedule(){
+        $data = DB::table('schedules')
+            ->join('subjects','schedules.subject_id','=','subjects.id')
+            ->join('teachers','subjects.teacher_id','=','teachers.id')
+            ->select('schedules.*','teachers.name','subjects.title')
+            ->orderBy('schedules.start_time', 'asc')
+            ->get();
+        
+        //dd($data);
+
+        return view('prints.scheduleAll', ['data' => $data]);
+    }
 }

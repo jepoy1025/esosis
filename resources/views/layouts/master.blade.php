@@ -15,7 +15,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   <!-- Font Awesome Icons -->
   <link rel="stylesheet" href="/css/app.css">
 </head>
-<body class="hold-transition sidebar-mini" >
+<body class="hold-transition sidebar-mini">
 <div class="wrapper" id="app">
 
   <!-- Navbar -->
@@ -175,13 +175,28 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </p>
           </router-link>
           </li>
-          <li class="nav-item">
-          <router-link to="/load" class="nav-link">
-            <i class="nav-icon fas fa-calendar-week pink"></i>
-            <p class="pink">
-              Class Loading
-            </p>
-          </router-link>
+          <li class="nav-item has-treeview">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-calendar-week pink"></i>
+              <p class="pink">
+                Class Loading
+                <i class="right fa fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <router-link to="/load" class="nav-link">
+                  <i class="fas fa-file cyan"></i>
+                  <p class="cyan">M.T.TH.F Schedule</p>
+                </router-link>
+              </li>
+              <li class="nav-item">
+                <router-link to="/drop_student" class="nav-link">
+                  <i class="fas fa-file cyan"></i>
+                  <p>Wednesday Schedule</p>
+                </router-link>
+              </li>
+            </ul>
           </li>
           <li class="nav-item has-treeview">
             <a href="#" class="nav-link">
@@ -237,19 +252,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
               </li>
               <li class="nav-item">
                 <router-link to="/ranking" class="nav-link">
-                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <i class="fas fa-sort-amount-up cyan"></i>
                   <p>Student Ranking</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/schedule" class="nav-link">
-                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                <router-link to="/transaction" class="nav-link">
+                  <i class="fas fa-cash-register cyan"></i>
                   <p>Payment Transactions</p>
                 </router-link>
               </li>
               <li class="nav-item">
                 <router-link to="/schedule" class="nav-link">
-                  <i class="fas fa-chalkboard-teacher cyan"></i>
+                  <i class="fas fa-calendar-week cyan"></i>
                   <p>Schedules</p>
                 </router-link>
               </li>
@@ -331,12 +346,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
   </aside>
 
   <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
+  <div class="content-wrapper" style="background-color: #ffb3ff;">
     <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
       <div class="container-fluid">
+        
         <router-view></router-view>
         <vue-progress-bar></vue-progress-bar>
         <!-- /.row -->

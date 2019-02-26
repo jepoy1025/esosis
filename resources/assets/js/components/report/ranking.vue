@@ -2,20 +2,32 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default">
-                    <div class="card-header"><h3 class="card-title"><b class="pink">Class</b> List</h3></div>
+                <div class="card card-info">
+                    <div class="card-header"><h3 class="card-title"><b class="pink">Student</b> Ranking</h3></div>
                     <div class="card-body table-responsive p-0">
                     <table class="table table-hover">
                       <tbody>
                         <tr>
                             <th>Grade Level</th>
-                            <th>Action</th>
+                            <th>Select Grading</th>
                         </tr>
                         <tr v-for="room in level" :key="room.id" :hidden="room.id == 0">
                             <td>{{room.title}}</td>
                             <td>
                                 <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">View Top Studaents</i>
+                                <i class="fas fa-edit orange">First</i>
+                                </button>
+                                <button href="" @click="rankList(room.id)" class="btn btn-default">
+                                <i class="fas fa-edit orange">Second</i>
+                                </button>
+                                <button href="" @click="rankList(room.id)" class="btn btn-default">
+                                <i class="fas fa-edit orange">Third</i>
+                                </button>
+                                <button href="" @click="rankList(room.id)" class="btn btn-default">
+                                <i class="fas fa-edit orange">Fourth</i>
+                                </button>
+                                <button href="" @click="rankList(room.id)" class="btn btn-default">
+                                <i class="fas fa-edit orange">Final</i>
                                 </button>
                             </td>
                         </tr>
