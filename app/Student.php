@@ -19,4 +19,12 @@ class Student extends Model
         'birth_date',
         'status',
     ];
+
+    /**
+     * @return string
+     */
+    public function getNameAttribute()
+    {
+        return implode(' ', [$this->first_name, $this->middle_name, $this->last_name]);
+    }
 }

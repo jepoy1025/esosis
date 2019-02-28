@@ -268,6 +268,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <p>Schedules</p>
                 </router-link>
               </li>
+              <li class="nav-item">
+                <router-link to="/grade_report" class="nav-link">
+                  <i class="fas fa-marker cyan"></i>
+                  <p>Grade Report</p>
+                </router-link>
+              </li>
             </ul>
           </li>
           <li class="nav-item has-treeview">

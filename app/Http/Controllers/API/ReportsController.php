@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Level;
+use App\Student;
+use App\Subject;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -179,5 +182,15 @@ class ReportsController extends Controller
         //dd($data);
 
         return view('prints.scheduleAll', ['data' => $data]);
+    }
+
+    public function gradeReport(Request $request, Level $level)
+    {
+        $student_ids = $level->grades()
+            ->groupBy('student_id')
+            ->get(['student_id']);
+        $students = Student::whereIn('id', $student_ids)->get();
+        $subjects = Subject::where('level', $level->id)->get();
+        return view('prints.gradeReport', compact('students', 'subjects', 'level'));
     }
 }

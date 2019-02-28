@@ -111,6 +111,7 @@ let routes = [
   { path: '/ranking', component: require('./components/report/ranking.vue') },
   { path: '/schedule', component: require('./components/report/schedule.vue') },
   { path: '/transaction', component: require('./components/report/transaction.vue') },
+  { path: '/grade_report', component: require('./components/report/grade-report.vue') },
 
   //codes
   { path: '/codes', component: require('./components/codes.vue') },
