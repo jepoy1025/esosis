@@ -77,6 +77,8 @@ let routes = [
 
   //Class Loading
   { path: '/load', component: require('./components/loading/calendar.vue') },
+  { path: '/wed', component: require('./components/loading/wed.vue') },
+
 
   //Enrollment
   { path: '/new_student', component: require('./components/enrollment/new_student.vue') },

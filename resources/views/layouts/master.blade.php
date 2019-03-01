@@ -191,7 +191,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link to="/drop_student" class="nav-link">
+                <router-link to="/wed" class="nav-link">
                   <i class="fas fa-file cyan"></i>
                   <p>Wednesday Schedule</p>
                 </router-link>
