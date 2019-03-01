@@ -94,5 +94,6 @@ Route::get('enrollmentPrint/{id}','API\ReportsController@enrollment');
 Route::get('payment/{id}','API\ReportsController@payment');
 Route::get('reEnrollPrint/{id}','API\ReportsController@reEnroll');
 Route::get('printAllSchedule','API\ReportsController@allSchedule');
+Route::get('gradeReport/{level}','API\ReportsController@gradeReport');
 
 //Route::get('teacher', 'API\TeacherController@index');
