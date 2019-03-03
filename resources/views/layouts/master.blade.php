@@ -86,11 +86,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
             </li>
             <li class="nav-item">
-            <router-link to="/addStudent" class="nav-link">
-              <i class="nav-icon fas fa-user-plus pink"></i>
+            <router-link to="/sis_announce" class="nav-link">
+              <i class="nav-icon fas fa-bullhorn pink"></i>
               <p class="pink">
-                Add Students
+                School Notification 
+                @if(Auth::user()->notify == 1)
+                <span class="right badge badge-danger pull-right">!</span>
+                @else
+                @endif
               </p>
+
             </router-link>
             </li>
           @endcan
@@ -156,7 +161,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/drop_student" class="nav-link">
                   <i class="fas fa-folder-open cyan"></i>
-                  <p>Drop</p>
+                  <p>Dropped</p>
                 </router-link>
               </li>
               <li class="nav-item">
@@ -187,15 +192,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/load" class="nav-link">
                   <i class="fas fa-file cyan"></i>
-                  <p class="cyan">M.T.TH.F Schedule</p>
+                  <p class="cyan">M.T.W.TH.F Schedule</p>
                 </router-link>
               </li>
-              <li class="nav-item">
+              {{-- <li class="nav-item">
                 <router-link to="/wed" class="nav-link">
                   <i class="fas fa-file cyan"></i>
                   <p>Wednesday Schedule</p>
                 </router-link>
-              </li>
+              </li> --}}
             </ul>
           </li>
           <li class="nav-item has-treeview">
@@ -226,6 +231,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </router-link>
               </li>
             </ul>
+          </li>
+          <li class="nav-item">
+          <router-link to="/announce" class="nav-link">
+            <i class="nav-icon fas fa-bullhorn pink"></i>
+            <p class="pink">
+              SIS Notification
+            </p>
+          </router-link>
           </li>
           <li class="nav-item">
           <router-link to="/codes" class="nav-link">
@@ -318,14 +331,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </ul>
           </li>
           @endcan
-          <li class="nav-item">
+{{--           <li class="nav-item">
           <router-link to="settings" class="nav-link">
             <i class="nav-icon fas fa-user-cog pink"></i>
             <p class="pink">
               Profile Settings
             </p>
           </router-link>
-          </li>
+          </li> --}}
           <li class="nav-item">
 {{--           <a href="#" class="text-danger nav-link">
             <i class="nav-icon fas fa-sign-out-alt"></i>

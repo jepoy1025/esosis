@@ -1,4 +1,7 @@
 <button onclick="printData()" id="hidebutton" style="background-color: blue">Print me</button>
+<style type="text/css" media="print">
+  @page { size: portrait; }
+</style>
 <div id="printTable" >
 	<div style="width: 100%;">
 	<p>NAME: <strong>{{ucwords($student->last_name)}}, {{ucwords($student->first_name)}}</strong><strong style="float: right"> Grade: {{ucwords($student->title)}}-{{$student->section}}</strong><br>

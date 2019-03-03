@@ -11,6 +11,7 @@
                         <h2 class="headline text-danger">HI!</h2>
 
                         <div class="error-content">
+                          <h5 class="red" :hidden="not == '0'"><i class="fas fa-exclamation-circle red"></i> Oops! please check your notification tab.</h5>
                           <h3>Mr./Ms. {{form.last_name}}, {{form.first_name}}</h3>
 
                           <p>
@@ -36,6 +37,7 @@
                 payments:{},
                 subjects:{},
                 transactions:{},
+                not:'',
                 first:'',
                 second:'',
                 third:'',
@@ -51,6 +53,7 @@
                     role_id : '',
                     email: '',
                     password: '',
+                    notify:'',
                     photo: '',
                     studentCode:''
                 })
@@ -62,15 +65,21 @@
                 this.user_id = this.form.id;
             },
             getUser(){
-                axios.get("api/profile").then(({ data }) => (this.form.fill(data)));
-                axios.get("api/profile").then(({ data }) => (this.user.id = data.id));
-            },
+                axios.get("api/profile").then(({ data }) => (this.form.fill(data), this.not = data.notify));
+                axios.get("api/profile").then(({ data }) => (this.user.id = data.id, this.not = data.notify));
+                console.log(this.form.notify);
+             },
+            notify(){
+                var noti = this.not;
+                console.log('yow');
+                console.log(noti);
+            }
         },
         created() {
             this.getUser();
-            console.log(this.user.id);
+            this.notify();
             Fire.$on('afterCreate',()=>{
-                //this.studentList();
+                
             });
         }
     }

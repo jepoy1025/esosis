@@ -95,5 +95,9 @@ Route::get('payment/{id}','API\ReportsController@payment');
 Route::get('reEnrollPrint/{id}','API\ReportsController@reEnroll');
 Route::get('printAllSchedule','API\ReportsController@allSchedule');
 Route::get('gradeReport/{level}','API\ReportsController@gradeReport');
+Route::get('transactionReport','API\ReportsController@transactionReport');
+Route::get('transactionReportAnnual/{year}','API\ReportsController@transactionReportAnnual');
+Route::get('transactionReportMonth/{month}','API\ReportsController@transactionReportMonth');
+Route::get('transactionReportRange/{range}','API\ReportsController@transactionReportRange');
 
 //Route::get('teacher', 'API\TeacherController@index');

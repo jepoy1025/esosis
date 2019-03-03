@@ -56,7 +56,7 @@
                         </table>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-submit" data-dismiss="modal" @click="printList()">Close</button>
+                <button type="button" class="btn btn-submit" data-dismiss="modal" @click="printList()">Print</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
               </div>
             </div>

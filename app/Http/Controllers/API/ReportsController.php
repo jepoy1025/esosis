@@ -191,6 +191,58 @@ class ReportsController extends Controller
             ->get(['student_id']);
         $students = Student::whereIn('id', $student_ids)->get();
         $subjects = Subject::where('level', $level->id)->get();
+
+        //dd($students);
         return view('prints.gradeReport', compact('students', 'subjects', 'level'));
+    }
+
+    public function transactionReport(){
+        $data = DB::table('transactions')
+                ->join('students','transactions.student_id','=','students.id')
+                ->select('transactions.*','students.last_name','students.first_name')
+                ->get();
+        $title = 'All Transaction Report';
+        //dd($data);
+
+        return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
+    }
+
+    public function transactionReportAnnual($year){
+        $data = DB::table('transactions')
+                ->join('students','transactions.student_id','=','students.id')
+                ->whereYear('transactions.created_at', '=', $year)
+                ->select('transactions.*','students.last_name','students.first_name')
+                ->get();
+        //dd($data);
+
+        $title = 'Transaction Report in '. $year;
+
+        return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
+    }
+
+    public function transactionReportMonth($month){
+        $exp = explode("-",$month);
+        $data = DB::table('transactions')
+                ->join('students','transactions.student_id','=','students.id')
+                ->whereYear('transactions.created_at', '=', $exp[1])
+                ->whereMonth('transactions.created_at', '=', $exp[0])
+                ->select('transactions.*','students.last_name','students.first_name')
+                ->get();
+        $month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        $title = 'Transaction Report in '. $month[$exp[0]-1].' year '. $exp[1];
+        
+        return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
+    }
+
+    public function transactionReportRange($range){
+        $exp = explode("+",$range);
+        $data = DB::table('transactions')
+                ->join('students','transactions.student_id','=','students.id')
+                ->whereDate('transactions.created_at', '>=', $exp[0])
+                ->whereDate('transactions.created_at', '<=', $exp[1])
+                ->select('transactions.*','students.last_name','students.first_name')
+                ->get();
+        $title = 'Transaction Report from '. $exp[0].' to '. $exp[1];
+        return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
     }
 }

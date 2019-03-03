@@ -5,6 +5,9 @@
  * @var \Illuminate\Database\Eloquent\Collection|\App\Subject[] $subjects
  */
 ?>
+<style type="text/css" media="print">
+  @page { size: landscape; }
+</style>
 <div id="printTable">
 
     <img src="{{ url('img/schoolIcon.png') }}" alt="Paris"
@@ -21,7 +24,7 @@
         <tr>
             <th>List of Students</th>
             @foreach($subjects as $subject)
-                <th colspan="4">{{ $subject->title }}</th>
+                <th colspan="5">{{ $subject->title }}</th>
                 @endforeach
         </tr>
         <tr>
@@ -31,6 +34,7 @@
                 <th style="text-align: center;">2nd</th>
                 <th style="text-align: center;">3rd</th>
                 <th style="text-align: center;">4th</th>
+                <th style="text-align: center;">Avg</th>
                 @endforeach
         </tr>
         </thead>
@@ -50,6 +54,7 @@
                     <td style="text-align: center;">{{ $grade->second }}</td>
                     <td style="text-align: center;">{{ $grade->third }}</td>
                     <td style="text-align: center;">{{ $grade->fourth }}</td>
+                    <td style="text-align: center;">{{ ($grade->fourth+$grade->third+$grade->second+$grade->first)/4 }}</td>
                     @endforeach
             </tr>
             @endforeach

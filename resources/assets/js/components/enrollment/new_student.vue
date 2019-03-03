@@ -308,9 +308,9 @@
               <div class="modal-body" id>
                 <label>Student Requirements:</label>
                 <div class="row">&nbsp&nbsp
-                <div :hidden="form.grade_level < 5">Form 137 :  <input type="checkbox" id="form.form137" v-model="form.form137"></div>
-                NSO : <input type="checkbox" id="form.nso" v-model="form.nso">
-                Picture 1x1 : <input type="checkbox" id="form.picture1x1" v-model="form.picture1x1">
+                <div :hidden="form.grade_level < 5"><input type="checkbox" id="form.form137" v-model="form.form137">Form 137  </div>
+                <input type="checkbox" id="form.nso" v-model="form.nso">NSO 
+                <input type="checkbox" id="form.picture1x1" v-model="form.picture1x1">Picture 1x1 
                 </div>
                 <div class="form-group">
                     <label>Whole Year Fee:</label>

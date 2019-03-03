@@ -33,6 +33,14 @@
         data() {
             return {
                 levels: [],
+                form: new Form({
+                    id: '',
+                    name : '',
+                    educational_attainment : '',
+                    civil_service : '',
+                    marital_status: '',
+                    status: ''
+                })
             }
         },
         methods: {
