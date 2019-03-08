@@ -310,7 +310,11 @@ line-height: 1.4em;">
                 if (data.id) {
                     axios.put(`/api/schedule/${data.id}`, data)
                         .then(({data}) => {
-                            this.eventScheduleIds[event._id] = data.id
+                            this.eventScheduleIds[event._id] = data.id;
+                            let existing = this.schedules.find(item => item.id == data.id);
+                            if (existing) {
+                                _.extend(existing, data)
+                            }
                         })
                         .catch(error => {
                             this.calendar.fullCalendar('removeEvents', event._id)
@@ -319,7 +323,8 @@ line-height: 1.4em;">
                 } else {
                     axios.post(`/api/schedule`, data)
                         .then(({data}) => {
-                            this.eventScheduleIds[event._id] = data.id
+                            this.schedules.push(data);
+                            this.eventScheduleIds[event._id] = data.id;
                             window.toast(
                                 'Success!',
                                 `${event.start.local().format('hh:mm a')}-${event.end.local().format('hh:mm a')} ,mr/ms ${teacher.name}`,
@@ -349,7 +354,7 @@ line-height: 1.4em;">
                                 'success',
                             );
                             let schedule = this.schedules.find(item => {
-                                return item.id == event.scheduleId
+                                return item.id == data.id
                             });
                             if (schedule) {
                                 this.schedules.splice(this.schedules.indexOf(schedule), 1);
