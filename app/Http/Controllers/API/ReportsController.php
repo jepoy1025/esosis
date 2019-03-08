@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Level;
+use App\Room;
 use App\Student;
 use App\Subject;
 use Illuminate\Http\Request;
@@ -244,5 +245,10 @@ class ReportsController extends Controller
                 ->get();
         $title = 'Transaction Report from '. $exp[0].' to '. $exp[1];
         return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
+    }
+
+    public function roomSchedule(Room $room)
+    {
+        return view('prints.roomSchedule', compact('room'));
     }
 }

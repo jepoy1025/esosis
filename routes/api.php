@@ -99,5 +99,6 @@ Route::get('transactionReport','API\ReportsController@transactionReport');
 Route::get('transactionReportAnnual/{year}','API\ReportsController@transactionReportAnnual');
 Route::get('transactionReportMonth/{month}','API\ReportsController@transactionReportMonth');
 Route::get('transactionReportRange/{range}','API\ReportsController@transactionReportRange');
+Route::get('roomSchedule/{room}','API\ReportsController@roomSchedule');
 
 //Route::get('teacher', 'API\TeacherController@index');
