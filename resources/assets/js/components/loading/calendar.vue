@@ -19,7 +19,7 @@ line-height: 1.4em;">
                     <label>Input Grade Level:</label>
                       <input type="text" name="level" v-model="gradeLevel">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
-                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :level="subject.level" :subject-id="subject.id"
+                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
@@ -251,6 +251,13 @@ line-height: 1.4em;">
             },
 
             initDraggables() {
+                function minutesToTime(minutes) {
+                    let h = Math.floor(minutes / 60);
+                    let m = minutes % 60;
+                    h = h < 10 ? '0' + h : h;
+                    m = m < 10 ? '0' + m : m;
+                    return h + ':' + m;
+                }
                 $('#external-events .fc-event').each(function () {
                     // axios.get("api/room-column").then(({data}) => (this.resources = data.data));
                     // store data so the calendar knows to render an event upon drop
@@ -259,6 +266,7 @@ line-height: 1.4em;">
                         stick: true, // maintain when user navigates (see docs on the renderEvent method)
                         subjectId: $(this).attr('subject-id'),
                         level: $(this).attr('level'),
+                        duration: minutesToTime($(this).attr('duration')),
                     });
                     // make the event draggable using jQuery UI
                     $(this).draggable({
