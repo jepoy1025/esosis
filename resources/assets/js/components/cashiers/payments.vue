@@ -102,7 +102,7 @@
                     <label>&nbsp Registration</label>
                     <button type="button" class="btn btn-default" @click="onDelete(0)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.enrollment" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="enrollment" id="enrollment"
+                        <input v-model="form.enrollment" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="enrollment" id="enrollment"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('enrollment') }">
                               <has-error :form="form" field="enrollment"></has-error>
                       </div>
@@ -112,7 +112,7 @@
                     <label>&nbsp Tuition</label>
                     <button type="button" class="btn btn-default" @click="onDelete(1)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.tuition" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="tuition" id="tuition"
+                        <input v-model="form.tuition" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="tuition" id="tuition"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('tuition') }">
                               <has-error :form="form" field="tuition"></has-error>
                       </div>
@@ -122,7 +122,7 @@
                     <label>&nbsp Miscellaneous</label>
                     <button type="button" class="btn btn-default" @click="onDelete(2)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.misc" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="misc" id="misc"
+                        <input v-model="form.misc" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="misc" id="misc"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('misc') }">
                               <has-error :form="form" field="misc"></has-error>
                       </div>
@@ -132,7 +132,7 @@
                     <label>&nbsp Books</label>
                     <button type="button" class="btn btn-default" @click="onDelete(3)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.books" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="books" id="books"
+                        <input v-model="form.books" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="books" id="books"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('books') }">
                               <has-error :form="form" field="books"></has-error>
                       </div>
@@ -142,7 +142,7 @@
                     <label>&nbsp Uniform</label>
                     <button type="button" class="btn btn-default" @click="onDelete(4)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.uniform" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="uniform" id="uniform"
+                        <input v-model="form.uniform" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="uniform" id="uniform"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('uniform') }">
                               <has-error :form="form" field="uniform"></has-error>
                       </div>
@@ -153,7 +153,7 @@
                     <label>&nbsp Last Year Balance</label>
                     <button type="button" class="btn btn-default" @click="onDelete(6)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.pastBalance" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="pastBalance" id="pastBalance"
+                        <input v-model="form.pastBalance" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="pastBalance" id="pastBalance"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('pastBalance') }">
                               <has-error :form="form" field="pastBalance"></has-error>
                       </div>
@@ -163,7 +163,7 @@
                     <label>&nbsp PTA</label>
                     <button type="button" class="btn btn-default" @click="onDelete(5)"><i class="fa fa-times red"></i></button>
                       <div class="input-group input-group-sm">
-                        <input v-model="form.pta" placeholder="AMOUNT" @keyup="getTotal()" type="number" name="pta" id="pta"
+                        <input v-model="form.pta" placeholder="AMOUNT" @keyup="getTotal()" type="number" min="0" name="pta" id="pta"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('pta') }">
                               <has-error :form="form" field="pta"></has-error>
                       </div>
@@ -243,12 +243,40 @@
             },
             getTotal(){
                 var enrollment = parseInt(this.form.enrollment);
+                if(enrollment > this.balance.enrollment_fee)
+                {
+                  this.form.enrollment = this.balance.enrollment_fee;
+                }
                 var tuition = parseInt(this.form.tuition);
+                if(tuition > this.balance.whole_year)
+                {
+                  this.form.tuition = this.balance.whole_year;
+                }
                 var misc = parseInt(this.form.misc);
+                if(misc > this.balance.misc)
+                {
+                  this.form.misc = this.balance.misc;
+                }
                 var books = parseInt(this.form.books);
+                if(books > this.balance.books)
+                {
+                  this.form.books = this.balance.books;
+                }
                 var uniform = parseInt(this.form.uniform);
+                if(uniform > this.balance.uniform)
+                {
+                  this.form.uniform = this.balance.uniform;
+                }
                 var pta = parseInt(this.form.pta);
+                if(pta > this.balance.pta)
+                {
+                  this.form.pta = this.balance.pta;
+                }
                 var pastBalance = parseInt(this.form.pastBalance);
+                if(pastBalance > this.balance.past_balance)
+                {
+                  this.form.pastBalance = this.balance.past_balance;
+                }
                 var total = enrollment + tuition + misc + books + uniform + pta + pastBalance;
                 this.form.total = parseInt(total);
                 if(this.form.total == 0){

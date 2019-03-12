@@ -232,7 +232,7 @@
                               'success'
                             )
                     }).catch(()=>{
-                        swal("failes","There was something wrong.","warning");
+                        swal("fails","There was something wrong.","warning");
                     })
                     }
                 })
@@ -255,7 +255,7 @@
                               'success'
                             )
                     }).catch(()=>{
-                        swal("failes","There was something wrong.","warning");
+                        swal("fails","There was something wrong.","warning");
                     })
                     }
                 })

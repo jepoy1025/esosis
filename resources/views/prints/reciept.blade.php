@@ -1,4 +1,4 @@
-<p style="text-align: center;">Payment Reciept<br /> As of #### ##,####</p>
+<p style="text-align: center;">Payment Receipt<br /> As of #### ##,####</p>
 <p style="text-align: center;"></p>
 <p style="text-align: left;">NAME:<strong>############################# </strong><strong style="float: right">Grade:#########</strong></p>
 <p style="text-align: left;"><strong>Accounts</strong></p>

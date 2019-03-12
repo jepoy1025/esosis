@@ -5,6 +5,11 @@
           <div class="col-md-3">
             <div class="card card-info">
               <div class="card-header">
+                <p>Status: </p>
+                <span class="right badge badge-danger pull-right" v-show="student.status == 4"> Dropped</span>
+                <span class="right badge badge-success pull-right" v-show="student.status == 3"> Transfered</span>
+                <span class="right badge badge-warning pull-right" v-show="student.status == 2"> Currently not Enrolled</span>
+                <span class="right badge badge-info pull-right" v-show="student.status == 1"> Enrolled</span>
               </div>
               <div class="card-body box-profile">
 

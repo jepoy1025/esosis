@@ -230,7 +230,7 @@
 			Facebook Page: www.facebook.com/lotusFoudnationOfficial <br>
 		</font>
 		</p>
-		<h2 style="text-align: center;">Payment Reciept</h2>
+		<h2 style="text-align: center;">Payment Receipt</h2>
 		<p style="text-align: center;"></p>
 		<p style="text-align: left;"> &nbsp;NAME:<strong>{{ucwords($student->last_name)}}, {{ucwords($student->first_name)}} </strong><br>&nbsp;Grade Level: <strong>{{ucwords($student->title)}}-{{$student->section}} &nbsp;</strong></p>
 		<p style="text-align: center;">{{$amount}}(P {{ number_format($data->amount, 2, '.', ',') }}) this partial/full payment for <strong>{{$data->type}}</strong></p>
@@ -261,7 +261,7 @@
 			Facebook Page: www.facebook.com/lotusFoudnationOfficial <br>
 		</font>
 		</p>
-		<h2 style="text-align: center;">Payment Reciept</h2>
+		<h2 style="text-align: center;">Payment Receipt</h2>
 		<p style="text-align: center;"></p>
 		<p style="text-align: left;"> &nbsp;NAME:<strong>{{ucwords($student->last_name)}}, {{ucwords($student->first_name)}} <br></strong>&nbsp;Grade Level: <strong>{{ucwords($student->title)}}-{{$student->section}} &nbsp;</strong></p>
 		<p style="text-align: center;">{{$amount}}(P {{ number_format($data->amount, 2, '.', ',') }}) this partial/full payment for <strong>{{$data->type}}</strong></p>

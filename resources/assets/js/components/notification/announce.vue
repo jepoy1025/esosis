@@ -65,14 +65,26 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form @submit.prevent="createTeacher()">
+              <form @submit.prevent="sendMessage()">
               <div class="modal-body">
                 <div class="form-group">
-                  <input class="form-control" placeholder="Subject:">
+                  <label>Send to:</label>
+                  <select name="sendTo" v-model="form.sendTo" id="sendTo" class="form-control" :class="{ 'is-invalid': form.errors.has('sendTo') }">
+                      <option value="1">Parents & Sponsor</option>
+                      <option value="2">Parents</option>
+                      <option value="3">Sponsor</option>
+                  </select>
                 </div>
                 <div class="form-group">
-                    <textarea id="compose-textarea" class="form-control" style="height: 300px" placeholder="Message">
-                    </textarea>
+                  <input v-model="form.header" placeholder="Subject" type="text" name="header" id="header"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('header') }">
+                  <has-error :form="form" field="header"></has-error>
+                </div>
+                
+                <div class="form-group">
+                    <textarea v-model="form.message" placeholder="Message" type="text" name="message" id="message"
+                    class="form-control" :class="{ 'is-invalid': form.errors.has('message') }">
+                  </textarea>
                 </div>
               </div>
               <div class="modal-footer">
@@ -98,6 +110,7 @@
                 form: new Form({
                     header : '',
                     message : '',
+                    sendTo: 1,
                 })
             }
         },
@@ -112,15 +125,20 @@
                   confirmButtonText: 'Yes, Send this notification!'
                 }).then((result) => {
                     if (result.value) {
-                    this.form.delete('/api/subject/'+id).then(()=>{
-                        Fire.$emit('afterCreate');
-                            swal(
-                              'Deleted!',
-                              'Subject has been move to archived.',
-                              'success'
-                            )
-                    }).catch(()=>{
-                        swal("failes","There was something wrong.","warning");
+
+                    this.$Progress.start();
+                    this.form.put('/api/announce/'+1)
+                    .then(()=>{
+                                swal(
+                                  'Success!',
+                                  'Notification send to SIS users.',
+                                  'success'
+                                )
+                      this.$Progress.finish();
+                    })
+                    .catch(() => {
+                      this.$Progress.fail();
+                      swal("failed","There was something wrong.","warning");
                     })
                     }
                 })
@@ -135,26 +153,45 @@
                   confirmButtonText: 'Yes, Send this notification!'
                 }).then((result) => {
                     if (result.value) {
-                    this.form.delete('/api/subject/'+id).then(()=>{
-                        Fire.$emit('afterCreate');
-                            swal(
-                              'Deleted!',
-                              'Subject has been move to archived.',
-                              'success'
-                            )
-                    }).catch(()=>{
-                        swal("failes","There was something wrong.","warning");
+                    this.$Progress.start();
+                    this.form.put('/api/announce/'+2)
+                    .then(()=>{
+                                swal(
+                                  'Success!',
+                                  'Notification send to SIS users.',
+                                  'success'
+                                )
+                      this.$Progress.finish();
+                    })
+                    .catch(() => {
+                      this.$Progress.fail();
+                      swal("failed","There was something wrong.","warning");
                     })
                     }
                 })
             },
             createMessage() {
                 $('#costum').modal('show');
+            },
+            sendMessage(){
+              this.form.put('/api/announce/'+3)
+                .then(()=>{
+                  Fire.$emit('afterCreate');
+                            swal(
+                              'Success!',
+                              'Notification Sent',
+                              'success'
+                            )
+                  this.$Progress.finish();
+                  $('#costum').modal('hide');
+                })
+                .catch(() => {
+                  this.$Progress.fail();
+              })
             }
         },
         created() {
-            //this.loadLevel();
-          
-    }
+
+          }
 }
-</script>
+</script>   

@@ -42,7 +42,7 @@
               <div class="card-header">
                 <h3 class="card-title">School Year</h3>
                 <div class="card-tools">
-                    <button class="btn btn-block btn-outline-primary btn-lg" @click="newSY" ><i class="fas fa-plus-circle fa-fw"></i> Add School Year</button>
+                    <button class="btn btn-block btn-outline-primary btn-lg" @click="newSY" ><i class="fas fa-plus-circle fa-fw"></i> Update School Year</button>
                 </div>
                 </div>
               <!-- /.card-header -->
@@ -129,6 +129,41 @@
             </div>
           </div>
         </div>
+        <div class="modal fade" id="checkStudents" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Please Settle the Grade in <b>students tab</b> of the Student/s Below First.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <h5 class="red">or Drop the Student if it is dropped</h5>
+                <table class="table">
+                  <tbody><tr>
+                    <th>Name</th>
+                    <th>Grade Level</th>
+                    <th>Dropped</th>
+                  </tr>
+                  <tr v-for="student in student" :key="student.id">
+                    <td>{{student.last_name | upText}}, {{student.first_name | upText}}</td>
+                    <td>{{student.title}}</td>
+                    <td>
+                        <button href=""  @click="transfer(student)" class="btn btn-default">
+                            <i class="fas fa-times red"></i>
+                        </button>
+                    </td>
+                  </tr>
+                </tbody></table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button  v-show="!student.length" @click="incrementSY" class="btn btn-success">Update School Year</button>
+              </div>
+            </div>
+          </div>
+        </div>
         </div>
 </template>
 
@@ -139,15 +174,59 @@
                 editMode : false,
                 level:{},
                 sy:{},
+                student:{},
                 form: new Form({
                     id: '',
                     title : '',
-                    school_year : ''
+                    school_year : '102'
                 })
             }
         },
         methods:{
         // level methods
+          incrementSY(){
+            this.$Progress.start();
+                this.form.post('api/sy')
+                .then(()=>{
+
+                    Fire.$emit('afterCreate');
+                    $('#checkStudents').modal('hide');
+                    toast({
+                      type: 'success',
+                      title: 'School Year Succesfully added'
+                    });
+                    this.$Progress.finish();
+
+                })
+                .catch(()=>{
+                  this.$Progress.fail();
+                })
+          },
+          transfer(student){
+                swal({
+                    title: 'Are you sure?',
+                    text: "Student Data Will be move to Student->Drop Tab!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, This student drop!'
+                  }).then((result) => {
+                      //console.log(student.id);
+                      if (result.value) {
+                      this.form.put('/api/dropStudent/'+ student.id).then(()=>{
+                          Fire.$emit('afterCreate');
+                              swal(
+                                'Archived!',
+                                'Student Data has been moved to Student Archives.',
+                                'success'
+                              )
+                      }).catch(()=>{
+                          swal("failes","There was something wrong.","warning");
+                      })
+                      }
+                  })
+            },
             loadLevel(){
                 axios.get("api/level").then(({data})=>(this.level = data.data));
             },
@@ -202,9 +281,8 @@
                 axios.get("api/sy").then(({data})=>(this.sy = data.data));
             },
             newSY(){
-                this.editMode = false;
-                this.form.reset();
-                $('#syModal').modal('show');
+               axios.get("api/studentPending/").then(({data})=>(this.student = data.data));
+               $('#checkStudents').modal('show');
             },
             createSY(){
                 this.$Progress.start();
@@ -254,6 +332,7 @@
             Fire.$on('afterCreate',()=>{
                 this.loadLevel();
                 this.loadSY();
+                this.newSY();
             });
         }
     }

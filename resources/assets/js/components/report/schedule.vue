@@ -26,7 +26,7 @@
                         <td>{{room.population}}</td>
                         <td>{{room.status}}</td>
                         <td>
-                            <button href="" @click="" class="btn btn-default">
+                            <button href="" @click="schedIndi(room.id)" class="btn btn-default">
                             <i class="fas fa-print orange"></i>
                             </button>
                         </td>
@@ -91,6 +91,9 @@
             }
         },
         methods : {
+            schedIndi(id){
+                window.open('api/printSchedIndi/'+id);
+            },
             printAll(){
                 window.open('api/printAllSchedule/');
             },

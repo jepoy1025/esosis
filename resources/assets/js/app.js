@@ -98,7 +98,7 @@ let routes = [
 
   //sis
   { path: '/studentList', component: require('./components/sis/student_list.vue') },
-  { path: '/sis_announce', component: require('./components/sis/announce.vue') },
+  { path: '/sis_announce/:id', component: require('./components/sis/announce.vue') },
   { path: '/profile/:id', component: require('./components/sis/profile.vue') },
 
   //student

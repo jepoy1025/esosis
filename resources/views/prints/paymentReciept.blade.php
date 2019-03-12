@@ -2,7 +2,7 @@
 <div id="printTable" >
 	<div style="width: 49%;float: left;border: solid black 2px;">
 		<p style="float: left"> &nbsp;Student/Parent Copy</p><br><br><br><br>
-		<p style="text-align: center;">Payment Reciept</p>
+		<p style="text-align: center;">Payment Receipt</p>
 		<p style="text-align: center;"></p>
 		<p style="text-align: left;"> &nbsp;NAME:<strong>{{ucwords($student->last_name)}}, {{ucwords($student->first_name)}} </strong><br>&nbsp;Grade Level: <strong>{{ucwords($student->title)}}-{{$student->section}} &nbsp;</strong></p>
 		<p style="text-align: center;">{{$amount}}(P {{ number_format($data->amount, 2, '.', ',') }}) this partial/full payment for <br>
@@ -30,7 +30,7 @@
 	</div>
 	<div style="width: 49%;float: right;border: solid black 2px;">
 		<p style="float: left"> &nbsp;School Copy</p><br><br><br><br>
-		<p style="text-align: center;">Payment Reciept</p>
+		<p style="text-align: center;">Payment Receipt</p>
 		<p style="text-align: center;"></p>
 		<p style="text-align: left;"> &nbsp;NAME:<strong>{{ucwords($student->last_name)}}, {{ucwords($student->first_name)}} <br></strong>&nbsp;Grade Level: <strong>{{ucwords($student->title)}}-{{$student->section}} &nbsp;</strong></p>
 		<p style="text-align: center;">{{$amount}}(P {{ number_format($data->amount, 2, '.', ',') }}) this partial/full payment for 

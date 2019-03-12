@@ -19,7 +19,7 @@ line-height: 1.4em;">
                     <label>Input Grade Level:</label>
                       <input type="text" name="level" v-model="gradeLevel">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
-                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :level="subject.level" :subject-id="subject.id"
+                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
@@ -43,12 +43,10 @@ line-height: 1.4em;">
     import {FullCalendar} from 'fullcalendar-scheduler'
     import 'fullcalendar-scheduler/dist/scheduler.css'
     import 'jquery-ui-dist/jquery-ui'
-
     export default {
         components: {
             FullCalendar
         },
-
         data() {
             //Fire.$emit('afterCreate');
             return {
@@ -62,7 +60,6 @@ line-height: 1.4em;">
                 schedules: [],
             }
         },
-
         computed: {
             computedRooms() {
                 return this.resources.map(item => {
@@ -75,8 +72,6 @@ line-height: 1.4em;">
                 })
             }
         },
-
-
         mounted() {
             //axios.get("api/teacher").then(({result})=>(this.resultRooms = result.data));
             //axios.get("api/teacher").then(result => { console.log(result); return result; },
@@ -87,9 +82,7 @@ line-height: 1.4em;">
                     this.initCalendar()
                 })
         },
-
         methods: {
-
             initCalendar() {
                 let self = this;
                 this.calendar = $('#calendar').fullCalendar({
@@ -117,7 +110,6 @@ line-height: 1.4em;">
                     },
                     resourceLabelText: 'Rooms',
                     resources: this.computedRooms,
-
                     events: function(start, end, timezone, callback) {
                         console.log({
                             start, end, timezone, callback
@@ -134,7 +126,6 @@ line-height: 1.4em;">
                             }
                         }));
                     },
-
                     //console.log(level),
                     drop: function (date, jsEvent, ui, resourceId,) {
                         //console.log('drop', date.format(), resourceId);
@@ -170,7 +161,6 @@ line-height: 1.4em;">
                     eventDrop: function (event, duration, revertFn,) { // called when an event (already on the calendar) is moved
                         //revertFunc();
                         console.log('eventDrop', event);
-
                         if (!self.isValidDropForRoom(event)) {
                             revertFn();
                             window.swal.fire(
@@ -249,8 +239,14 @@ line-height: 1.4em;">
                     },
                 });
             },
-
             initDraggables() {
+                function minutesToTime(minutes) {
+                    let h = Math.floor(minutes / 60);
+                    let m = minutes % 60;
+                    h = h < 10 ? '0' + h : h;
+                    m = m < 10 ? '0' + m : m;
+                    return h + ':' + m;
+                }
                 $('#external-events .fc-event').each(function () {
                     // axios.get("api/room-column").then(({data}) => (this.resources = data.data));
                     // store data so the calendar knows to render an event upon drop
@@ -259,6 +255,7 @@ line-height: 1.4em;">
                         stick: true, // maintain when user navigates (see docs on the renderEvent method)
                         subjectId: $(this).attr('subject-id'),
                         level: $(this).attr('level'),
+                        duration: minutesToTime($(this).attr('duration')),
                     });
                     // make the event draggable using jQuery UI
                     $(this).draggable({
@@ -266,10 +263,8 @@ line-height: 1.4em;">
                         revert: true,      // will cause the event to go back to its
                         revertDuration: 0  //  original position after the drag
                     });
-
                 });
             },
-
             // roomColumn(){
             //   var resources = axios.get("api/room-column").then(({data})=>(this.resources = data.data));
             //   return resources;
@@ -310,7 +305,11 @@ line-height: 1.4em;">
                 if (data.id) {
                     axios.put(`/api/schedule/${data.id}`, data)
                         .then(({data}) => {
-                            this.eventScheduleIds[event._id] = data.id
+                            this.eventScheduleIds[event._id] = data.id;
+                            let existing = this.schedules.find(item => item.id == data.id);
+                            if (existing) {
+                                _.extend(existing, data)
+                            }
                         })
                         .catch(error => {
                             this.calendar.fullCalendar('removeEvents', event._id)
@@ -319,7 +318,8 @@ line-height: 1.4em;">
                 } else {
                     axios.post(`/api/schedule`, data)
                         .then(({data}) => {
-                            this.eventScheduleIds[event._id] = data.id
+                            this.schedules.push(data);
+                            this.eventScheduleIds[event._id] = data.id;
                             window.toast(
                                 'Success!',
                                 `${event.start.local().format('hh:mm a')}-${event.end.local().format('hh:mm a')} ,mr/ms ${teacher.name}`,
@@ -349,7 +349,7 @@ line-height: 1.4em;">
                                 'success',
                             );
                             let schedule = this.schedules.find(item => {
-                                return item.id == event.scheduleId
+                                return item.id == data.id
                             });
                             if (schedule) {
                                 this.schedules.splice(this.schedules.indexOf(schedule), 1);
@@ -430,6 +430,5 @@ line-height: 1.4em;">
             // });
             // setInterval(() => this.loadUser(),3000);
         }
-
     }
 </script>

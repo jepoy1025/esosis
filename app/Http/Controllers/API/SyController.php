@@ -43,7 +43,17 @@ class SyController extends Controller
         $this->validate($request,[
             'school_year' => 'required|max:50|unique:school_year',
         ]);
-        $data = DB::table('school_year')->insert(['school_year' => $request['school_year']]);
+
+        $syCurrent = DB::table('school_year')
+                    ->orderBy('id', 'desc')
+                    ->first();
+        $year = $syCurrent->school_year+1;
+        //dd($year);
+        $data = DB::table('school_year')->insert(['school_year' =>  $year]);
+
+                DB::table('students')
+                 ->where('status','=',1)
+                 ->update(array('status' => 2));
         return compact('data');
     }
 

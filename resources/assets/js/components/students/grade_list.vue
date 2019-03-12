@@ -37,7 +37,8 @@
                           </div>
                           <div class="modal-footer">
                             <button type="button" class="btn btn-danger" @click="backStudent"><i class="fas fa-undo-alt fa-fw"></i> Back</button>
-                            <button type="submit" class="btn btn-success" @click="printGrade"><i class="fas fa-print fa-fw"></i> Print</button>
+                            <button type="submit" class="btn btn-success" @click="printGrade"><i class="fas fa-print fa-fw"></i> Print Current Grade Level</button>
+                            <button type="submit" class="btn btn-success" @click="printGradeAll"><i class="fas fa-print fa-fw"></i> Print All Grades</button>
                           </div>
                     </div>
 
@@ -146,6 +147,9 @@
 
             printGrade(){
                 window.open('/api/gradePrint/'+this.$route.params.id);
+            },
+            printGradeAll(){
+                window.open('/api/gradePrintAll/'+this.$route.params.id);
             }
 
         },

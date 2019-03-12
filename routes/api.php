@@ -1,5 +1,5 @@
 <?php
-
+    
 use Illuminate\Http\Request;
   
 /*
@@ -43,12 +43,14 @@ Route::apiResources(['student' => 'API\StudentController']);
 
 //students
 Route::get('studentProfile/{id}','API\StudentController@studentProfile');
+Route::get('studentPending','API\StudentController@pending');
 Route::get('student-drop','API\StudentController@dropList');
 Route::get('transfered','API\StudentController@transferedList');
 Route::get('findStudent','API\StudentController@search');
 Route::put('rank-student/{id}','API\GradesController@rank');
 Route::get('grades','API\GradesController@index');
 Route::get('gradePrint/{id}','API\GradesController@print');
+Route::get('gradePrintAll/{id}','API\GradesController@printAll');
 Route::get('grade-list/{id}','API\GradesController@gradeList');
 Route::get('comment-list/{id}','API\CommentController@commentList');
 Route::get('requirements-list/{id}','API\RequirementsController@reqList');
@@ -63,7 +65,7 @@ Route::put('dropStudent/{id}','API\StudentController@dropStudent');
 Route::put('oldStudent/{id}','API\StudentController@oldStudent');
 Route::put('dropEnroll/{id}','API\StudentController@dropEnroll');
 
-
+   
 Route::put('teacher-active/{teacher}','API\TeacherController@activate');
 Route::get('active-teacher','API\TeacherController@actTeacher');
 Route::get('inactive-room','API\RoomController@inActive');
@@ -87,6 +89,10 @@ Route::get('lecture/{id}','API\SisController@lecture');
 //reports
 Route::get('testPrint/{id}','API\ReportsController@generatePDF');
 Route::get('rankPrint/{id}','API\ReportsController@topStudents');
+Route::get('rankPrintFirst/{id}','API\ReportsController@topStudentsFirst');
+Route::get('rankPrintSecond/{id}','API\ReportsController@topStudentsSecond');
+Route::get('rankPrintThird/{id}','API\ReportsController@topStudentsThird');
+Route::get('rankPrintFourth/{id}','API\ReportsController@topStudentsFourth');
 Route::get('getSchedule', 'API\ReportsController@schedules');
 Route::get('studentRoom/{id}','API\ReportsController@studentRoom');
 Route::get('studentRank/{id}','API\ReportsController@studentRank');
@@ -99,5 +105,14 @@ Route::get('transactionReport','API\ReportsController@transactionReport');
 Route::get('transactionReportAnnual/{year}','API\ReportsController@transactionReportAnnual');
 Route::get('transactionReportMonth/{month}','API\ReportsController@transactionReportMonth');
 Route::get('transactionReportRange/{range}','API\ReportsController@transactionReportRange');
+Route::get('printSchedIndi/{id}','API\ReportsController@SchedIndi');
+//Route::get('roomSchedule/{room}','API\ReportsController@roomSchedule');
+
+
+//notification
+Route::put('announce/{id}','API\MessagesController@announce');
+Route::get('notificationList/{id}', 'API\MessagesController@list');
+Route::put('notificationStatus/{id}','API\MessagesController@status');
+Route::delete('notificationDelete/{id}','API\MessagesController@delete');
 
 //Route::get('teacher', 'API\TeacherController@index');

@@ -27,7 +27,7 @@
                     <tr v-for="student in students" :key="student.id">
                         <td class="red">{{student.last_name | upText}}</td>
                         <td class="red">{{student.first_name | upText}}</td>
-                        <td class="indigo">{{student.title}}</td>
+                        <td class="indigo">{{student.title}} <span class="right badge badge-danger pull-right" :hidden="student.status == '2'">Dropped Student</span></td>
                         <th></th>
                         <td class="pull-left">
                             <button href="" @click="enrollModal(student)" class="btn btn-default">
@@ -55,7 +55,7 @@
                     <tr v-for="student in students" :key="student.id" :hidden="student.last_name != stud_name">
                         <td class="red">{{student.last_name | upText}}</td>
                         <td class="red">{{student.first_name | upText}}</td>
-                        <td>{{student.title}}</td>
+                        <td>{{student.title}} <span class="right badge badge-danger pull-right" :hidden="student.status == '2'">Dropped Student</span></td>
                         <td>
                             <button href="" @click="enrollModal(student)" class="btn btn-default">
                             <i class="fas fa-user-plus green">Enroll</i>
@@ -206,6 +206,7 @@
                 testPayment:'',
                 level:{},
                 fees:[],
+                status:'',
                 accountView: [],
                 payment:[],
                 student: [],
@@ -232,21 +233,39 @@
         },
         methods: {
             enrollModal(student){
+              console.log(student.status);
+              this.status = student.status;
+              if(student.status == 2){
               $('#paymentModal').modal('show');
-              this.fees = this.level[student.grade_level_id];
-              this.student_id = student.id;
-              this.form.whole_year = this.fees.whole_year;
-              this.form.misc = this.fees.misc;
-              this.form.books = this.fees.books;
-              this.form.uniform = this.fees.uniform;
-              this.form.min_downpayment = this.fees.min_downpayment;
-              this.form.first_name = student.first_name;
-              this.form.last_name = student.last_name;
-              this.form.middle_name = student.middle_name;
-              this.form.grade_title = student.title;
+                this.fees = this.level[student.grade_level_id];
+                this.student_id = student.id;
+                this.form.whole_year = this.fees.whole_year;
+                this.form.misc = this.fees.misc;
+                this.form.books = this.fees.books;
+                this.form.uniform = this.fees.uniform;
+                this.form.min_downpayment = this.fees.min_downpayment;
+                this.form.first_name = student.first_name;
+                this.form.last_name = student.last_name;
+                this.form.middle_name = student.middle_name;
+                this.form.grade_title = student.title;
+              }else{
+                $('#paymentModal').modal('show');
+                this.fees = this.level[student.grade_level_id-1];
+                this.student_id = student.id;
+                this.form.whole_year = this.fees.whole_year;
+                this.form.misc = this.fees.misc;
+                this.form.books = this.fees.books;
+                this.form.uniform = this.fees.uniform;
+                this.form.min_downpayment = this.fees.min_downpayment;
+                this.form.first_name = student.first_name;
+                this.form.last_name = student.last_name;
+                this.form.middle_name = student.middle_name;
+                this.form.grade_title = student.title;
+              }
               //axios.get("/api/fee"+ student.grade_level_id).then(({data})=>(this.payment = data.data));
             },
             enrollStudent(){
+
               if(this.form.paidAmount > this.form.min_downpayment){
                 swal(
                               'Failed To Create Transaction!',
@@ -255,7 +274,30 @@
                       );
               }else{
                 this.$Progress.start();
+                if(this.status == 2){
                 this.form.put('/api/oldStudent/'+this.student_id)
+                    .then(()=>{
+                      Fire.$emit('afterCreate');
+                                swal(
+                                  'Success!',
+                                  'Student Enrolled',
+                                  'success'
+                                )
+                      this.$Progress.finish();
+                      window.open('/api/reEnrollPrint/'+this.student_id);
+                      $('#paymentModal').modal('hide');
+                    })
+                    .catch(() => {
+                      swal(
+                                  'Failed To Create Transaction!',
+                                  'Check the Amount',
+                                  'error'
+                          )
+                      this.$Progress.fail();
+                    })
+                }else{
+                  this.$Progress.start();
+                this.form.put('/api/dropEnroll/'+this.student_id)
                 .then(()=>{
                   Fire.$emit('afterCreate');
                             swal(
@@ -275,6 +317,7 @@
                       )
                   this.$Progress.fail();
                 })
+                }
               }
             },
             updateUser(){
@@ -315,7 +358,7 @@
               $('#balanceModal').modal('show');
             },
             createUser(){
-                this.$Progress.start();
+                this.$Progress.start();  
                 this.form.post('api/user')
                 .then(()=>{
 

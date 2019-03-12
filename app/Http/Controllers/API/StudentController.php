@@ -27,6 +27,17 @@ class StudentController extends Controller
     //                 ->get();
 
     // }
+    public function pending(){
+        $data = DB::table('students')
+                    ->join('levels','students.grade_level_id','=','levels.id')
+                    ->where([
+                        ['students.proceed','=','0'],
+                        ['students.status','=','1']
+                    ])
+                    ->select('students.*','levels.title')
+                    ->get();
+        return compact('data');
+    }
     public function studentProfile($id){
         $data = DB::table('students')
             ->join('levels','students.grade_level_id','=','levels.id')
@@ -60,6 +71,7 @@ class StudentController extends Controller
         $data = DB::table('students')
                     ->join('levels','students.grade_level_id','=','levels.id')
                     ->where('status','=','2')
+                    ->orWhere('status','=','4')
                     ->select('students.*','levels.title')
                     ->get();
         return compact('data');
@@ -330,6 +342,34 @@ class StudentController extends Controller
             'average' => 00.00
         )
     );
+    DB::table('first_rankings')->insert(
+        array(
+            'grade_level' => $request['grade_level'],
+            'student_id'     =>   $id, 
+            'average' => 00.00
+        )
+    );
+    DB::table('second_rankings')->insert(
+        array(
+            'grade_level' => $request['grade_level'],
+            'student_id'     =>   $id, 
+            'average' => 00.00
+        )
+    );
+    DB::table('third_rankings')->insert(
+        array(
+            'grade_level' => $request['grade_level'],
+            'student_id'     =>   $id, 
+            'average' => 00.00
+        )
+    );
+    DB::table('fourth_rankings')->insert(
+        array(
+            'grade_level' => $request['grade_level'],
+            'student_id'     =>   $id, 
+            'average' => 00.00
+        )
+    );
     $data = $id;
             return compact('data');
         
@@ -426,7 +466,40 @@ class StudentController extends Controller
                 'grade_level_id' => $level_id,
                 'lecture_id' => $lecture_id->id,
                 'status' => 1,
+                'proceed' => 0,
+        ]);
+        DB::table('rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $level_id,
+                'average' => 00.00
             ]);
+        DB::table('first_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $level_id,
+                'average' => 00.00
+            ]);
+        DB::table('second_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $level_id,
+                'average' => 00.00
+            ]);
+        DB::table('third_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $level_id,
+                'average' => 00.00
+            ]);
+        DB::table('fourth_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $level_id,
+                'average' => 00.00
+            ]);
+
+
 
         return compact('student');
     }
@@ -531,6 +604,32 @@ class StudentController extends Controller
                 'status' => 1,
             ]);
 
+        DB::table('rankings')
+            ->where('student_id', $id)
+            ->update([
+                'average' => 00.00
+            ]);
+        DB::table('first_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'average' => 00.00
+            ]);
+        DB::table('second_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'average' => 00.00
+            ]);
+        DB::table('third_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'average' => 00.00
+            ]);
+        DB::table('fourth_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'average' => 00.00
+            ]);
+
         return compact('student');
     }
 
@@ -559,7 +658,7 @@ class StudentController extends Controller
     {
         //
     }
-
+      
     /**
      * Update the specified resource in storage.
      *

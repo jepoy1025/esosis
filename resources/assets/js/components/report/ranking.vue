@@ -9,26 +9,34 @@
                       <tbody>
                         <tr>
                             <th>Grade Level</th>
-                            <th>Select Grading</th>
+                            <th colspan="5">Select Grading</th>
                         </tr>
                         <tr v-for="room in level" :key="room.id" :hidden="room.id == 0">
                             <td>{{room.title}}</td>
                             <td>
-                                <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">First</i>
-                                </button>
-                                <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">Second</i>
-                                </button>
-                                <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">Third</i>
-                                </button>
-                                <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">Fourth</i>
-                                </button>
-                                <button href="" @click="rankList(room.id)" class="btn btn-default">
-                                <i class="fas fa-edit orange">Final</i>
-                                </button>
+                                    <div class="callout callout-warning" @click="firstList(room.id)">
+                                      <p><b>1st</b></p>
+                                    </div>
+                            </td>
+                            <td>
+                            <div class="callout callout-warning" @click="secondList(room.id)">
+                                      <p><b>2nd</b></p>
+                                    </div>
+                            </td>
+                            <td>
+                            <div class="callout callout-warning" @click="thirdList(room.id)">
+                                      <p><b>3rd</b></p>
+                                    </div>
+                            </td>
+                            <td>
+                            <div class="callout callout-warning" @click="fourthList(room.id)">
+                                      <p><b>4th</b></p>
+                            </div>
+                            </td>
+                            <td>
+                                <div class="callout callout-warning" @click="rankList(room.id)">
+                                      <p><b>Final</b></p>
+                                </div>
                             </td>
                         </tr>
                     </tbody></table>
@@ -96,14 +104,26 @@
             loadLevel(){
                 axios.get("api/level").then(({data})=>(this.level = data.data));
             },
+            // rankList(id){
+            //     axios.get("/api/studentRank/" + id).then(({data})=>(this.students = data.data));
+            //     this.room_id = id;
+            //     $('#studentModal').modal('show');
+            // },
             rankList(id){
-                axios.get("/api/studentRank/" + id).then(({data})=>(this.students = data.data));
-                this.room_id = id;
-                $('#studentModal').modal('show');
+                window.open('/api/rankPrint/'+id);
             },
-            printTop(){
-                window.open('/api/rankPrint/'+this.room_id);
-            }
+            firstList(id){
+                window.open('/api/rankPrintFirst/'+id);
+            },
+            secondList(id){
+                window.open('/api/rankPrintSecond/'+id);
+            },
+            thirdList(id){
+                window.open('/api/rankPrintThird/'+id);
+            },
+            fourthList(id){
+                window.open('/api/rankPrintFourth/'+id);
+            },
         },
         created() {
             this.loadLevel();

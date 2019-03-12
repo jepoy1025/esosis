@@ -139,8 +139,9 @@
                   cancelButtonColor: '#d33',
                   confirmButtonText: 'Yes, This student drop!'
                 }).then((result) => {
+                    console.log(student.id);
                     if (result.value) {
-                    this.form.put('/api/dropStudent/'+ student.student_id).then(()=>{
+                    this.form.put('/api/dropStudent/'+ student.id).then(()=>{
                         Fire.$emit('afterCreate');
                             swal(
                               'Archived!',
@@ -153,7 +154,7 @@
                     }
                 })
             },
-            searchit(){
+            searchit(){   
               if(this.search == "" || this.search == null || this.search == "search"){
                 this.searchFilter = false;
               }else{

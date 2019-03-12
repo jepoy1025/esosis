@@ -86,7 +86,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             </router-link>
             </li>
             <li class="nav-item">
-            <router-link to="/sis_announce" class="nav-link">
+            <router-link to="/sis_announce/{{ Auth::user()->id }}" class="nav-link">
               <i class="nav-icon fas fa-bullhorn pink"></i>
               <p class="pink">
                 School Notification 
@@ -192,7 +192,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/load" class="nav-link">
                   <i class="fas fa-file cyan"></i>
-                  <p class="cyan">M.T.W.TH.F Schedule</p>
+                  <p class="cyan">Schedule</p>
                 </router-link>
               </li>
               {{-- <li class="nav-item">
@@ -260,7 +260,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <li class="nav-item">
                 <router-link to="/class_list" class="nav-link">
                   <i class="fas fa-money-check cyan"></i>
-                  <p>class List</p>
+                  <p>Class List</p>
                 </router-link>
               </li>
               <li class="nav-item">

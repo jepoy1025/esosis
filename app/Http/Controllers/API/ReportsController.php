@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Level;
 use App\Student;
+use App\Room;
 use App\Subject;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -76,6 +77,70 @@ class ReportsController extends Controller
             ->join('students', 'rankings.student_id', '=', 'students.id')
             ->where('rankings.grade_level','=',$id)
             ->select('students.*','rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
+        return view('prints.topStudent', ['data' => $data, 'level' => $level]);
+    }
+
+    public function topStudentsFirst($id){
+        $data = DB::table('first_rankings')
+            ->join('students', 'first_rankings.student_id', '=', 'students.id')
+            ->where('first_rankings.grade_level','=',$id)
+            ->select('students.*','first_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
+        return view('prints.topStudent', ['data' => $data, 'level' => $level]);
+    }
+
+    public function topStudentsSecond($id){
+        $data = DB::table('second_rankings')
+            ->join('students', 'second_rankings.student_id', '=', 'students.id')
+            ->where('second_rankings.grade_level','=',$id)
+            ->select('students.*','second_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
+        return view('prints.topStudent', ['data' => $data, 'level' => $level]);
+    }
+
+    public function topStudentsThird($id){
+        $data = DB::table('third_rankings')
+            ->join('students', 'third_rankings.student_id', '=', 'students.id')
+            ->where('third_rankings.grade_level','=',$id)
+            ->select('students.*','third_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+
+        $level = DB::table('levels')
+                ->where('id', $id)
+                ->first();
+
+        return view('prints.topStudent', ['data' => $data, 'level' => $level]);
+    }
+
+    public function topStudentsFourth($id){
+        $data = DB::table('fourth_rankings')
+            ->join('students', 'fourth_rankings.student_id', '=', 'students.id')
+            ->where('fourth_rankings.grade_level','=',$id)
+            ->select('students.*','fourth_rankings.*')
             ->orderBy('average', 'desc')
             ->take(10)
             ->get();
@@ -172,16 +237,24 @@ class ReportsController extends Controller
     }
 
     public function allSchedule(){
-        $data = DB::table('schedules')
-            ->join('subjects','schedules.subject_id','=','subjects.id')
-            ->join('teachers','subjects.teacher_id','=','teachers.id')
-            ->select('schedules.*','teachers.name','subjects.title')
-            ->orderBy('schedules.start_time', 'asc')
-            ->get();
+        $rooms = DB::table('rooms')
+                ->join('levels','rooms.grade_level','levels.id')
+                ->select('rooms.*','levels.title')
+                ->where('status','active')
+                ->get();
+
+        $schedules = DB::table('schedules')
+                ->join('subjects','schedules.subject_id','=','subjects.id')
+                ->join('teachers','subjects.teacher_id','=','teachers.id')
+                ->select('schedules.*','subjects.title','subjects.duration','teachers.name')
+                ->orderBy('schedules.start_time', 'asc')
+                ->get();
+
+        //dd($rooms);
         
         //dd($data);
 
-        return view('prints.scheduleAll', ['data' => $data]);
+        return view('prints.integratedSched', ['rooms' => $rooms, 'schedules' => $schedules]);
     }
 
     public function gradeReport(Request $request, Level $level)
@@ -244,5 +317,22 @@ class ReportsController extends Controller
                 ->get();
         $title = 'Transaction Report from '. $exp[0].' to '. $exp[1];
         return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
+    }
+
+    public function SchedIndi($id){
+        $room1 = DB::table('schedules')
+            ->join('subjects','schedules.subject_id','=','subjects.id')
+            ->join('teachers','subjects.teacher_id','=','teachers.id')
+            ->select('schedules.*','teachers.name','subjects.title','subjects.duration')
+            ->orderBy('schedules.start_time', 'asc')
+            ->where('schedules.room_id', $id)
+            ->get();
+
+        $name = DB::table('rooms')
+                ->join('levels','rooms.grade_level','=','levels.id')
+                ->where('rooms.id',$id)
+                ->first();
+
+        return view('prints.scheduleIndi', ['room1' => $room1, 'name' => $name]);
     }
 }
