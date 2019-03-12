@@ -114,5 +114,6 @@ Route::put('announce/{id}','API\MessagesController@announce');
 Route::get('notificationList/{id}', 'API\MessagesController@list');
 Route::put('notificationStatus/{id}','API\MessagesController@status');
 Route::delete('notificationDelete/{id}','API\MessagesController@delete');
+Route::get('roomSchedule/{room}','API\ReportsController@roomSchedule');
 
 //Route::get('teacher', 'API\TeacherController@index');

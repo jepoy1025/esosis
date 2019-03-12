@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Level;
-use App\Student;
 use App\Room;
+use App\Student;
+//use App\Room;
 use App\Subject;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -318,7 +319,6 @@ class ReportsController extends Controller
         $title = 'Transaction Report from '. $exp[0].' to '. $exp[1];
         return view('prints.transactionsAll', ['data' => $data, 'title' => $title]);
     }
-
     public function SchedIndi($id){
         $room1 = DB::table('schedules')
             ->join('subjects','schedules.subject_id','=','subjects.id')
@@ -334,5 +334,9 @@ class ReportsController extends Controller
                 ->first();
 
         return view('prints.scheduleIndi', ['room1' => $room1, 'name' => $name]);
+    }
+    public function roomSchedule(Room $room)
+    {
+        return view('prints.roomSchedule', compact('room'));
     }
 }

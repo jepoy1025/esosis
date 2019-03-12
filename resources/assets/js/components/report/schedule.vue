@@ -19,14 +19,15 @@
                         <th>Status</th>
                         <th>Print</th>
                     </tr>
-                    <tr v-for="room in room" :key="room.id">
+                    <tr v-for="room in rooms" :key="room.id">
                         <td>{{room.title}}</td>
                         <td>{{room.section}}</td>
                         <td>{{room.name}}</td>
                         <td>{{room.population}}</td>
                         <td>{{room.status}}</td>
                         <td>
-                            <button href="" @click="schedIndi(room.id)" class="btn btn-default">
+                            <!-- <button href="" @click="schedIndi(room.id)" class="btn btn-default"></button> -->
+                            <button href="" @click="view(room)" class="btn btn-default">
                             <i class="fas fa-print orange"></i>
                             </button>
                         </td>
@@ -76,7 +77,7 @@
         data() {
             return{
                 room_id:'',
-                room: {},
+                rooms: {},
                 sched: {},
                 editMode : false,
                 users : {},
@@ -101,7 +102,7 @@
                 window.open('/api/testPrint/');
             },
             loadRoom(){
-                axios.get("api/room").then(({data})=>(this.room = data.data));
+                axios.get("api/room").then(({data})=>(this.rooms = data.data));
             },
             studentList(id){
                 axios.get("/api/studentRoom/" + id).then(({data})=>(this.students = data.data));
@@ -110,6 +111,9 @@
             },
             printList(){
                 window.open('/api/testPrint/'+this.room_id);
+            },
+            view(room) {
+                window.open(`/api/roomSchedule/${room.id}`)
             }
         },
         created() {
