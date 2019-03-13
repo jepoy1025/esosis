@@ -19,7 +19,7 @@ line-height: 1.4em;">
                     <label>Input Grade Level:</label>
                       <input type="text" name="level" v-model="gradeLevel">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
-                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
+                    <div v-for="subject in draggableSubjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
@@ -69,6 +69,11 @@ line-height: 1.4em;">
                             title: item.title + ' - ' + item.section
                         }
                     }
+                })
+            },
+            draggableSubjects() {
+                return this.subjects.filter(subject => {
+                    return !this.schedules.find(item => item.subject_id == subject.id)
                 })
             }
         },
