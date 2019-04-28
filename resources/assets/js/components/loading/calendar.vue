@@ -143,7 +143,7 @@ line-height: 1.4em;">
                         });
                         callback(self.schedules.map(item => {
                             return {
-                                title: item.subject.title,
+                                title: item.subject.title + ' - ' + item.subject.grade_level,
                                 start: moment(start.format('YYYY-MM-DD') + ' ' + item.start_time),
                                 end: moment(start.format('YYYY-MM-DD') + ' ' + item.end_time),
                                 subjectId: item.subject_id,
@@ -348,6 +348,9 @@ line-height: 1.4em;">
                         .then(({data}) => {
                             this.schedules.push(data);
                             this.eventScheduleIds[event._id] = data.id;
+                            event.scheduleId = data.id;
+                            this.calendar.fullCalendar('destroy');
+                            this.initCalendar();
                             window.toast(
                                 'Success!',
                                 `${event.start.local().format('hh:mm a')}-${event.end.local().format('hh:mm a')} ,mr/ms ${teacher.name}`,
@@ -394,9 +397,11 @@ line-height: 1.4em;">
                 return room.grade_level == event.level
             },
             isValidDropForRoom(event) {
+                console.log({event}, 'valid room drop')
                 let room_schedules = this.schedules.filter(item => {
                     return item.room_id == event.resourceId && item.id != event.scheduleId;
                 });
+                console.log({room_schedules})
                 let valid = true;
                 _.forEach(room_schedules, schedule => {
                     let start = moment(moment().format('YYYY-MM-DD ') + schedule.start_time);
