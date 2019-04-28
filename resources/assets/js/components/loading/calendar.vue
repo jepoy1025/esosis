@@ -274,6 +274,7 @@ line-height: 1.4em;">
                     m = m < 10 ? '0' + m : m;
                     return h + ':' + m;
                 }
+                $("#external-events .fc-event.ui-draggable").draggable( "destroy" );
                 $('#external-events .fc-event').each(function () {
                     // axios.get("api/room-column").then(({data}) => (this.resources = data.data));
                     // store data so the calendar knows to render an event upon drop
@@ -381,6 +382,9 @@ line-height: 1.4em;">
                             if (schedule) {
                                 this.schedules.splice(this.schedules.indexOf(schedule), 1);
                             }
+                            Vue.nextTick(() => {
+                                this.initDraggables();
+                            });
                         });
             },
             isValidRoomLevel(event) {
