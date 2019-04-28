@@ -15,17 +15,17 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" v-show="!searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>Last Name</th>
-                        <th>First Name</th>
+                        <th>Full Name</th>
                         <th>Current Grade Level</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                     <tr v-for="student in students" :key="student.id">
-                        <td class="red">{{student.last_name | upText}}</td>
-                        <td class="red">{{student.first_name | upText}}</td>
+                        <td>
+                          <a href="" @click="viewProfile(student.id)" class="primary">{{student.last_name | upText}}, {{student.first_name | upText}}</a>
+                        </td>
                         <td class="red">{{student.title}}</td>
                         <td>
                             <button href="" @click="studentBalance(student)" class="btn btn-default">
@@ -36,17 +36,17 @@
                 </tbody></table>
               </div>
               <div class="card-body table-responsive p-0" v-show="searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>Last Name</th>
-                        <th>First Name</th>
+                        <th>Full Name</th>
                         <th>Past Grade Level</th>
-                        <th></th>
+                        <th>Actions</th>
                     </tr>
                     <tr v-for="student in students" :key="student.id" :hidden="student.last_name != stud_name">
-                        <td class="red">{{student.last_name | upText}}</td>
-                        <td class="red">{{student.first_name | upText}}</td>
+                        <td>
+                          <a href="" @click="viewProfile(student.id)" class="primary">{{student.last_name | upText}}, {{student.first_name | upText}}</a>
+                        </td>
                         <td>{{student.title}}</td>
                         <td>
                             <button href="" @click="enrollModal(student)" class="btn btn-default">

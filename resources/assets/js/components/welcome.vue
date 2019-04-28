@@ -2,6 +2,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12">
+            <br>
             <div class="card card-info">
               <div class="card-header">
                 <h3 class="card-title"><b class="pink">Successfully </b> Login</h3></div>

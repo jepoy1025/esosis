@@ -27,6 +27,160 @@ class StudentController extends Controller
     //                 ->get();
 
     // }
+    public function checkname(Request $request){
+        $data = false;
+        $first = DB::table('students')
+            ->where('first_name',strtolower($request['first_name']))
+            ->first();
+        $middle = DB::table('students')
+            ->where('middle_name',strtolower($request['middle_name']))
+            ->first();
+        $last = DB::table('students')
+            ->where('last_name',strtolower($request['last_name']))
+            ->first();
+
+        if($first != null){
+            if($middle != null){
+                if($last != null)
+                    $data = true;
+            }
+        }
+        return compact('data');
+    }
+    public function transferEnroll(Request $request, $id){
+        $sy = DB::table('school_year')
+        ->orderBy('id','DESC')
+        ->first();
+
+        $gradeID = DB::table('levels')
+                ->where('id',$request->grade_level)
+                ->first();
+        //dd($gradeID);
+        $paid = $request['paidAmount'];
+        $count1 = DB::table('students')->where('sy_id','=',$sy->id)->count();
+        $student_id = $sy->school_year.($count1+1);
+        $student = DB::table('students')
+                ->where('id', $id)
+                ->first();
+        //$level_id = $student->grade_level_id + 1;
+        $fees = DB::table('fees')->where('grade_level',$gradeID->id)->first();
+        $uniform = $fees->uniform;
+        if($request['uniformCheck'] == false){
+            $uniform = 0;
+        }
+        $minDP = $fees->min_downpayment - $paid;
+        $balance = DB::table('payments')->where('student_id','=',$id)->first();
+        //dd($balance);
+        $totalBalance = $balance->whole_year + $balance->uniform + $balance->misc + $balance->books + $balance->past_balance;
+        $updatePayments = DB::table('payments')
+                        ->where('student_id','=',$id)
+                        ->update([
+                            'enrollment_fee' => $minDP,
+                            'past_balance' => $totalBalance,
+                            'whole_year' => $fees->whole_year,
+                            'misc' => $fees->misc,
+                            'books' => $fees->books,
+                            'uniform' => $uniform,    
+                        ]);
+        transaction::create([
+            'student_id' => $id,
+            'type' => 'Enrollment Fee',
+            'amount' => $request['paidAmount'],
+        ]);
+
+        $countSubj = DB::table('subjects')->where('level','=',$gradeID->id)->count();
+        $subject = DB::table('subjects')->where([
+            ['level', '=', $gradeID->id],
+            ['status', '=', 'active'],
+        ])->get();
+        foreach ($subject as $subject) {
+        DB::table('grades')->insert(
+          array(
+                 'student_id'     =>   $id, 
+                 'subject_id'   =>   $subject->id,
+                 'grade_level'   =>   $gradeID->id,
+                 'first'    => 0,
+                 'second'    => 0,
+                 'third'    => 0,
+                 'fourth'    => 0,
+                 'sy_id' => $sy->id,
+          )
+          );
+        }
+
+        DB::table('comments')->insert(
+          array(
+                 'student_id'     =>   $id, 
+                 'grade_level'   =>   $gradeID->id,
+                 'first'    => 'Please Fill',
+                 'second'    => 'Please Fill',
+                 'third'    => 'Please Fill',
+                 'fourth'    => 'Please Fill',
+                 'sy_id' => $sy->id,
+          )
+          );
+
+        DB::table('level_student')->insert(
+          array(
+                 'student_id'     =>   $id, 
+                 'level_id'   =>   $gradeID->id,
+                 'sy_id' => $sy->id,
+          )
+          );
+
+        $lecture_id = DB::table('rooms')
+                    ->where([
+                        ['grade_level', '=', $gradeID->id],
+                        ['availability', '=', 0]
+                    ])
+                    ->first();
+
+        $update = DB::table('students')
+            ->where('id', $id)
+            ->update([
+                'student_id' => $student_id,
+                'grade_level_id' => $gradeID->id,
+                'lecture_id' => $lecture_id->id,
+                'sy_id' => $sy->id,
+                'status' => 1,
+                'proceed' => 0,
+        ]);
+        DB::table('rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $gradeID->id,
+                'average' => 00.00
+            ]);
+        DB::table('first_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $gradeID->id,
+                'average' => 00.00
+            ]);
+        DB::table('second_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $gradeID->id,
+                'average' => 00.00
+            ]);
+        DB::table('third_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $gradeID->id,
+                'average' => 00.00
+            ]);
+        DB::table('fourth_rankings')
+            ->where('student_id', $id)
+            ->update([
+                'grade_level' => $gradeID->id,
+                'average' => 00.00
+            ]);
+
+
+        return compact('update');
+
+
+    }
     public function pending(){
         $data = DB::table('students')
                     ->join('levels','students.grade_level_id','=','levels.id')
@@ -68,10 +222,12 @@ class StudentController extends Controller
     }
     public function waitingList(){
         //$ret = "sasdasd";
+        $sy = DB::table('school_year')
+        ->orderBy('id','DESC')
+        ->first();
         $data = DB::table('students')
                     ->join('levels','students.grade_level_id','=','levels.id')
-                    ->where('status','=','2')
-                    ->orWhere('status','=','4')
+                    ->where('sy_id','!=',$sy->id)
                     ->select('students.*','levels.title')
                     ->get();
         return compact('data');
@@ -104,7 +260,7 @@ class StudentController extends Controller
             'first_name' => 'required|string|max:50',
             'middle_name' => 'required|string|max:50',
             'last_name' => 'required|string|max:50',
-            'address' => 'required|string|max:50',
+            'address' => 'required|string|max:100',
             'gender' => 'required|string',
             'birth_date' => 'required|string|max:50',
             'room_id' => 'required',
@@ -115,8 +271,9 @@ class StudentController extends Controller
         $sy = DB::table('school_year')
         ->orderBy('id','DESC')
         ->first();
-        $count1 = DB::table('students')->where('status','=','1')->count();
-        $student_id = $sy->school_year.($count1+1);
+        $dateYear = date('Y');
+        $count1 = DB::table('students')->where('sy_id','=',$sy->id)->count();
+        $student_id = $dateYear.($count1+1);
         $room = DB::table('rooms')
         ->where('grade_level','=',$request['room_id'])
         ->where('availability','=',0)
@@ -133,6 +290,7 @@ class StudentController extends Controller
           'address' => $request['address'],
           'gender' => $request['gender'],
           'birth_date' => $request['birth_date'],
+          'sy_id' => $sy->id,
           'status' => $request['student_type'],
         ]);
 
@@ -287,6 +445,7 @@ class StudentController extends Controller
       array(
              'student_id'     =>   $id, 
              'level_id'   =>   $request['grade_level'],
+             'sy_id' => $sy->id,
       )
       );
 
@@ -298,6 +457,7 @@ class StudentController extends Controller
              'second'    => 'Please Fill',
              'third'    => 'Please Fill',
              'fourth'    => 'Please Fill',
+             'sy_id' => $sy->id,
       )
       );
     $countSubj = DB::table('subjects')->where([['level','=',$request['grade_level']],['status', '=', 'active']])->count();
@@ -317,6 +477,7 @@ class StudentController extends Controller
              'second'    => 0,
              'third'    => 0,
              'fourth'    => 0,
+             'sy_id' => $sy->id,
       )
       );
     }
@@ -382,7 +543,7 @@ class StudentController extends Controller
         ->first();
         //Amount
         $paid = $request['paidAmount'];
-        $count1 = DB::table('students')->where('status','=','1')->count();
+        $count1 = DB::table('students')->where('sy_id','=',$sy->id)->count();
         $student_id = $sy->school_year.($count1+1);
         $student = DB::table('students')
                 ->where('id', $id)
@@ -430,6 +591,7 @@ class StudentController extends Controller
                  'second'    => 0,
                  'third'    => 0,
                  'fourth'    => 0,
+                 'sy_id' => $sy->id,
           )
           );
         }
@@ -442,6 +604,7 @@ class StudentController extends Controller
                  'second'    => 'Please Fill',
                  'third'    => 'Please Fill',
                  'fourth'    => 'Please Fill',
+                 'sy_id' => $sy->id,
           )
           );
 
@@ -449,6 +612,7 @@ class StudentController extends Controller
           array(
                  'student_id'     =>   $id, 
                  'level_id'   =>   $level_id,
+                 'sy_id' => $sy->id,
           )
           );
 
@@ -465,6 +629,7 @@ class StudentController extends Controller
                 'student_id' => $student_id,
                 'grade_level_id' => $level_id,
                 'lecture_id' => $lecture_id->id,
+                'sy_id' => $sy->id,
                 'status' => 1,
                 'proceed' => 0,
         ]);
@@ -512,7 +677,7 @@ class StudentController extends Controller
      */
 
     public function dropEnroll(Request $request, $id){
-                $sy = DB::table('school_year')
+        $sy = DB::table('school_year')
         ->orderBy('id','DESC')
         ->first();
         //Amount
@@ -548,11 +713,6 @@ class StudentController extends Controller
             'amount' => $request['paidAmount'],
         ]);
 
-        DB::table('grades')->where([
-            ['student_id', $id],
-            ['grade_level', $level_id]
-        ])->delete();
-
         DB::table('comments')->where([
             ['student_id', $id],
             ['grade_level', $level_id]
@@ -573,6 +733,7 @@ class StudentController extends Controller
                  'second'    => 0,
                  'third'    => 0,
                  'fourth'    => 0,
+                 'sy_id' => $sy->id,
           )
           );
         }
@@ -585,6 +746,7 @@ class StudentController extends Controller
                  'second'    => 'Please Fill',
                  'third'    => 'Please Fill',
                  'fourth'    => 'Please Fill',
+                 'sy_id' => $sy->id,
           )
           );
 
@@ -601,6 +763,7 @@ class StudentController extends Controller
                 'student_id' => $student_id,
                 'grade_level_id' => $level_id,
                 'lecture_id' => $lecture_id->id,
+                'sy_id' => $sy->id,
                 'status' => 1,
             ]);
 

@@ -12,6 +12,8 @@ class Grade extends Model
         'first',
         'second',
         'third',
-        'fourth'
+        'fourth',
+        'remarks',
+        'sy_id'
     ];
 }

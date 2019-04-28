@@ -17,7 +17,9 @@ class Student extends Model
         'address',
         'gender',
         'birth_date',
+        'sy_id',
         'status',
+        'proceed'
     ];
 
     /**

@@ -15,16 +15,14 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" v-show="!searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>Student ID</th>
                         <th>Full Name</th>
                         <th>Actions</th>
                     </tr>
                     <tr v-for="student in accounts" :key="student.id">
-                        <td>{{student.student_id}}</td>
-                        <td>{{student.last_name}}, {{student.first_name}}</td>
+                        <td>{{student.last_name | upText}}, {{student.first_name | upText}}</td>
                         <td>
                             <button href="" @click="viewTransactions(student.student_id)" class="btn btn-default">
                             <i class="fas fa-user-cog green">View Transactions</i>
@@ -37,16 +35,14 @@
                 </tbody></table>
               </div>
               <div class="card-body table-responsive p-0" v-show="searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>Student ID</th>
                         <th>Full Name</th>
                         <th>Actions</th>
                     </tr>
                     <tr v-for="student in accounts" :key="student.id" :hidden="student.last_name != stud_name">
-                        <td>{{student.student_id}}</td>
-                        <td>{{student.last_name}}, {{student.first_name}}</td>
+                        <td>{{student.last_name | upText}}, {{student.first_name | upText}}</td>
                         <td>
                             <button href="" @click="viewTransactions(student.student_id)" class="btn btn-default">
                             <i class="fas fa-user-cog green">View Transactions</i>

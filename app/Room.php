@@ -27,6 +27,7 @@ class Room extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function level()
+    {
         return $this->belongsTo(Level::class, 'grade_level');
     }
 

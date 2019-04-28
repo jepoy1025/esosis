@@ -1,3 +1,25 @@
+Skip to content
+ 
+Search or jump to…
+
+Pull requests
+Issues
+Marketplace
+Explore
+ @jepoy1025 Sign out
+1
+0 0 jepoy1025/esosis
+ Code  Issues 0  Pull requests 0  Projects 0  Wiki  Insights  Settings
+esosis/resources/assets/js/components/loading/calendar.vue
+@sniperx1414 sniperx1414 hide subject if already added
+d6b6982  16 hours ago
+@sniperx1414 @jepoy1025
+We found potential security vulnerabilities in your dependencies.
+Only the owner of this repository can see this message. 
+Manage your notification settings or learn more about vulnerability alerts.
+
+439 lines (434 sloc)  20 KB
+    
 <template>
     <div class="container">
         <div class="row">
@@ -5,7 +27,7 @@
         <div class="col-lg-12">
             <div class="card card-info">
                 <div class="card-header">
-                <h3 class="card-title pink"><b>M. T. TH. F. Schedule Loading</b></h3>
+                <h3 class="card-title pink"><b>Schedule Loading</b></h3>
               </div>
             <div id='wrap' style="width: 100%;margin: 0;position: relative;
 line-height: 1.4em;">
@@ -19,7 +41,7 @@ line-height: 1.4em;">
                     <label>Input Grade Level:</label>
                       <input type="text" name="level" v-model="gradeLevel">
                     <h4 style="font-size: 16px;margin-top: 0;padding-top: 1em;">Drag Subject to Table</h4>
-                    <div v-for="subject in subjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
+                    <div v-for="subject in draggableSubjects" :key="subject.id" class='fc-event' :duration="subject.duration" :level="subject.level" :subject-id="subject.id"
                          style="margin: 10px 0;cursor: pointer;" :hidden="subject.grade_level != gradeLevel && subject.grade_level != 'Multi-level'">{{ subject.title }} - {{ subject.grade_level }}
                     </div>
                     <p>
@@ -69,6 +91,11 @@ line-height: 1.4em;">
                             title: item.title + ' - ' + item.section
                         }
                     }
+                })
+            },
+            draggableSubjects() {
+                return this.subjects.filter(subject => {
+                    return !this.schedules.find(item => item.subject_id == subject.id)
                 })
             }
         },

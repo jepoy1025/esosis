@@ -8,7 +8,7 @@
                 <h3 class="card-title">Account Balance</h3>
 
                 <div class="card-tools">
-                    
+                    <button class="btn btn-block btn-outline-danger btn-lg" @click="back()" ><i class="fas fa-undo-alt fa-fw"></i> Back</button>
                 </div>
               </div>
               <!-- /.card-header -->
@@ -223,6 +223,9 @@
             }
         },
         methods: {
+            back(){
+              this.$router.push("/cashier");
+            },
             processPayment(){
               this.form.put('/api/transactions/'+this.$route.params.id)
                 .then(({data})=>{

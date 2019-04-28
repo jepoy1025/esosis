@@ -14,7 +14,7 @@
               <div class="card-header">
                 <h3 class="card-title">Level</h3>
                 <div class="card-tools">
-                    <button class="btn btn-block btn-outline-primary btn-lg" @click="newLevel" ><i class="fas fa-plus-circle fa-fw"></i> Add Teacher</button>
+                    <button class="btn btn-block btn-outline-primary btn-lg" @click="newLevel" ><i class="fas fa-plus-circle fa-fw"></i> Add Grade Level</button>
                 </div>
                 </div>
               <!-- /.card-header -->
@@ -47,22 +47,12 @@
                 </div>
               <!-- /.card-header -->
               <div class="card-body p-0">
-                <table class="table">
-                  <tbody><tr>
-                    <th>ID</th>
-                    <th>School Year</th>
-                    <th>Action</th>
-                  </tr>
-                  <tr v-for="sy in sy" :key="sy.id">
-                    <td>{{sy.id}}</td>
-                    <td>{{sy.school_year}}</td>
-                    <td>
-                        <button href="" @click="editSY(sy)" class="btn btn-default">
-                            <i class="fas fa-tools orange"></i>
-                        </button>
-                    </td>
-                  </tr>
-                </tbody></table>
+                <br>
+                <div class="callout callout-default">
+                  <h5>Current School Year</h5>
+
+                  <p>{{sy.school_year}}</p>
+                </div>
               </div>
               <!-- /.card-body -->
             </div>
@@ -133,33 +123,26 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Please Settle the Grade in <b>students tab</b> of the Student/s Below First.</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Note: The following student/s has unsettled grades</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <h5 class="red">or Drop the Student if it is dropped</h5>
                 <table class="table">
                   <tbody><tr>
                     <th>Name</th>
                     <th>Grade Level</th>
-                    <th>Dropped</th>
                   </tr>
                   <tr v-for="student in student" :key="student.id">
                     <td>{{student.last_name | upText}}, {{student.first_name | upText}}</td>
                     <td>{{student.title}}</td>
-                    <td>
-                        <button href=""  @click="transfer(student)" class="btn btn-default">
-                            <i class="fas fa-times red"></i>
-                        </button>
-                    </td>
                   </tr>
                 </tbody></table>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button  v-show="!student.length" @click="incrementSY" class="btn btn-success">Update School Year</button>
+                <button @click="incrementSY" class="btn btn-success">Update School Year</button>
               </div>
             </div>
           </div>
@@ -173,7 +156,7 @@
             return{
                 editMode : false,
                 level:{},
-                sy:{},
+                sy:[],
                 student:{},
                 form: new Form({
                     id: '',

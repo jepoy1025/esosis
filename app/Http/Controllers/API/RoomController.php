@@ -65,9 +65,15 @@ class RoomController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'section' => 'required|string|max:50|unique:rooms'
-        ]);
+        // $data = DB::table('rooms')
+        //             ->join('levels','rooms.grade_level','=','levels.id')
+        //             ->where('rooms.grade_level',$request['grade_level'])
+        //             ->select('rooms.id','levels.title')
+        //             ->get();
+
+        // $this->validate($request,[
+        //     'section' => 'required|string|max:50|unique:rooms'
+        // ]);
 
         return Room::create([
             'grade_level' => $request['grade_level'],

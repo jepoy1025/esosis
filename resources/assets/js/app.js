@@ -84,6 +84,7 @@ let routes = [
   { path: '/new_student', component: require('./components/enrollment/new_student.vue') },
   { path: '/old_student', component: require('./components/enrollment/old_student.vue') },
   { path: '/drop_student', component: require('./components/enrollment/drop.vue') },
+  { path: '/transfer-enroll/:id', component: require('./components/enrollment/transfer.vue') },
 
 
   //Announcement
@@ -105,6 +106,7 @@ let routes = [
   { path: '/grade', component: require('./components/students/grade.vue') },
   { path: '/grade/:id', component: require('./components/students/grade_list.vue') },
   { path: '/comment/:id', component: require('./components/students/comments.vue') },
+  { path: '/student_info/:id', component: require('./components/students/student_info.vue') },
   { path: '/requirement/:id', component: require('./components/students/requirements.vue') },
   { path: '/transfered', component: require('./components/students/transfered.vue') },
 

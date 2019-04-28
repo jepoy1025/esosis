@@ -50,7 +50,11 @@
                             <tr v-for="user in students" :key="user.id">
                                     <td>{{user.first_name}}</td>
                                     <td>{{user.middle_name}}</td>
-                                    <td>{{user.last_name}}</td>
+                                    <td>
+                                        {{user.last_name}}
+                                        <span class="right badge badge-danger pull-right" v-show="user.status == 4">Dropped</span>
+                                        <span class="right badge badge-info pull-right" v-show="user.status == 2">Unenrolled</span>
+                                    </td>
                             </tr>
                             </tbody>
                         </table>

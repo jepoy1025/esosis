@@ -2,7 +2,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default">
+                <br>
+                <div class="card card-default bg-dark text-white">
                     <div class="card-header"><h4>{{student.last_name}}, {{student.first_name}}</h4>
                     </div>
     

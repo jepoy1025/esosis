@@ -2,15 +2,16 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card card-default"> 
+              <br>
+                <div class="card card-default bg-dark"> 
                     <form @submit.prevent="saveComment()">
                     <div class="card-header"><h4>{{student.last_name}}, {{student.first_name}}</h4></div>
    
                     <div class="card-body">
                             <div class="row">
           <!-- /.col -->
-          <div class="col-md-4 col-sm-6 col-12">
-            <div class="info-box">
+          <div class="col-md-4 col-sm-6 col-12 bg-dark">
+            <div class="info-box bg-dark">
               <span class="info-box-icon bg-success"><i class="fas fa-table"></i></span>
 
               <div class="info-box-content">
@@ -22,8 +23,8 @@
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <div class="col-md-4 col-sm-6 col-12">
-            <div class="info-box">
+          <div class="col-md-4 col-sm-6 col-12 bg-dark">
+            <div class="info-box bg-dark">
               <span class="info-box-icon bg-warning"><i class="fas fa-newspaper fa-fw"></i></span>
 
               <div class="info-box-content">
@@ -36,7 +37,7 @@
           </div>
           <!-- /.col -->
           <div class="col-md-4 col-sm-6 col-12">
-            <div class="info-box">
+            <div class="info-box bg-dark">
               <span class="info-box-icon bg-danger"><i class="fas fa-id-badge"></i></span>
 
               <div class="info-box-content">

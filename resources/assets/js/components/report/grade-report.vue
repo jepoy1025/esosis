@@ -3,7 +3,26 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card card-info">
-                    <div class="card-header"><h3 class="card-title">Grade Report</h3></div>
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-6">
+                            <h3 class="card-title"><b>Grade Report</b></h3>
+                            </div>
+                            <div class="col-2">
+                               Integrated Report Per School Year 
+                            </div>
+                            <div class="col-3">
+                                <select name="sy_id" v-model="sy_id" id="sy_id" class="form-control" :class="{ 'is-invalid': form.errors.has('schoolAttendedDate') }">
+                                <option v-for="syList in syList" v-bind:value="syList.id" >{{syList.school_year}}</option>
+                                </select>
+                            </div>
+                            <div class="col-1">
+                                <button href="#" @click.prevent="print()" class="btn btn-default">
+                                        <i class="fas fa-print orange">Print</i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body table-responsive p-0">
                         <table class="table table-hover">
                             <tbody>
@@ -15,7 +34,7 @@
                                 <td>{{level.title}}</td>
                                 <td>
                                     <button href="#" @click.prevent="view(level)" class="btn btn-default">
-                                        <i class="fas fa-eye orange">View</i>
+                                        <i class="fas fa-print orange">Print</i>
                                     </button>
                                 </td>
                             </tr>
@@ -33,6 +52,8 @@
         data() {
             return {
                 levels: [],
+                syList:{},
+                sy_id:'',
                 form: new Form({
                     id: '',
                     name : '',
@@ -50,9 +71,16 @@
             view(level) {
                 window.open('/api/gradeReport/' + level.id);
             },
+            schoolYear(){
+                axios.get("api/syList").then(({data})=>(this.syList = data.data));
+            },
+            print(){
+                window.open('/api/gradeReports/' + this.sy_id);
+            }
         },
         created() {
             this.loadLevel();
+            this.schoolYear();
             console.log('Component mounted.')
         }
     }

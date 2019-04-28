@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
+
+use Auth;
+// use JWTAuth;
 use Illuminate\Http\Request;
+//use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use App\Transaction;
 use App\Payment;
+use App\Log;
+use App\User;
 
 class CashierController extends Controller
 {
@@ -22,24 +28,26 @@ class CashierController extends Controller
          $data = DB::table('payments')
          	->join('students','payments.student_id','=','students.id')
          	->select('payments.*','students.first_name','students.last_name')
+            ->orderBy('students.last_name', 'asc')
          	->get();
 
 
          return compact('data');
-         	
     }
 
     public function transactions(Request $request, $id){
     	 $data = DB::table('transactions')
          	->where('student_id', $id)
          	->get();
-
          return compact('data');
     }
  
     public function update(Request $request, $id){
         $month = date('F');
         $label = '';
+        $student = DB::table('students')
+                ->where('id',$id)
+                ->first();
     	$amounts = DB::table('payments')
     		->where('student_id',$id)
     		->first();
@@ -103,6 +111,18 @@ class CashierController extends Controller
           ->orderBy('id', 'desc')
           ->first();
         $data = $trans->id;
+
+        //$user = Auth::User();
+
+        //dd($user);
+        
+        $userLog = auth('api')->id();
+        Log::create([
+            'user_id' => $userLog,
+            'activity' => $label . ' ' . $request['total'] . ' for ' . $student->last_name . ', ' . $student->first_name
+        ]);
+
+        
 
         return compact('data');
     }

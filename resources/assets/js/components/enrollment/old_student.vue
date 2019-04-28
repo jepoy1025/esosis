@@ -15,20 +15,19 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" v-show="!searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 800px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Past Grade Level</th>
                         <th></th>
-                        <th></th>
+                        <th>status</th>
                     </tr>
                     <tr v-for="student in students" :key="student.id">
                         <td class="red">{{student.last_name | upText}}</td>
                         <td class="red">{{student.first_name | upText}}</td>
-                        <td class="indigo">{{student.title}} <span class="right badge badge-danger pull-right" :hidden="student.status == '2'">Dropped Student</span></td>
-                        <th></th>
+                        <td class="indigo">{{student.title}}</td>
                         <td class="pull-left">
                             <button href="" @click="enrollModal(student)" class="btn btn-default">
                             <i class="fas fa-user-plus green">Enroll</i>
@@ -36,21 +35,25 @@
                             <button href="" @click="studentBalance(student)" class="btn btn-default">
                             <i class="fas fa-list-alt orange">Check Balance</i>
                             </button>
-                            <button href="" @click="archiveStudent(student.id)" class="btn btn-default">
-                            <i class="fas fa-user-times red">Move To Archive</i>
-                            </button>
+                        </td>
+                        <td>
+                          <span class="right badge badge-danger pull-right" v-show="student.status == 4">Dropped</span>
+                          <span class="right badge badge-info pull-right" v-show="student.status == 2">Unenrolled</span>
+                          <span class="right badge badge-info pull-right" v-show="student.status == 1">Unenrolled</span>
+                          <span class="right badge badge-warning pull-right" v-show="student.status == 3">Transferred</span>
                         </td>
                     </tr>
                 </tbody></table>
               </div>
               <div class="card-body table-responsive p-0" v-show="searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 800px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Past Grade Level</th>
                         <th></th>
+                        <th>status</th>
                     </tr>
                     <tr v-for="student in students" :key="student.id" :hidden="student.last_name != stud_name">
                         <td class="red">{{student.last_name | upText}}</td>
@@ -63,9 +66,12 @@
                             <button href="" @click="studentBalance(student)" class="btn btn-default">
                             <i class="fas fa-list-alt orange">Check Balance</i>
                             </button>
-                            <button href="" @click="archiveStudent(student.id)" class="btn btn-default">
-                            <i class="fas fa-user-times red">Move To Archive</i>
-                            </button>
+                            <td>
+                              <span class="right badge badge-danger pull-right" v-show="student.status == 4">Dropped</span>
+                              <span class="right badge badge-info pull-right" v-show="student.status == 2">Unenrolled</span>
+                              <span class="right badge badge-info pull-right" v-show="student.status == 1">Unenrolled</span>
+                              <span class="right badge badge-warning pull-right" v-show="student.status == 3">Transferred</span>
+                            </td>
                         </td>
                     </tr>
                 </tbody></table>
@@ -134,43 +140,28 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header" style="background-color: #A9A9A9;">
-                <h4 class="modal-title pink"><b>{{form.last_name}}, {{form.first_name}} {{form.middle_name}}</b> <p> {{form.grade_title}}</p></h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <form @submit.prevent="enrollStudent()">
               <div class="modal-body" id>
-                <div class="form-group">
-                    <label>Whole Year Fee:</label>
-                  <input v-model="form.whole_year" placeholder="Whole Year Fee" type="number" name="whole_year" id="whole_year"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('whole_year') }" readonly>
-                  <has-error :form="form" field="whole_year"></has-error>
+                <h4><b>{{form.last_name}}, {{form.first_name}} {{form.middle_name}}</b> <p> {{form.grade_title}}</p></h4>
+                <div class="row">
+                <div class="col-6 pull-left">
+                  <p>Whole Year Fee:</p><br>
+                  <p>Miscellaneous:</p><br>
+                  <p>Books:</p><br>
+                  <p>Uniform:</p><br>
+                  <p>Minimum Downpayment:</p><br>
                 </div>
-                <div class="form-group">
-                    <label>miscellaneous:</label>
-                  <input v-model="form.misc" placeholder="Whole Year Fee" type="number" name="misc" id="misc"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('misc') }" readonly>
-                  <has-error :form="form" field="misc"></has-error>
+                <div class="col-6 pull-right">
+                  <p><b>P {{formatPrice(form.whole_year)}}</b></p><br>
+                  <p><b>P {{formatPrice(form.misc)}}</b></p><br>
+                  <p><b>P {{formatPrice(form.books)}}</b></p><br>
+                  <p><b>P {{formatPrice(form.uniform)}}</b></p><br>
+                  <p><b>P {{formatPrice(form.min_downpayment)}}</b></p><br>
                 </div>
-                <div class="form-group">
-                    <label>Books Fee</label>
-                  <input v-model="form.books" placeholder="Books Fee" type="number" name="books" id="books"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('books') }" readonly>
-                  <has-error :form="form" field="books"></has-error>
-                </div>
-                <div class="form-group">
-                    <label>Uniform Fee</label>
-                  <input type="checkbox" id="checkbox" v-model="form.uniformCheck">
-                  <input v-model="form.uniform" placeholder="Uniform Fee" type="number" name="uniform" id="uniform"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('uniform') }" readonly>
-                  <has-error :form="form" field="uniform"></has-error>
-                </div>
-                <div class="form-group">
-                    <label>Minimum Downpayment For This Transaction</label>
-                  <input v-model="form.min_downpayment" placeholder="Minimum Downpayment" type="number" name="min_downpayment" id="min_downpayment"
-                    class="form-control" :class="{ 'is-invalid': form.errors.has('min_downpayment') }" readonly>
-                  <has-error :form="form" field="min_downpayment"></has-error>
                 </div>
                 <div class="form-group">
                     <label>Amount</label>
@@ -184,6 +175,26 @@
                 <button type="submit" class="btn btn-primary">Enroll Student</button>
               </div>
             </form>
+            </div>
+          </div>
+        </div>
+        <div class="modal fade" id="resultModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header" style="background-color: #A9A9A9;">
+                Result:
+              </div>
+              <div v-show="studentGrades" class="modal-body" id>
+                Some grades is unsettled.
+              </div>
+              <div v-show="!studentGrades" class="modal-body" id>
+                All Subject Pass you can proceed to enroll the student.
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button v-show="studentGrades" @click="manageGrade()" class="btn btn-success">Manage Grades</button>
+                <button v-show="!studentGrades" @click="proceed()" class="btn btn-primary">Proceed</button>
+              </div>
             </div>
           </div>
         </div>
@@ -210,6 +221,9 @@
                 accountView: [],
                 payment:[],
                 student: [],
+                studentGrades: '',
+                gradesId:'',
+                studentInfo:[],
                 searchFilter: false,
                 form: new Form({
                     id: '',
@@ -232,11 +246,19 @@
             }
         },
         methods: {
+          formatPrice(value) {
+              let val = (value/1).toFixed(2).replace(',', '.')
+              return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          },
+            manageGrade(){
+              $('#resultModal').modal('hide');
+              this.$router.push("/grade/"+this.gradesId);
+            },
             enrollModal(student){
+              
               console.log(student.status);
               this.status = student.status;
               if(student.status == 2){
-              $('#paymentModal').modal('show');
                 this.fees = this.level[student.grade_level_id];
                 this.student_id = student.id;
                 this.form.whole_year = this.fees.whole_year;
@@ -249,7 +271,6 @@
                 this.form.middle_name = student.middle_name;
                 this.form.grade_title = student.title;
               }else{
-                $('#paymentModal').modal('show');
                 this.fees = this.level[student.grade_level_id-1];
                 this.student_id = student.id;
                 this.form.whole_year = this.fees.whole_year;
@@ -262,7 +283,28 @@
                 this.form.middle_name = student.middle_name;
                 this.form.grade_title = student.title;
               }
-              //axios.get("/api/fee"+ student.grade_level_id).then(({data})=>(this.payment = data.data));
+              axios.get("/api/fee"+ student.grade_level_id).then(({data})=>(this.payment = data.data));
+
+              this.studentInfo = student;
+              if(student.status == 1 || student.status == 2){
+                this.$Progress.start();
+                swal.fire(
+                  'Please Wait',
+                  'The system is checking the student grades.'
+                )
+                this.gradesId = student.id;
+                axios.get("/api/studentGrades/"+ student.id).then(({data})=>(this.studentGrades = data.data));
+                this.$Progress.finish();
+                $('#resultModal').modal('show');
+              }else if (student.status == 3) {
+                this.$router.push("/transfer-enroll/"+student.id);
+              }else{
+                $('#paymentModal').modal('show');
+              }
+            },
+            proceed(){
+              $('#resultModal').modal('hide');
+              $('#paymentModal').modal('show');
             },
             enrollStudent(){
 
@@ -274,7 +316,7 @@
                       );
               }else{
                 this.$Progress.start();
-                if(this.status == 2){
+                if(this.status == 2 || this.status == 1){
                 this.form.put('/api/oldStudent/'+this.student_id)
                     .then(()=>{
                       Fire.$emit('afterCreate');

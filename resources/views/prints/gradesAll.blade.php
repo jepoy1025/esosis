@@ -1,4 +1,4 @@
-<button onclick="printData()" id="hidebutton" style="background-color: blue">Print me</button>
+<button onclick="printData()" id="hidebutton"><b>Print</b></button>
 <div id="printTable" >
 	<img src="{{ url('img/schoolIcon.png') }}" alt="Paris" style="width: 188px; height: 120px;display: flex; justify-content: center;float:left;">
 	<p style="text-align: left; margin-left: 200px">Community Welfare Service Lotus Foundation School and Training Center<br>
@@ -13,7 +13,7 @@
 			<table style="width: 100%;" border="1" cellspacing="0">
 			<tbody>
 				<tr style="height: 18px;">
-				<td style="width: 581px; height: 18px; text-align: center;" colspan="6"><strong>&nbsp;{{$gradeLevel->title}}</strong></td>
+				<td style="width: 581px; height: 18px; text-align: center;" colspan="6"><strong>&nbsp;{{$gradeLevel->title}} - S.Y.: {{$gradeLevel->school_year}}</strong></td>
 				</tr>
 			<tr>
 			<td style="width: 156px; text-align: center;">Subject</td>

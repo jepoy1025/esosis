@@ -5,7 +5,7 @@
           <div class="col-12">
             <div class="card card-info">
               <div class="card-header">
-                <h3 class="card-title"><b class="pink">Sponsor</b> List</h3>
+                <h3 class="card-title"><b class="pink">Student</b> Codes</h3>(for SIS)
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
@@ -13,7 +13,7 @@
                   <tbody>
                     <tr>
                         <th>Student Name</th>
-                        <th>Grade Level</th>
+                        <th>Code</th>
                     </tr>
                     <tr v-for="user in codes" :key="user.id">
                         <td>{{user.last_name}}, {{user.first_name}}</td>

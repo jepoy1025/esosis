@@ -54,8 +54,8 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 v-show="editMode" class="modal-title" id="exampleModalLabel">Updating Teacher</h5>
-                <h5 v-show="!editMode" class="modal-title" id="exampleModalLabel">Adding Teacher</h5>
+                <h5 v-show="editMode" class="modal-title" id="exampleModalLabel">Update Room</h5>
+                <h5 v-show="!editMode" class="modal-title" id="exampleModalLabel">Add Room</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -84,7 +84,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button v-show="editMode" type="submit" class="btn btn-success">Update Teacher</button>
+                <button v-show="editMode" type="submit" class="btn btn-success">Update Room</button>
                 <button v-show="!editMode" type="submit" class="btn btn-primary">Create Room</button>
               </div>
             </form>
@@ -180,6 +180,15 @@
                 axios.get("api/room").then(({data})=>(this.room = data.data));
             },
       createRoom(){
+                // var ctr =  this.room.count;
+                // for(var x = 0; x < ctr; x++){
+                //   if(this.room[x].grade == this.level[this.form.grade_level].title){
+                //     if(this.room[x].section == this.form.section){
+                //       swal("","Section Already taken.","warning");
+                //       break;
+                //     }
+                //   }
+                // }
                 this.$Progress.start();
                 this.form.post('api/room')
                 .then(()=>{

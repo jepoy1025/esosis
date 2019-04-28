@@ -9,10 +9,21 @@ use App\Comment;
 
 class CommentController extends Controller
 {
-    public function index()
+    public function prevComments($id)
     {
-   
-         	
+        $sy = DB::table('level_student')
+            ->where('id',$id)
+            ->first();
+
+        $data = DB::table('comments')
+            ->where([
+                ['student_id', '=', $sy->student_id],
+                ['sy_id', '=', $sy->sy_id],
+
+            ])
+            ->first();
+
+        return compact('data');
     }
 
     public function commentList(Request $request, $id){

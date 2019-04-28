@@ -65,7 +65,17 @@
                     <!-- Post -->
                     <div class="card card-info">
                     <div class="card-header">
-                      <h3 class="card-title pink">Grades</h3>
+                      <div class="row">
+                        <div class="col-8">
+                          <h3 class="card-title pink">Grades</h3>
+                        </div>
+                        <div class="col-4">
+                          <label>Select School Year</label>
+                          <select name="sy" v-model="sy" id="sy" class="form-control"  @change="prevGrades()">
+                          <option v-for="level in levels" v-bind:value="level.id" :hidden="level.sy_id == student.sy_id" >{{level.title}} S.Y.: {{level.school_year}}</option>
+                          </select>
+                        </div>
+                    </div>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -302,6 +312,8 @@
             subjects: {},
             transactions: {},
             accountView: {},
+            sy:{},
+            levels:{},
             first:'',
             second:'',
             third:'',
@@ -313,6 +325,14 @@
             
         },
         methods: {
+            prevGrades(){
+                console.log(this.sy);
+                axios.get('/api/prev_grades/' + this.sy).then(({data})=>(this.subjects = data.data));
+                axios.get('/api/prev_comments/' + this.sy).then(({data})=>(this.first = data.data.first,this.second = data.data.second,this.third = data.data.third,this.fourth = data.data.fourth));
+            },
+            loadLevels(){
+              axios.get('/api/studentLevel/' + this.$route.params.id).then(({data})=>(this.levels = data.data));
+            },
             requirements(){
                 axios.get('/api/requirements-list/' + this.$route.params.id).then(({data})=>(this.form_137 = data.data.form_137,this.nso = data.data.birth_cert,this.picture2x2 = data.data.photo2x2));
             },
@@ -339,6 +359,7 @@
             }
         },
         created() {
+            this.loadLevels();
             this.getProfile();
             this.getLecture();
             this.grades();

@@ -10,17 +10,19 @@
 	<table style="height: 153px; width: 100%;" border="1" cellspacing="0">
 	<tbody>
 	<tr style="text-align: center; height: 25px;">
-	<td style="width: 188px; text-align: left; height: 25px;" colspan="2">
+	<td style="width: 188px; text-align: left; height: 25px;" colspan="3">
 	</td>
 	</tr>
 	<tr style="height: 18px;">
 	<td style="width: 50px; text-align: center; height: 18px;"><strong>Rank</strong></td>
 	<td style="width: 206px; text-align: center; height: 18px;"><strong>Name</strong></td>
+	<td style="width: 206px; text-align: center; height: 18px;"><strong>Average</strong></td>
 	</tr>
 	@foreach($data as $key=>$data)
 	<tr style="height: 18px;">
 	<td style="text-align: center; width: 50px; height: 18px;">&nbsp;{{$key+1}}</td>
 	<td style="width: 206px; height: 18px;">&nbsp;{{ucwords($data->last_name)}}, {{ucwords($data->first_name)}}</td>
+	<td style="text-align: center; width: 50px; height: 18px;">&nbsp;{{$data->average}}%</td>
 	</tr>
 	@endforeach
 	</tbody>

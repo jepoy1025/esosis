@@ -15,7 +15,7 @@
     <p style="text-align: left; margin-left: 200px">Community Welfare Service Lotus Foundation School and Training
         Center<br>
         Gredu, Panabo City, Davao del Norte <br>
-        Website: www.lotus-foundation.com | telephone: ###-####-### <br>
+        Website: www.lotus-foundation.com | telephone: (084)-209-0747 <br>
         Facebook Page: www.facebook.com/lotusFoudnationOfficial <br>
     <p style="text-align: center;"><strong>&nbsp;</strong></p>
     <p style="text-align: center;"><strong>{{$level->title}}<br>Grade Report</strong></p>

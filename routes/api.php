@@ -29,6 +29,9 @@ Route::get('parentsStudents/{id}', 'API\StudentController@parentGet');
 Route::get('sponsorStudents/{id}', 'API\StudentController@sponsorGet');
 
 Route::get('teacherList', 'API\TeacherController@actTeacher');
+Route::get('syList', 'API\SyController@list');
+Route::post('checkStudent','API\StudentController@checkname');
+Route::post('rankList','API\ReportsController@rankList');
 
 
 Route::apiResources(['teacher' => 'API\TeacherController']);
@@ -40,8 +43,20 @@ Route::apiResources(['subject' => 'API\SubjectController']);
 Route::apiResources(['schedule' => 'API\ScheduleController']);
 Route::apiResources(['student' => 'API\StudentController']);
 
+//student info
+Route::get('prev_grades/{id}','API\GradesController@prevGrades');
+Route::get('prev_comments/{id}','API\CommentController@prevComments');
+Route::get('studentLevel/{id}','API\GradesController@gradeLevel');
+Route::get('studentGrades/{id}','API\GradesController@studentGrades');
+Route::get('infos/{id}','API\InformationController@infos');
+Route::get('age/{id}','API\InformationController@age');
+Route::get('parents/{id}','API\InformationController@parents');
+Route::get('emergency/{id}','API\InformationController@emergency');
+Route::get('siblings/{id}','API\InformationController@siblings');
+Route::get('lastAttended/{id}','API\InformationController@lastAttended');
 
 //students
+Route::put('transferedEnroll/{id}','API\StudentController@transferEnroll');
 Route::get('studentProfile/{id}','API\StudentController@studentProfile');
 Route::get('studentPending','API\StudentController@pending');
 Route::get('student-drop','API\StudentController@dropList');
@@ -87,6 +102,7 @@ Route::get('account/{id}','API\SisController@balance');
 Route::get('lecture/{id}','API\SisController@lecture');
 
 //reports
+Route::get('prevGradePrint/{id}','API\ReportsController@prevGradePrint');
 Route::get('testPrint/{id}','API\ReportsController@generatePDF');
 Route::get('rankPrint/{id}','API\ReportsController@topStudents');
 Route::get('rankPrintFirst/{id}','API\ReportsController@topStudentsFirst');
@@ -99,8 +115,10 @@ Route::get('studentRank/{id}','API\ReportsController@studentRank');
 Route::get('enrollmentPrint/{id}','API\ReportsController@enrollment');
 Route::get('payment/{id}','API\ReportsController@payment');
 Route::get('reEnrollPrint/{id}','API\ReportsController@reEnroll');
+Route::get('transferEnrollPrint/{id}','API\ReportsController@transferEnrollPrint');
 Route::get('printAllSchedule','API\ReportsController@allSchedule');
 Route::get('gradeReport/{level}','API\ReportsController@gradeReport');
+Route::get('gradeReports/{level}','API\ReportsController@gradesReport');
 Route::get('transactionReport','API\ReportsController@transactionReport');
 Route::get('transactionReportAnnual/{year}','API\ReportsController@transactionReportAnnual');
 Route::get('transactionReportMonth/{month}','API\ReportsController@transactionReportMonth');

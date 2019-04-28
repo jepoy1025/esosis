@@ -42,17 +42,17 @@
                     <label>Complete Name:</label>
                     <div class="row">
                         <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                          <input v-model="form.first_name" placeholder="First Name" type="text" name="first_name" id="first_name"
+                          <input v-model="form.first_name" @keyup="check" placeholder="First Name" type="text" name="first_name" id="first_name"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('first_name') }">
                           <has-error :form="form" field="first_name"></has-error>
                         </div>
                         <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                          <input v-model="form.middle_name" placeholder="Middle Name" type="text" name="middle_name" id="middle_name"
+                          <input v-model="form.middle_name" @keyup="check" placeholder="Middle Name" type="text" name="middle_name" id="middle_name"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('middle_name') }">
                           <has-error :form="form" field="middle_name"></has-error>
                         </div>
                         <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                          <input v-model="form.last_name" placeholder="Last Name" type="text" name="last_name" id="last_name"
+                          <input v-model="form.last_name" @keyup="check" placeholder="Last Name" type="text" name="last_name" id="last_name"
                             class="form-control" :class="{ 'is-invalid': form.errors.has('last_name') }">
                           <has-error :form="form" field="last_name"></has-error>
                         </div>
@@ -79,11 +79,12 @@
                               <has-error :form="form" field="schoolAttendedAddress"></has-error>
                             </div>
                             <div class="form-group col-md-1 col-sm-12 col-xs-12">
-                                <label>Date:</label>
+                                <label>Year:</label>
                             </div>
                             <div class="form-group col-md-3 col-sm-12 col-xs-12">
-                              <input v-model="form.schoolAttendedDate" placeholder="" type="date" name="schoolAttendedDate" id="schoolAttendedDate"
-                                class="form-control" :class="{ 'is-invalid': form.errors.has('schoolAttendedDate') }">
+                              <select name="schoolAttendedDate" v-model="form.schoolAttendedDate" id="schoolAttendedDate" class="form-control" :class="{ 'is-invalid': form.errors.has('schoolAttendedDate') }">
+                                <option v-for="syList in syList" v-bind:value="syList.id" >{{syList.school_year}}</option>
+                              </select>
                               <has-error :form="form" field="schoolAttendedDate"></has-error>
                             </div>
                         </div>
@@ -92,8 +93,8 @@
                         <div class="form-group col-md-2 col-sm-6 col-xs-12">
                             <label>Gender</label>
                           <select name="gender" v-model="form.gender" id="gender" class="form-control" :class="{ 'is-invalid': form.errors.has('gender') }">
-                              <option value="married">Male</option>
-                              <option value="single">Female</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
                           </select>
                           <has-error :form="form" field="gender"></has-error>
                         </div>
@@ -267,11 +268,14 @@
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('emergencyRelationship') }">
                             <has-error :form="form" field="emergencyRelationship"></has-error>
                         </div>
-                        <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                            <input v-model="form.emergencyContact" placeholder="Contact Number" type="number" name="emergencyContact" id="emergencyContact"
+                        <div class="form-group col-md-1 col-sm-12 col-xs-12">
+                                <label>+63</label>
+                            </div>
+                            <div class="form-group col-md-3 col-sm-12 col-xs-12">
+                              <input v-model="form.emergencyContact" v-on:keyup="keymonitor" placeholder="Contact Number" type="number" name="emergencyContact" id="emergencyContact"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('emergencyContact') }">
-                            <has-error :form="form" field="emergencyContact"></has-error>
-                        </div>
+                              <has-error :form="form" field="emergencyContact"></has-error>
+                            </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-8 col-sm-6 col-xs-12">
@@ -280,7 +284,7 @@
                             <has-error :form="form" field="emergencyAddress"></has-error>
                         </div>
                         <div class="form-group col-md-4 col-sm-6 col-xs-12">
-                            <input v-model="form.emergencyAltContact" placeholder="Alternative Contact Number" type="number" name="emergencyAltContact" id="emergencyAltContact"
+                            <input v-model="form.emergencyAltContact" v-on:keyup="keymonitor2" placeholder="Alternative Contact Number" type="number" name="emergencyAltContact" id="emergencyAltContact"
                                 class="form-control" :class="{ 'is-invalid': form.errors.has('emergencyAltContact') }">
                             <has-error :form="form" field="emergencyAltContact"></has-error>
                         </div>
@@ -375,6 +379,7 @@
                 population: 0,
                 level:{},
                 section:{},
+                syList:{},
                 age:'',
                 guardian: false,
                 sisterCount:0,
@@ -384,6 +389,9 @@
                 payment:[],
                 gradetitle:'',
                 checked:'',
+                dummy:'',
+                checkname:'',
+                databack:[],
                 //age:'',
                 form: new Form({
                     paidAmount:0,
@@ -441,6 +449,48 @@
               }
             },
             methods: {
+              check(){
+                this.form.post('api/checkStudent')
+                    .then(({data})=>{
+                        this.checkname = data.data;
+                        if(this.checkname == true){
+                          toast({
+                            type: 'error',
+                            title: 'Student name has already a record please check the records'
+                          });
+                          this.form.first_name = '';
+                          this.form.middle_name = '';
+                          this.form.last_name = '';
+                        }
+
+                    })
+                    .catch(()=>{});
+              },
+                keymonitor() {
+                  if(this.form.emergencyContact > 9999999999){
+
+                    this.form.emergencyContact = this.dummy;
+                    swal({
+                        title: 'Invalid Mobile Number!',
+                        text: "check again the number",
+                        type: 'warning',
+                      })
+                  }else{
+                    this.dummy = this.form.emergencyContact;
+                  }
+                },
+                keymonitor2() {
+                  if(this.form.emergencyAltContact > 99999999999){
+                    this.form.emergencyAltContact = this.dummy;
+                    swal({
+                        title: 'Invalid Mobile Number!',
+                        text: "check again the number",
+                        type: 'warning',
+                      })
+                  }else{
+                    this.dummy = this.form.emergencyAltContact;
+                  }
+                },
                 rndStr() {
                     let text = " "
                     let chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -482,7 +532,12 @@
                   }
                 },
 
+                schoolyear(){
+                  axios.get("api/syList").then(({data})=>(this.syList = data.data));
+                },
+
                 processPayment(){
+                    this.rndStr();
                     $('#paymentModal').modal('show');      
                 },
 
@@ -553,6 +608,8 @@
                         this.form.reset();
                          window.open('/api/enrollmentPrint/'+this.pushId);
                         //this.$router.push('/')
+                        window.location.reload()
+
 
                     })
                     .catch(()=>{
@@ -570,6 +627,7 @@
                 //this.calculateAge();
                 this.loadLevel();
                 this.rndStr();
+                this.schoolyear();
             }
     }
 </script>

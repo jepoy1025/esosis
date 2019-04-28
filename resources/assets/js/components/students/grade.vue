@@ -15,19 +15,20 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" v-show="!searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>ID</th>
-                        <th>Last Name</th>
-                        <th>First Name</th>
+                        <th>Full Name</th>
                         <th>Grade Level</th>
                         <th>Action</th>
                     </tr>
                     <tr v-for="user in users" :key="user.id">
-                        <td>{{user.id}}</td>
-                        <td>{{user.last_name | upText}}</td>
-                        <td>{{user.first_name | upText}}</td>
+                        <!-- <td><button href="" @click="viewProfile(user.id)" class="btn btn-default pull-right">
+                            <i class="fas fa-eye green"> View Info</i>
+                        </button></td> -->
+                        <td>
+                          <a href="" @click="viewProfile(user.id)" class="primary">{{user.last_name | upText}}, {{user.first_name | upText}}</a>
+                        </td>
                         <td>{{user.title}}</td>
                         <td>
                             <button href="" @click="editModal(user.id)" class="btn btn-default">
@@ -40,24 +41,26 @@
                             <i class="fas fa-tasks teal">Requirements</i>
                             </button>
                             <button href="" @click="transfer(user)" class="btn btn-default">
-                            <i class="fas fa-external-link-alt indigo">Drop Student</i>
+                            <i class="fas fa-external-link-alt red">Drop Student</i>
                             </button>
                         </td>
                     </tr>
                 </tbody></table>
               </div>
               <div class="card-body table-responsive p-0" v-show="searchFilter">
-                <table class="table table-hover">
-                  <tbody>
+                <table class="table table-hover table-dark">
+                  <tbody style="height: 500px; overflow: scroll; display: block; swidth:100%;">
                     <tr>
-                        <th>ID</th>
+                        <th></th>
                         <th>Last Name</th>
                         <th>First Name</th>
                         <th>Grade Level</th>
                         <th>Action</th>
                     </tr>
                     <tr v-for="user in users" :key="user.id" :hidden="user.last_name != stud_name">
-                        <td>{{user.id}}</td>
+                        <td><button href="" @click="viewProfile(user.id)" class="btn btn-default pull-right">
+                            <i class="fas fa-eye green"> View Info</i>
+                        </button></td>
                         <td>{{user.last_name | upText}}</td>
                         <td>{{user.first_name | upText}}</td>
                         <td>{{user.title}}</td>
@@ -72,7 +75,7 @@
                             <i class="fas fa-tasks teal">Requirements</i>
                             </button>
                             <button href="" @click="transfer(user)" class="btn btn-default">
-                            <i class="fas fa-external-link-alt indigo">Drop Student</i>
+                            <i class="fas fa-external-link-alt red">Drop Student</i>
                             </button>
                         </td>
                     </tr>
@@ -129,6 +132,9 @@
             }
         },
         methods: {
+            viewProfile(id){
+              this.$router.push("/student_info/"+id);
+            },
             transfer(student){
               swal({
                   title: 'Are you sure?',

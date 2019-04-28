@@ -17,9 +17,18 @@ class SyController extends Controller
      */
     public function index()
     {
-       return DB::table('school_year')
-                    ->latest()
-                    ->paginate(10);
+       $data = DB::table('school_year')
+        ->orderBy('id','DESC')
+        ->first();
+
+        return compact('data');
+    }
+
+    public function list(){
+        $data = DB::table('school_year')
+                ->get();
+        //dd($data);
+        return compact('data');
     }
 
     /**
@@ -40,20 +49,19 @@ class SyController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'school_year' => 'required|max:50|unique:school_year',
-        ]);
+        $sy = DB::table('school_year')
+        ->orderBy('id','DESC')
+        ->first();
 
-        $syCurrent = DB::table('school_year')
-                    ->orderBy('id', 'desc')
-                    ->first();
-        $year = $syCurrent->school_year+1;
-        //dd($year);
-        $data = DB::table('school_year')->insert(['school_year' =>  $year]);
+        $year = explode("-",$sy->school_year);
+        $newSY = $year[1]."-".($year[1]+1);
+        $data = DB::table('school_year')->insert(['school_year' =>  $newSY]);
 
-                DB::table('students')
-                 ->where('status','=',1)
-                 ->update(array('status' => 2));
+        DB::table('first_rankings')->truncate();
+        DB::table('second_rankings')->truncate();
+        DB::table('third_rankings')->truncate();
+        DB::table('fourth_rankings')->truncate();
+        DB::table('rankings')->truncate();
         return compact('data');
     }
 

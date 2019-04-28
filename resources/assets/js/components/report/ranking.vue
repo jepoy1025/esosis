@@ -5,41 +5,48 @@
                 <div class="card card-info">
                     <div class="card-header"><h3 class="card-title"><b class="pink">Student</b> Ranking</h3></div>
                     <div class="card-body table-responsive p-0">
+                    <form @submit.prevent="viewRank()">
+                        <div class="row">
+                            <div class="col-5">
+                                <label>Select Grade Level:</label>
+                                  <select name="level_id" v-model="form.level_id" id="level_id" class="form-control" :class="{ 'is-invalid': form.errors.has('level_id') }">
+                                      <option v-for="level in level" v-bind:value="level.id" :hidden="level.id == '0'" >{{level.title}}</option>
+                                  </select>
+                                  <has-error :form="form" field="level_id"></has-error>
+                            </div>
+                            <div class="col-5">
+                                <label>Select Grading Quarter</label>
+                                  <select name="grading_id" v-model="form.grading_id" id="grading_id" class="form-control" :class="{ 'is-invalid': form.errors.has('grading_id') }">
+                                      <option value="1">First</option>
+                                      <option value="2">Second</option>
+                                      <option value="3">Third</option>
+                                      <option value="4">Fourth</option>
+                                      <option value="5">Overall</option>
+                                  </select>
+                                  <has-error :form="form" field="grading_id"></has-error>
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-warning" style="margin-top: 25px">Rank Students</button>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-hover">
                       <tbody>
                         <tr>
-                            <th>Grade Level</th>
-                            <th colspan="5">Select Grading</th>
+                            <th>Name</th>
+                            <th>Rank</th>
+                            <th>Average</th>
                         </tr>
-                        <tr v-for="room in level" :key="room.id" :hidden="room.id == 0">
-                            <td>{{room.title}}</td>
-                            <td>
-                                    <div class="callout callout-warning" @click="firstList(room.id)">
-                                      <p><b>1st</b></p>
-                                    </div>
-                            </td>
-                            <td>
-                            <div class="callout callout-warning" @click="secondList(room.id)">
-                                      <p><b>2nd</b></p>
-                                    </div>
-                            </td>
-                            <td>
-                            <div class="callout callout-warning" @click="thirdList(room.id)">
-                                      <p><b>3rd</b></p>
-                                    </div>
-                            </td>
-                            <td>
-                            <div class="callout callout-warning" @click="fourthList(room.id)">
-                                      <p><b>4th</b></p>
-                            </div>
-                            </td>
-                            <td>
-                                <div class="callout callout-warning" @click="rankList(room.id)">
-                                      <p><b>Final</b></p>
-                                </div>
-                            </td>
+                        <tr v-for="(student, index) in students" :key="index">
+                            <td>{{ student.last_name }}, {{ student.first_name }}</td>
+                            <td>{{ index+1 }}</td>
+                            <td>{{ student.average }}%</td>
                         </tr>
-                    </tbody></table>
+                    </tbody>
+                        <div class="col-md-12">
+                            <button v-show="hideBtn" type="" @click="print()" class="btn btn-block btn-secondary btn-lg" style="margin-top: 25px;margin-left: 165px">Print</button>
+                        </div>
+                    </table>
                   </div>
                 </div>
             </div>
@@ -88,18 +95,40 @@
                 editMode : false,
                 users : {},
                 students : {},
+                hideBtn:false,
                 form: new Form({
-                    id: '',
-                    first: '',
-                    second: '',
-                    third: '',
-                    fourth: '',
+                    level_id:'',
+                    grading_id:'',
                 })
             }
         },
         methods : {
+            viewRank(){
+                this.form.post('api/rankList')
+                    .then(({data})=>{
+                        this.students = data.data;
+                    })
+                    .catch(()=>{});
+                this.hideBtn = true;
+            },
             print(){
-                window.open('/api/testPrint/');
+
+                if(this.form.grading_id == 1){
+                    window.open('/api/rankPrintFirst/'+this.form.level_id);
+                }
+                if(this.form.grading_id == 2){
+                    window.open('/api/rankPrintSecond/'+this.form.level_id);
+                }
+                if(this.form.grading_id == 3){
+                    window.open('/api/rankPrintThird/'+this.form.level_id)
+                }
+                if(this.form.grading_id == 4){
+                    window.open('/api/rankPrintFourth/'+this.form.level_id);
+                }
+                if(this.form.grading_id == 5){
+                    window.open('/api/rankPrint/'+this.form.level_id);
+                }
+                //window.open('/api/testPrint/');
             },
             loadLevel(){
                 axios.get("api/level").then(({data})=>(this.level = data.data));

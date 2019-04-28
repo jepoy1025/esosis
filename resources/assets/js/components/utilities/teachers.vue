@@ -16,7 +16,6 @@
                 <table class="table table-hover">
                   <tbody>
                     <tr>
-                        <th>ID</th>
                         <th>Full Name</th>
                         <th>Educational Attainment</th>
                         <th>Civil Service</th>
@@ -25,7 +24,6 @@
                         <th>Action</th>
                     </tr>
                     <tr v-for="teacher in teacher" :key="teacher.id">
-                        <td>{{teacher.id}}</td>
                         <td>{{teacher.name}}</td>
                         <td>{{teacher.educational_attainment}}</td>
                         <td>{{teacher.civil_service}}</td>
@@ -35,10 +33,10 @@
                             <button href="" @click="editModal(teacher)" class="btn btn-default">
                             <i class="fas fa-user-cog orange"></i>
                             </button>
-                            <button href="" @click="teacherActivate(teacher.id)" class="btn btn-default" :disabled="teacher.status == 'active'">
+                            <button href="" @click="teacherActivate(teacher.id)" class="btn btn-default" :hidden="teacher.status == 'active'">
                             <i class="fas fa-user-check green"></i>
                             </button>
-                            <button href="" @click="teacherDeactivate(teacher.id)" class="btn btn-default" :disabled="teacher.status == 'inactive'">
+                            <button href="" @click="teacherDeactivate(teacher.id)" class="btn btn-default" :hidden="teacher.status == 'inactive'">
                             <i class="fas fa-user-times red"></i>
                             </button>
                         </td>

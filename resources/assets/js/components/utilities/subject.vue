@@ -8,7 +8,7 @@
                 <h3 class="card-title"><b class="pink">Subject</b> utilities</h3>
 
                 <div class="card-tools">
-                  <button class="btn btn-outline-warning btn-lg" @click="deletedModal" ><i class="fas fa-eye fa-fw"></i> View Deleted Subjects</button>
+                  <button class="btn btn-outline-warning btn-lg" @click="deletedModal" ><i class="fas fa-eye fa-fw"></i> Archived Subjects</button>
                     <button class="btn btn-outline-primary btn-lg" @click="newModal" ><i class="fas fa-book fa-fw"></i> Add Subject</button>
                 </div>
               </div>
@@ -84,8 +84,8 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button v-show="editMode" type="submit" class="btn btn-success">Update Teacher</button>
-                <button v-show="!editMode" type="submit" class="btn btn-primary">Create Teacher</button>
+                <button v-show="editMode" type="submit" class="btn btn-success">Update Subject</button>
+                <button v-show="!editMode" type="submit" class="btn btn-primary">Create Subject</button>
               </div>
             </form>
             </div>
@@ -219,12 +219,12 @@
             },
       subjectDelete(id){
                 swal({
-                  title: 'Teacher will be deactivated?',
+                  title: 'Subject will be archived?',
                   type: 'warning',
                   showCancelButton: true,
                   confirmButtonColor: '#3085d6',
                   cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, deactivate it!'
+                  confirmButtonText: 'Yes'
                 }).then((result) => {
                     if (result.value) {
                     this.form.delete('/api/subject/'+id).then(()=>{

@@ -14,6 +14,90 @@ use NumberToWords\NumberToWords;
 
 class ReportsController extends Controller
 {
+    public function rankList(Request $request){
+        $data;
+        if($request['grading_id'] == 1){
+            $data = DB::table('first_rankings')
+            ->join('students', 'first_rankings.student_id', '=', 'students.id')
+            ->where('first_rankings.grade_level','=',$request['level_id'])
+            ->select('students.*','first_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+        }
+        if($request['grading_id'] == 2){
+            $data = DB::table('second_rankings')
+            ->join('students', 'second_rankings.student_id', '=', 'students.id')
+            ->where('second_rankings.grade_level','=',$request['level_id'])
+            ->select('students.*','second_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+        }
+        if($request['grading_id'] == 3){
+            $data = DB::table('third_rankings')
+            ->join('students', 'third_rankings.student_id', '=', 'students.id')
+            ->where('third_rankings.grade_level','=',$request['level_id'])
+            ->select('students.*','third_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+        }
+        if($request['grading_id'] == 4){
+            $data = DB::table('fourth_rankings')
+            ->join('students', 'fourth_rankings.student_id', '=', 'students.id')
+            ->where('fourth_rankings.grade_level','=',$request['level_id'])
+            ->select('students.*','fourth_rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+        }
+        if($request['grading_id'] == 5){
+            $data = DB::table('rankings')
+            ->join('students', 'rankings.student_id', '=', 'students.id')
+            ->where('rankings.grade_level','=',$request['level_id'])
+            ->select('students.*','rankings.*')
+            ->orderBy('average', 'desc')
+            ->take(10)
+            ->get();
+        }
+
+        return compact('data');
+    }
+    public function prevGradePrint($id){
+        $sy = DB::table('level_student')
+            ->join('school_year','level_student.sy_id','=','school_year.id')
+            ->join('levels','level_student.level_id','=','levels.id')
+            ->where('level_student.id','=',$id)
+            ->select('level_student.*','levels.title','school_year.school_year')
+            ->first();
+           
+       $student = DB::table('students')
+            ->join('levels','students.grade_level_id','levels.id')
+            ->join('rooms','students.lecture_id','rooms.id')
+            ->join('teachers','rooms.advicer_id','teachers.id')
+            ->where('students.id', $sy->student_id)
+            ->select('students.*','levels.title','rooms.section','teachers.name')
+            ->first();
+         //dd($student);
+        $data = DB::table('grades')
+            ->join('subjects','grades.subject_id','=','subjects.id')
+            ->where([
+                ['grades.student_id','=', $student->id],
+                ['grades.sy_id','=', $sy->sy_id]
+                    ])
+            ->select('grades.*','subjects.title')
+            ->get();
+        //dd($data);
+        $comments = DB::table('comments')
+            ->where([
+                ['comments.student_id','=', $id],
+                ['comments.grade_level','=', $student->grade_level_id]
+                    ])
+            ->first();
+
+        return view('prints.prevPrint', ['data' => $data, 'comments' => $comments, 'student' => $student, 'sy' => $sy]);
+    }
     public function generatePDF($id){
         $info = DB::table('rooms')
                 ->join('levels','rooms.grade_level','levels.id')
@@ -270,6 +354,32 @@ class ReportsController extends Controller
         return view('prints.gradeReport', compact('students', 'subjects', 'level'));
     }
 
+    public function gradesReport($level){
+        $sy = DB::table('school_year')
+        ->orderBy('id','DESC')
+        ->first();
+
+        $students = DB::table('students')
+                ->join('level_student','students.id','=','level_student.student_id')
+                ->where('level_student.sy_id', $level)
+                ->select('students.*','level_student.level_id')
+                ->get();
+
+        //dd($students);
+        $levels = DB::table('levels')
+                ->get();
+
+        $grades = DB::table('grades')
+                ->where('sy_id', $level)
+                ->get();
+
+        $subjects = DB::table('subjects')
+                ->get();
+
+        return view('prints.gradesReport', ['students' => $students, 'levels' => $levels, 'grades' => $grades, 'subjects' => $subjects]);
+
+    }
+
     public function transactionReport(){
         $data = DB::table('transactions')
                 ->join('students','transactions.student_id','=','students.id')
@@ -335,6 +445,28 @@ class ReportsController extends Controller
 
         return view('prints.scheduleIndi', ['room1' => $room1, 'name' => $name]);
     }
+
+    public function transferEnrollPrint($id){
+        $data = DB::table('transactions')
+                    ->where('student_id',$id)
+                    ->orderBy('id', 'desc')
+                    ->first();
+        $student =  DB::table('students')
+                ->join('rooms','students.lecture_id','=','rooms.id')
+                ->join('levels','rooms.grade_level','=','levels.id')
+                ->where('students.id', $id)
+                ->select('students.*','levels.title','rooms.section')
+                ->first();
+        $payment = DB::table('payments')
+                ->where('payments.student_id', $student->id)
+                ->first();
+        $numberToWords = new NumberToWords();
+        $numberTransformer = $numberToWords->getNumberTransformer('en');
+        $amount = $numberTransformer->toWords($data->amount);
+
+        return view('prints.reEnrollReciept', ['data' => $data, 'student'=>$student, 'payment'=>$payment, 'amount'=>$amount]);
+    }
+
     public function roomSchedule(Room $room)
     {
         return view('prints.roomSchedule', compact('room'));

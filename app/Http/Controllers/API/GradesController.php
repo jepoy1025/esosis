@@ -9,6 +9,59 @@ use App\Grade;
 
 class GradesController extends Controller
 {
+    public function prevGrades($id){
+        $sy = DB::table('level_student')
+            ->where('id',$id)
+            ->first();
+
+        $data = DB::table('grades')
+            ->join('subjects','grades.subject_id','=','subjects.id')
+            ->where([
+                ['grades.student_id', '=', $sy->student_id],
+                ['grades.sy_id', '=', $sy->sy_id],
+
+            ])
+            ->select('grades.*','subjects.title')
+            ->get();
+
+        return compact('data');
+
+    }
+    public function gradeLevel($id){
+        $data = DB::table('level_student')
+            ->join('school_year','level_student.sy_id','=','school_year.id')
+            ->join('levels','level_student.level_id','=','levels.id')
+            ->where('level_student.student_id','=',$id)
+            ->select('level_student.*','levels.title','school_year.school_year')
+            ->get();
+
+        return compact('data');
+    }
+    public function studentGrades($id){
+        $student = DB::table('students')
+            ->where('id',$id)
+            ->first();
+
+        $grades = DB::table('grades')
+            ->where([
+                ['student_id','=', $id],
+                ['sy_id','=', $student->sy_id]
+            ])
+            ->get();
+
+        $dataCount = count($grades);
+
+        $data = false;
+
+        for($ctr = 0;$ctr < $dataCount && $data == false; $ctr++){
+            if($grades[$ctr]->remarks == 0){
+                $data = true;
+            }
+        }
+
+        return compact('data');
+    }
+
     public function index()
     {
          $data = DB::table('students')
@@ -17,6 +70,7 @@ class GradesController extends Controller
          	->where('students.status','=','1')
             ->orWhere('students.status','=','2')
             ->select('students.*','levels.title','payments.past_balance','payments.enrollment_fee','payments.whole_year','payments.misc','payments.books','payments.uniform','payments.pta')
+            ->orderBy('students.last_name', 'asc')
          	->get();
 
          return compact('data'); 
@@ -40,13 +94,25 @@ class GradesController extends Controller
 
     public function update(Request $request, $id){
     	$subject = Grade::findOrFail($id);
-    	$subject->update([
-            'first' => $request['first'],
-            'second' => $request['second'],
-            'third' => $request['third'],
-            'fourth' => $request['fourth']
-        ]);
-        return $subject; 
+        $remarks = ($request['first']+$request['second']+$request['third']+$request['fourth'])/4;
+
+        if($remarks > 74.9){
+        	$subject->update([
+                'first' => $request['first'],
+                'second' => $request['second'],
+                'third' => $request['third'],
+                'fourth' => $request['fourth'],
+                'remarks' => 1,
+            ]);
+        }else{
+            $subject->update([
+                'first' => $request['first'],
+                'second' => $request['second'],
+                'third' => $request['third'],
+                'fourth' => $request['fourth'],
+            ]);
+        }
+        return $remarks; 
     }
 
     public function print($id){
@@ -90,9 +156,10 @@ class GradesController extends Controller
             ->select('grades.*','subjects.title')
             ->get();
         $gradeLevels = DB::table('level_student')
-            ->join('levels','level_student.level_id','levels.id')
-            ->where('level_student.student_id', $id)
-            ->orderBy('level_student.level_id', 'asc')
+            ->join('school_year','level_student.sy_id','=','school_year.id')
+            ->join('levels','level_student.level_id','=','levels.id')
+            ->where('level_student.student_id','=',$id)
+            ->select('level_student.*','levels.title','school_year.school_year')
             ->get();
         //dd($data);
         return view('prints.gradesAll', ['grades' => $grades, 'gradeLevels'=>$gradeLevels, 'student' => $student]);
