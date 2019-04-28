@@ -11,6 +11,7 @@ class Comment extends Model
         'first',
         'second',
         'third',
-        'fourth'
+        'fourth',
+        'sy_id'
     ];
 }
